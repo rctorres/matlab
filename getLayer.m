@@ -19,5 +19,5 @@ else
 end
 
 function ret = slice(data, ringsDist, layer)
-  [initPos, endPos] = getLayerLimits(ringsDist, layer)
+  [initPos, endPos] = getLayerLimits(ringsDist, layer);
   ret = data(initPos:endPos,:);
