@@ -1,6 +1,6 @@
 function [w,e] = lms(input, target, lr)
 %function [w,e] = lms(input, target, lr)
-%Trains a linear discriminator based on LMS training algorithm.
+%Trains a linear discriminator based on LMS training.
 %Parameters:
 %  - input : the input values
 %  - target: the desired output
