@@ -1,4 +1,5 @@
 function [inTrn_W, inVal_W, inTst_W] = get_pre_proc_data(inTrn, inVal, inTst, W)
+%function [inTrn_W, inVal_W, inTst_W] = get_pre_proc_data(inTrn, inVal,inTst, W)
 %Projects the data sets onto the base specified in W. W must be organized so
 %that each direction is a row.
 %
