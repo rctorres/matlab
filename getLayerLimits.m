@@ -5,4 +5,4 @@ function [initPos, endPos] = getLayerLimits(ringsDist, layer)
 %
 initPos = sum(ringsDist(1:layer-1)) + 1;
 endPos = initPos + ringsDist(layer) - 1;
-fprintf('Getting layer %d (Rings %d to %d). Total of %d rings.\n', layer, initPos, endPos, (endPos - initPos + 1));
+%fprintf('Getting layer %d (Rings %d to %d). Total of %d rings.\n', layer, initPos, endPos, (endPos - initPos + 1));
