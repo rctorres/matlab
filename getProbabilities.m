@@ -44,11 +44,11 @@ function [pd, pfa, numE, numJ] = getProbabilities(net, cut, dataE, dataJ, analE,
     
     %Calculating Pd.
     out = nsim(net, dataE(:,Ie));
-    pd(i) = 100 * length(find(out >= cut)) / numE(i);
+    pd(i) = length(find(out >= cut)) / numE(i);
     
     %Calculating Pfa
     out = nsim(net, dataJ(:,Ij));
-    pfa(i) = 100 * length(find(out >= cut)) / numJ(i);
+    pfa(i) = length(find(out >= cut)) / numJ(i);
   end
 
 
