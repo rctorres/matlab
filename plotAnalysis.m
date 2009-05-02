@@ -1,4 +1,4 @@
-function plotAnalysis(net, cut, electrons, jets, bE, bEta, bPhi, id)
+function plotAnalysis(net, cut, electrons, jets, bE, bEta, bPhi, showError, id)
 %function plotAnalysis(net, cut, electrons, jets, bE, bEta, bPhi, id)
 %Gera as figuras de Plots para analise. Os parametros de entrada sao:
 % - net: a rede neural a ser utilizada.
@@ -68,5 +68,11 @@ function plotAnalysis(net, cut, electrons, jets, bE, bEta, bPhi, id)
 %    text(c(i),floor(pd(i)-10),txt,'FontSize',8, 'Rotation', 90, 'HorizontalAlignment', 'right', 'Color', 'y', 'FontUnits', 'normalized');
   end
 
-  
+function show(x,y,e,c,error)
+  if error,
+    errorbar(x,y,e,c);
+  else
+    plot(x,y,c);
+  end
+
    
