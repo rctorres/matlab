@@ -72,6 +72,11 @@ doProjectionAnalysis('All Layers', ldata, 8, figCorr, figNlCorr, figOrt, w_all.(
 
 
 
+function mypcolor(data)
+  data = [data mean(data,2)];
+  data = [data ; mean(data,1)];
+  pcolor(data);
+
 
 function doPlot(data, name)
   [n,m] = size(data);
@@ -101,7 +106,7 @@ function doProjectionAnalysis(name, data, figIdx, figCorr, figNlCorr, figOrt, W)
     %Doing ortogonalization
     figure(figOrt);
     subplot(2,4,figIdx);
-    pcolor(calcAngles(W'));
+    mypcolor(calcAngles(W'));
     if figIdx == 1, colorbar; end
     title(sprintf('Ortogonalization Analysis - %s', name));
     xlabel('Projection');
@@ -113,7 +118,7 @@ function doProjectionAnalysis(name, data, figIdx, figCorr, figNlCorr, figOrt, W)
   %Doing linear correlation analysis.
   figure(figCorr);
   subplot(2,4,figIdx);
-  pcolor(abs(corrcoef(data)));
+  mypcolor(abs(corrcoef(data)));
   if figIdx == 1, colorbar; end
   title(sprintf('Linear Correlation Analysis - %s', name));
   xlabel('Projection');
@@ -126,7 +131,7 @@ function doProjectionAnalysis(name, data, figIdx, figCorr, figNlCorr, figOrt, W)
 
   figure(figNlCorr);
   subplot(2,4,figIdx);
-  pcolor(abs(corrcoef(data)));
+  mypcolor(abs(corrcoef(data)));
   if figIdx == 1, colorbar; end
   title(sprintf('Non-linear Correlation Analysis - %s', name));
   xlabel('Projection');
