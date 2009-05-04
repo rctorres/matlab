@@ -1,5 +1,5 @@
-function [spMean, spStd, netStr] = numNodesAnalysis(numNodesVec, numTrains, inTrn, inVal, inTst)
-%function [spMean, spStd, netStr] = numNodesAnalysis(numNodesVec, numTrains, inTrn, inVal, inTst)
+function [spMax, spMean, spStd, netStr] = numNodesAnalysis(numNodesVec, numTrains, inTrn, inVal, inTst)
+%function [maxSp, spMean, spStd, netStr] = numNodesAnalysis(numNodesVec, numTrains, inTrn, inVal, inTst)
 %This function will take the default training, validating and testing sets for electrons and jets
 %and will perform the hidden nodes validation, which means, varying the number of nodes in the 
 %hidden layer taking the values in the numNodesVec. If a network with only one hidden node is
@@ -10,9 +10,7 @@ function [spMean, spStd, netStr] = numNodesAnalysis(numNodesVec, numTrains, inTr
 %each case.
 %
 
-epochs = 2000;
-max_fail = 50;
-show = 0;
+net = [];
 trfFunc = 'tansig';
 
 if length(find(numNodesVec <= 0)) > 0,
@@ -21,82 +19,44 @@ end
 
 start = 1;
 nNodes = length(numNodesVec);
-nInput = size(eTrn,1);
+nInput = size(inTrn{1},1);
 numNodesVec = sort(numNodesVec);
+
 spMean = zeros(1,nNodes);
 spStd = zeros(1,nNodes);
+spMax = zeros(1,nNodes);
 netStr = cell(1,nNodes);
 
-if numNodesVec(1) == 1,
-  fprintf('Training linear network (%d x 1)\n', nInput);
-  net = newff2([nInput, 1], {trfFunc}, false, 'trainrp');
-  net.trainParam.epochs = epochs;
-  net.trainParam.show = show;
-  net.trainParam.max_fail = max_fail;
 
-  [nVec, idx] = trainMany(trnNet, inTrn, inVal, inTst, numIterations);
-  outNet{i} = nVec{idx}.net;
-  epoch{i} = nVec{idx}.epoch;
-  trnError{i} = nVec{idx}.trnError;
-  valError{i} = nVec{idx}.valError;
-  maxSP = nVec{idx}.sp;
-
-  %Getting the mean and std val of the SP efficiencies obtained through the iterations.
-  ef = zeros(1,numIterations);
-  for j=1:numIterations,
-    ef(j) = nVec{j}.sp;
+for i=1:nNodes,
+  if numNodesVec(i) == 1,
+    fprintf('Training linear network (%d x 1)\n', nInput);
+    net = newff2([nInput, 1], {trfFunc});
+  else
+    fprintf('Training non-linear network (%d x %d x 1)\n', nInput, numNodesVec(i));
+    net = newff2([nInput, numNodesVec(i), 1], {trfFunc, trfFunc});
   end
-  meanEfic(i) = mean(ef);
-  stdEfic(i) = std(ef);
-
-
-
-
-
-
-
-  [spRetVec, netVec] = trainMany(net, eTrn, eVal, eTst, jTrn, jVal, jTst, numTrains);
-  spMean(1) = mean(spRetVec);
-  spStd(1) = std(spRetVec);
-  start = 2;
-  
-  aux.nets = netVec;
-  aux.numNodes = 1;
-  netStr = [netStr aux];
-end
-
-for i=start:nNodes,
-  fprintf('Training non-linear network (%d x %d x 1)\n', nInput, numNodesVec(i));
-  net = newff2([nInput, numNodesVec(i), 1], {trfFunc, trfFunc}, false, 'trainrp');
-  net.trainParam.epochs = epochs;
-  net.trainParam.show = show;
-  net.trainParam.max_fail = max_fail;
-  [spRetVec, netVec] = trainMany(net, eTrn, eVal, eTst, jTrn, jVal, jTst, numTrains);
-  spMean(i) = mean(spRetVec);
-  spStd(i) = std(spRetVec);
-  
-  aux.nets = netVec;
-  aux.numNodes = i;
-  netStr = [netStr aux];
+  [netStr{i}, spMax(i), spMean(i), spStd(i)] = do_train(net, inTrn, inVal, inTst, numTrains);
 end
 
 
-function do_train(net, inTrn, inVal, inTst)
-  net.trainParam.epochs = epochs;
-  net.trainParam.show = show;
-  net.trainParam.max_fail = max_fail;
+function [outNet, maxEffic, meanEfic, stdEfic] = do_train(net, inTrn, inVal, inTst, numIt)
+  net.trainParam.epochs = 2000;
+  net.trainParam.show = 0;
+  net.trainParam.max_fail = 50;
 
-  [nVec, idx] = trainMany(net, inTrn, inVal, inTst, numIterations);
-  outNet{i} = nVec{idx}.net;
-  epoch{i} = nVec{idx}.epoch;
-  trnError{i} = nVec{idx}.trnError;
-  valError{i} = nVec{idx}.valError;
-  maxSP = nVec{idx}.sp;
+  [nVec, idx] = trainMany(net, inTrn, inVal, inTst, numIt);
+  outNet.net = nVec{idx}.net;
+  outNet.epoch = nVec{idx}.epoch;
+  outNet.trnError = nVec{idx}.trnError;
+  outNet.valError = nVec{idx}.valError;
+  
+  maxEffic = nVec{idx}.sp;
 
   %Getting the mean and std val of the SP efficiencies obtained through the iterations.
-  ef = zeros(1,numIterations);
-  for j=1:numIterations,
+  ef = zeros(1,numIt);
+  for j=1:numIt,
     ef(j) = nVec{j}.sp;
-  end
-  meanEfic(i) = mean(ef);
-  stdEfic(i) = std(ef);
+  end  
+  meanEfic = mean(ef);
+  stdEfic = std(ef);
