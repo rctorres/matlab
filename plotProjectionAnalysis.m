@@ -1,5 +1,5 @@
-function plotProjectionAnalysis(data, ringsDist, secNames, w_all, w_seg, name)
-%function plotProjectionAnalysis(data, ringsDist, secNames, w_all, w_seg, name)
+function plotProjectionAnalysis(data, ringsDist, secNames, w_all, w_seg)
+%function plotProjectionAnalysis(data, ringsDist, secNames, w_all, w_seg)
 %Realiza a analise dos dados de entrada.
 %Esta funcao vai pegar um conjunto de entrada e vai realizar as analises
 %principais encessarias p/ o desenvolvimento do classificador, que e a
@@ -15,13 +15,10 @@ function plotProjectionAnalysis(data, ringsDist, secNames, w_all, w_seg, name)
 % coluna)
 % ringDist : a quantidade de aneis em cada camada.
 % secNames : o nome de cada camada do calorimetro (PS, EM1, etc)
-% w_all : a matriz de projecao a ser usadada p/ projetar todos os aneis. E
+% w_all : a matriz de projecao a ser usadada p/ projetar todos os aneis (w_all.W). E
 % a matriz retornada pelo metodo extract.m de cada analise (ica, pcd, etc)
-% w_seg : a matriz de projecao a ser usadada p/ projetar os aneis de cada 
+% w_seg : a matriz de projecao a ser usadada p/ projetar os aneis de cada (w_seg.W) 
 % camada. E a matriz retornada pelo metodo extract.m de cada analise (ica, pcd, etc)
-%name : e o nome, tanto em w_all, bem como w_seg{i} que a amtriz de
-%projecao tem: exemplo, de tal forma que as direcoes de projecao sao
-%achadas em w_all.(name).
 %
 %Se w_all e w_seg forem omitidos, as analises serao feitas em data, sem
 %nenhum pre-processamento, e o grafico de ortogonalidade nao sera gerado.
@@ -43,10 +40,9 @@ doProj = true;
 %Se W nao foi passado, criamos um dummy.
 if nargin == 3,
   doProj = false;
-  name = 'dummy';
   w_seg = cell(1,nLayers);
-  for i=1:nLayers, w_seg{i}.(name) = [];end
-  w_all.(name) = [];
+  for i=1:nLayers, w_seg{i}.W = [];end
+  w_all.W = [];
   figOrt = [];
 else
   figOrt = figure;
@@ -57,11 +53,11 @@ figCorr = figure;
 figNlCorr = figure;
 
 for i=1:nLayers,
-  ldata = project(getLayer(data, ringsDist, i), w_seg{i}.(name), doProj);
+  ldata = project(getLayer(data, ringsDist, i), w_seg{i}.W, doProj);
   figure(inHist);
   subplot(2,4,i);
   doPlot(ldata, secNames{i});
-  doProjectionAnalysis(secNames{i}, ldata, i, figCorr, figNlCorr, figOrt, w_seg{i}.(name));
+  doProjectionAnalysis(secNames{i}, ldata, i, figCorr, figNlCorr, figOrt, w_seg{i}.W);
 end
 
 figure(inHist);
