@@ -95,7 +95,7 @@ function pdata = project(data, w, doProj)
 
 function doProjectionAnalysis(name, data, figIdx, figCorr, figNlCorr, figOrt, W)
 
-  if nargin == 7,
+  if size(W,1) ~= 0,
     %Doing ortogonalization
     figure(figOrt);
     subplot(2,4,figIdx);
