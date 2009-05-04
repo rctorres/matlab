@@ -47,12 +47,14 @@ if nargin == 3,
   w_seg = cell(1,nLayers);
   for i=1:nLayers, w_seg{i}.(name) = [];end
   w_all.(name) = [];
+  figOrt = [];
+else
+  figOrt = figure;
 end
 
 inHist = figure;
 figCorr = figure;
 figNlCorr = figure;
-figOrt = figure;
 
 for i=1:nLayers,
   ldata = project(getLayer(data, ringsDist, i), w_seg{i}.(name), doProj);
@@ -100,7 +102,7 @@ function doProjectionAnalysis(name, data, figIdx, figCorr, figNlCorr, figOrt, W)
     figure(figOrt);
     subplot(2,4,figIdx);
     pcolor(calcAngles(W'));
-    colorbar;
+    if figIdx == 1, colorbar; end
     title(sprintf('Ortogonalization Analysis - %s', name));
     xlabel('Projection');
     ylabel('Projection');
@@ -112,7 +114,7 @@ function doProjectionAnalysis(name, data, figIdx, figCorr, figNlCorr, figOrt, W)
   figure(figCorr);
   subplot(2,4,figIdx);
   pcolor(abs(corrcoef(data)));
-  colorbar;
+  if figIdx == 1, colorbar; end
   title(sprintf('Linear Correlation Analysis - %s', name));
   xlabel('Projection');
   ylabel('Projection');
@@ -125,7 +127,7 @@ function doProjectionAnalysis(name, data, figIdx, figCorr, figNlCorr, figOrt, W)
   figure(figNlCorr);
   subplot(2,4,figIdx);
   pcolor(abs(corrcoef(data)));
-  colorbar;
+  if figIdx == 1, colorbar; end
   title(sprintf('Non-linear Correlation Analysis - %s', name));
   xlabel('Projection');
   ylabel('Projection');
