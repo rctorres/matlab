@@ -6,30 +6,31 @@ function doProjectionAnalysis(W, data)
 %that W * data is feasible.
 %
 
-W = W';
-data = data';
+data = (W * data)';
 
 %Doing ortogonalization
 figure;
-pcolor(calcAngles(W));
+pcolor(calcAngles(W'));
 colorbar;
 title('Ortogonalization Analysis');
 xlabel('Projection');
 ylabel('Projection');
 
-data = data * W;
-
 %Doing linear correlation analysis.
 figure;
-pcolor(corrcoef(data));
+pcolor(abs(corrcoef(data)));
 colorbar;
 title('Linear Correlation Analysis');
 xlabel('Projection');
 ylabel('Projection');
 
+ndata = size(data,1);
+data(1:round(ndata/2),:) = tanh(data(1:round(ndata/2),:));
+data(round(ndata/2)+1:end,:) = data(round(ndata/2)+1:end,:).^3;
+
 %Doing non-linear correlation analysis.
 figure;
-pcolor(corrcoef(data.^3, tanh(data)));
+pcolor(abs(corrcoef(data)));
 colorbar;
 title('Non-linear Correlation Analysis');
 xlabel('Projection');
