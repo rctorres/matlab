@@ -62,9 +62,9 @@ end
 
 figure(inHist);
 subplot(2,4,8);
-ldata = project(data, w_all.(name), doProj);
+ldata = project(data, w_all.W, doProj);
 doPlot(ldata, 'All Layers');
-doProjectionAnalysis('All Layers', ldata, 8, figCorr, figNlCorr, figOrt, w_all.(name));
+doProjectionAnalysis('All Layers', ldata, 8, figCorr, figNlCorr, figOrt, w_all.W);
 
 
 
