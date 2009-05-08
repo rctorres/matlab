@@ -33,7 +33,7 @@ function formatFig(figHandler)
 % contained in 'figName', are saved.
 
 % Congigurarion:
-size = 16;
+size = 24;
 font = 'Times New Roman';
 lineWidth = 2;
 figDim = [1 1 1400 900];
