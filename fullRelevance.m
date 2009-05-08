@@ -15,15 +15,17 @@ function rNet = fullRelevance(net, inTrn, inVal, inTst)
 rNet.relev = doRelevanceAnalysis(net, [inTrn{1} inTrn{2}]);
 
 %Cutting at 10% of the most relevant info.
-rNet.rIdx = find(relev > (0.1*max(relev)));
+rNet.rIdx = find(rNet.relev > (0.1*max(rNet.relev)));
+
+fprintf('Selected %d inputs after relevance analysys.\n', length(rNet.rIdx));
 
 %Getting the new relevant dataset.
-inTrn = getRelevData(inTrn, rIdx);
-inVal = getRelevData(inVal, rIdx);
-inTst = getRelevData(inTst, rIdx);
+inTrn = getRelevData(inTrn, rNet.rIdx);
+inVal = getRelevData(inVal, rNet.rIdx);
+inTst = getRelevData(inTst, rNet.rIdx);
 
 %Training the new network.
-net = newff2([size(inTrn{1},1) 1  1], {'tansig', 'tansig'});
+net = newff2([length(rNet.rIdx) 1  1], {'tansig', 'tansig'});
 net.trainParam.epochs = 2000;
 net.trainParam.max_fail = 50;
 net.trainParam.show = 0;
