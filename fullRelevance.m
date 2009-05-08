@@ -45,10 +45,10 @@ function rNet = doRelev(net, trn, val, tst)
 
   %Training the new network.
   net = newff2([length(rNet.rIdx) 1  1], {'tansig', 'tansig'});
-  net.trainParam.epochs = 2;
+  net.trainParam.epochs = 2000;
   net.trainParam.max_fail = 50;
   net.trainParam.show = 0;
-  numTrains = 1;
+  numTrains = 5;
   
   %calculando a melhor  rede ICA usando PCD.
   [pcd, netVec, e, trnE, valE, efic] = npcd(net, trn, val, tst, false, numTrains);
