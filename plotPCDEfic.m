@@ -12,5 +12,5 @@ hold off;
 title('SP Variation over PCD');
 xlabel('# PCD');
 ylabel('SP (norm)');
-legend('Max SP', 'Mean SP');
+legend('Max SP', 'Mean SP', 'Location', 'SouthEast');
 grid on;
