@@ -37,10 +37,10 @@ end
 function oNet = trainNetwork(inTrn, inVal, inTst)
   %Creating the neural network
   net = newff2([size(inTrn{1},1) 1], {'tansig'});
-  net.trainParam.epochs = 20;
+  net.trainParam.epochs = 2000;
   net.trainParam.max_fail = 50;
   net.trainParam.show = 0;
-  numTrains = 2;
+  numTrains = 5;
   [netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);
   oNet = netVec{I};
 
