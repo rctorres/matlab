@@ -18,6 +18,8 @@ function [trn val tst] = joinSegments(inTrn, inVal, inTst, ringsDist, inList, wV
 %is intended.
 %
 
+disp('Projecting the inut data onto a segmented space and joining the segments into a single event.');
+
 %Getting sizes and limits.
 nClasses = length(inTrn);
 nLayers = length(ringsDist);
