@@ -3,7 +3,6 @@ function [inTrn_W, inVal_W, inTst_W] = get_pre_proc_data(inTrn, inVal, inTst, W)
 %Projects the data sets onto the base specified in W. W must be organized so
 %that each direction is a row.
 %
-disp('Projecting the inut data onto a NON segmented space.');
 nSets = length(inTrn);
 
 W = single(W);

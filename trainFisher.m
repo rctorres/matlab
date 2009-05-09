@@ -9,18 +9,12 @@ elseif (nargin == 4),
   doProj = true;
   disp('Will perform non-segmented projection.');
 elseif (nargin == 6),
+  doProj = true;
   doProjSeg = true;
-  disp('Will perform segmented projection and training.');
+  disp('Will perform segmented and non-segmented projection and training.');
 else
   error('Invalid number of parameters. See help!');
 end
-
-%Creating the neural network
-net = newff2([size(trn{1},1) 1], {'tansig'});
-net.trainParam.epochs = 2000;
-net.trainParam.max_fail = 50;
-net.trainParam.show = 0;
-numTrains = 5;
 
 %Non seg case.
 if doProj,
@@ -29,16 +23,27 @@ if doProj,
 else
   inTrn = trn; inVal = val; inTst = tst;
 end
-[netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);
-oNet = netVec{I};
+fprintf('Input dimension for the NON segmented case: %d\n', size(inTrn{1},1));
+oNet = trainNetwork(inTrn, inVal, inTst);
 
 %Seg case.
 if doProjSeg,
   [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg.N, proj_seg.W);
   [inTrn, inVal, inTst] = normalize(inTrn, inVal, inTst, proj_seg);
-  [netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);
-  oNet_seg = netVec{I};
+  fprintf('Input dimension for the segmented case: %d\n', size(inTrn{1},1));
+  oNet_seg = trainNetwork(inTrn, inVal, inTst);
 end
+
+function oNet = trainNetwork(inTrn, inVal, inTst)
+  %Creating the neural network
+  net = newff2([size(inTrn{1},1) 1], {'tansig'});
+  net.trainParam.epochs = 20;
+  net.trainParam.max_fail = 50;
+  net.trainParam.show = 0;
+  numTrains = 2;
+  [netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);
+  oNet = netVec{I};
+
 
 function [nTrn, nVal, nTst] = normalize(trn, val, tst, proj)
   nTrn = trn;

@@ -1,4 +1,4 @@
-function [inTrn, inVal, inTst] = load4Train(dataFile)
+function [inTrn, inVal, inTst, ringsDist] = load4Train(dataFile)
 %function [inTrn, inVal, inTst] = load4Train(dataFile)
 %Loads the dataset files, and organize them already into train, val e test
 %sets
