@@ -46,7 +46,7 @@ if ~skipNSeg,
   oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes);
 else
   disp('Skipping the non-segmented training.');
-  onet = [];
+  oNet = [];
 end
 
 %Seg case.
