@@ -45,7 +45,7 @@ if ~skipNSeg,
   fprintf('Input dimension for the NON segmented case: %d\n', size(inTrn{1},1));
   oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes);
 else
-  disp('Skipping the non-segment training.');
+  disp('Skipping the non-segmented training.');
   onet = [];
 end
 
