@@ -83,7 +83,7 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes)
   net.trainParam.epochs = 2000;
   net.trainParam.max_fail = 50;
   net.trainParam.show = 0;
-  numTrains = 3;
+  numTrains = 10;
 
   %Doing the training.
   if (nNodes == 1),
