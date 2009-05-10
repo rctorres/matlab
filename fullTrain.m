@@ -59,6 +59,7 @@ end
 
 function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, doFisher)
   %Should we spherize?
+
   ps = [];
   if doSpher,
     [inTrn, inVal, inTst, ps] = normalize(inTrn, inVal, inTst);
@@ -73,17 +74,17 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, doFisher)
     disp('Training a non-linear classifier.');
     net = newff2([size(inTrn{1},1) 1  1], {'tansig', 'tansig'});
   end
-  net.trainParam.epochs = 2;
+  net.trainParam.epochs = 2000;
   net.trainParam.max_fail = 50;
   net.trainParam.show = 0;
-  numTrains = 2;
+  numTrains = 5;
 
   %Doing the training.
   if doFisher,
     [netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);
     oNet = netVec{I};
   else
-    [pcd, onet.netVec, onet.epoch, onet.trnError, onet.valError, onet.efic] = npcd(net, inTrn, inVal, inTst, false, numTrains);
+    [aux, oNet.net, oNet.epoch, oNet.trnError, oNet.valError, oNet.efic] = npcd(net, inTrn, inVal, inTst, false, numTrains);
   end
 
   %Saving the spherization values.
