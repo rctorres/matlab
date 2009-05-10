@@ -1,0 +1,125 @@
+function [oNet, oNet_seg] = fullTrain(trn, val, tst, doSpher, nNodes, skipNSeg, proj, proj_seg, ringsDist)
+%function [oNet, oNet_seg] = fullTrain(trn, val, tst, doSpher, nNodes, skipNSeg, proj, proj_seg, ringsDist)
+%Perform segmented and non-segmented training.
+% trn, val, tst - cell vectors with trn, val and tst data.
+% doSpher - if true, will apply mapstd to the inputs.
+% nNodes : if 0, trains a fisher classifier. If 1, then a neural-network is trained and the number of
+%          hidden nodes are calculated via PCD. Otherwise, a network is trained with nNodes nodes in
+%          the hidden layer.
+% skipNSeg : If true, will skip the non-segmented training. To skip the segment training, just set proj_seg = [].
+% proj : A projection structure for the non-segmented case containing the following fields:
+%    - W : The projection matrix, with one projection per ROW.
+%    - N : The number of projections to use.
+%        If proj = [], then no projection is performed, but the training is done.
+% proj_seg : A projection structure for the segmented case containing the following fields:
+%    - W : A cell vector, where each cell is a structure containing a field named 'W' containing
+%            the projections direction for that given layer. Each ROW is a direction.
+%    - N : A vector with the number of projections to use for each layer.
+%        If proj_seg = [], then no projection is performed, AND the training is not done (skipped).
+%
+%Returns:
+% oNet and oNet_seg : trained structure with the following fields:
+%   For the non-linear case:
+%     - net: Either the net structure (fisher) or a cell vector with the net structure for each PCD.
+%     - epoch: Either the epochs vector (fisher) or a matrix where the rows are the epochs for each PCD.
+%     - trnError: Either the trn error vector (fisher) or a matrix where the rows are the trn error for each PCD.
+%     - valError: Either the val error vector (fisher) or a matrix where the rows are the val error for each PCD.
+%     - ps: if doSpher = true, will contain the ps structure to use with mapstd for inut spherization.
+%     - efic: only for the non-linear case. It is the mean, std and max SP values obtained for each PCD.
+%
+% If any of the cases (seg or non-seg) are skipped, it corresponding return structure is set to [].
+% 
+
+if (nargin ~= 9),
+  error('Invalid number of parameters. See help!');
+end
+
+%Non seg case.
+if ~skipNSeg,
+  if size(proj,1) ~= 0,
+    disp('Performing non-segmented projection.');
+    [inTrn, inVal, inTst] = get_pre_proc_data(trn, val, tst, proj.W(1:proj.N,:));
+  else
+    inTrn = trn; inVal = val; inTst = tst;
+  end
+  fprintf('Input dimension for the NON segmented case: %d\n', size(inTrn{1},1));
+  oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes);
+else
+  disp('Skipping the non-segmented training.');
+  oNet = [];
+end
+
+%Seg case.
+if size(proj_seg,1) ~= 0,
+  [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg.N, proj_seg.W);
+  fprintf('Input dimension for the segmented case: %d\n', size(inTrn{1},1));
+  oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes);
+else
+  disp('Skipping the segmented training.');
+  oNet_seg = [];
+end
+
+
+
+function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes)
+  %Should we spherize?
+
+  ps = [];
+  nNodes = abs(nNodes);
+  
+  if doSpher,
+    [inTrn, inVal, inTst, ps] = normalize(inTrn, inVal, inTst);
+  end
+
+  %Creating the neural network.  
+  net = [];
+  if nNodes == 0,
+    disp('Training a Fisher classifier.');
+    net = newff2([size(inTrn{1},1) 1], {'tansig'});
+  else
+    disp('Training a non-linear classifier.');
+    net = newff2([size(inTrn{1},1) nNodes  1], {'tansig', 'tansig'});
+  end
+  net.trainParam.epochs = 2000;
+  net.trainParam.max_fail = 50;
+  net.trainParam.show = 0;
+  numTrains = 3;
+
+  %Doing the training.
+  if (nNodes == 1),
+    disp('Extracting the number of hidden nodes via PCD.');
+    [aux, oNet.net, oNet.epoch, oNet.trnError, oNet.valError, oNet.efic] = npcd(net, inTrn, inVal, inTst, false, numTrains);
+  else
+    [netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);
+    oNet = netVec{I};
+  end
+
+  %Saving the spherization values.
+  if doSpher,
+    oNet.ps = ps;
+  end
+
+
+function [nTrn, nVal, nTst, ps] = normalize(trn, val, tst)
+  N = length(trn);
+  nTrn = cell(1,N);
+  nVal = cell(1,N);
+  nTst = cell(1,N);
+  
+  disp('Applying input spherization.');
+
+  %Calculating the pre-proc parameters.
+  data = [];
+  for i=1:N,
+    data = [data trn{i}];
+  end
+  [aux, ps] = mapstd(double(data));
+  clear data aux;
+    
+  %Applying onto the dataset.
+  for i=1:N,
+    nTrn{i} = single(mapstd('apply', double(trn{i}), ps));
+    nVal{i} = single(mapstd('apply', double(val{i}), ps));
+    nTst{i} = single(mapstd('apply', double(tst{i}), ps));
+  end
+ 
