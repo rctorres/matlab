@@ -1,4 +1,4 @@
-function plotPCAcurve(val)
+function res = plotPCAcurve(val)
 %function plotPCAcurve(val)
 %Plots the accumulated energy over the number of considered PCAs.
 %
@@ -13,4 +13,6 @@ for i=2:N,
 	res(i) = res(i-1) + ( 100*val(i)/Etot );
 end
 
-plot([1:N], res, '*-');
+if nargout == 0,
+  plot([1:N], res, '*-');
+end
