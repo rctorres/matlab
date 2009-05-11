@@ -1,6 +1,7 @@
-function [oNet, oNet_seg] = fullTrain(trn, val, tst, doSpher, nNodes, skipNSeg, proj, proj_seg, ringsDist)
-%function [oNet, oNet_seg] = fullTrain(trn, val, tst, doSpher, nNodes, skipNSeg, proj, proj_seg, ringsDist)
+function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, nNodes, skipNSeg, proj, proj_seg, ringsDist)
+%function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, nNodes, skipNSeg, proj, proj_seg, ringsDist)
 %Perform segmented and non-segmented training.
+% batchSize : The batch size for each epoch.
 % trn, val, tst - cell vectors with trn, val and tst data.
 % doSpher - if true, will apply mapstd to the inputs.
 % nNodes : if 0, trains a fisher classifier. If 1, then a neural-network is trained and the number of
@@ -30,7 +31,7 @@ function [oNet, oNet_seg] = fullTrain(trn, val, tst, doSpher, nNodes, skipNSeg, 
 % If any of the cases (seg or non-seg) are skipped, it corresponding return structure is set to [].
 % 
 
-if (nargin ~= 9),
+if (nargin ~= 10),
   error('Invalid number of parameters. See help!');
 end
 
@@ -43,7 +44,7 @@ if ~skipNSeg,
     inTrn = trn; inVal = val; inTst = tst;
   end
   fprintf('Input dimension for the NON segmented case: %d\n', size(inTrn{1},1));
-  oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes);
+  oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize);
 else
   disp('Skipping the non-segmented training.');
   oNet = [];
@@ -53,7 +54,7 @@ end
 if size(proj_seg,1) ~= 0,
   [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg.N, proj_seg.W);
   fprintf('Input dimension for the segmented case: %d\n', size(inTrn{1},1));
-  oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes);
+  oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize);
 else
   disp('Skipping the segmented training.');
   oNet_seg = [];
@@ -61,7 +62,7 @@ end
 
 
 
-function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes)
+function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
   %Should we spherize?
 
   ps = [];
@@ -72,7 +73,6 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes)
   end
 
   %Creating the neural network.  
-  net = [];
   if nNodes == 0,
     disp('Training a Fisher classifier.');
     net = newff2([size(inTrn{1},1) 1], {'tansig'});
@@ -83,6 +83,7 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes)
   net.trainParam.epochs = 2000;
   net.trainParam.max_fail = 50;
   net.trainParam.show = 0;
+  net.trainParam.batchSize = batchSize;
   numTrains = 10;
 
   %Doing the training.
