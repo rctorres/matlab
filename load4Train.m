@@ -9,12 +9,14 @@ function [inTrn, inVal, inTst, ringsDist] = load4Train(globalInfo)
 name = getenv('LOGNAME');
 if strcmp(name, 'torres'), %If ubuntu, logname is torres, otherwise os rtorres
   load(globalInfo, 'DATAPATH');
-  load(DATAPATH);
+  pathVal = DATAPATH;
 else %If MAC.
   load(globalInfo, 'DATAPATH_MAC');
-  load(DATAPATH_MAC);
+  pathVal = DATAPATH_MAC;
 end
 
+fprintf('Loading data from "%s"\n', pathVal);
+load(pathVal);
 inTrn = {eTrn.rings jTrn.rings};
 inVal = {eVal.rings jVal.rings};
 inTst = {eTst.rings jTst.rings};
