@@ -80,11 +80,11 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
     disp('Training a non-linear classifier.');
     net = newff2([size(inTrn{1},1) nNodes  1], {'tansig', 'tansig'});
   end
-  net.trainParam.epochs = 2000;
-  net.trainParam.max_fail = 50;
+  net.trainParam.epochs = 3000;
+  net.trainParam.max_fail = 100;
   net.trainParam.show = 0;
   net.trainParam.batchSize = batchSize;
-  numTrains = 10;
+  numTrains = 5;
 
   %Doing the training.
   if (nNodes == 1),
