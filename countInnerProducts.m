@@ -1,12 +1,16 @@
-function total = countInnerProducts(net)
-%function total = countInnerProducts(net)
+function total = countInnerProducts(net, origDim)
+%function total = countInnerProducts(net,origDim)
 %Counts the number of inner products performed by the passed neural network.
 %
 nNodes = getNumNodes(net);
+if nargin == 2,
+  nNodes(1) = origDim;
+end
+
 total = 0;
 
 for i=2:length(nNodes),
-  total = total + (nNodes(i-1) * nNodes(i));
+  total = total + (nNodes(i) * nNodes(i-1));
 end
 
 function numNodes = getNumNodes(net)
