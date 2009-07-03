@@ -114,13 +114,13 @@ function [nTrn, nVal, nTst, ps] = normalize(trn, val, tst)
   for i=1:N,
     data = [data trn{i}];
   end
-  [aux, ps] = mapstd(double(data));
+  [aux, ps] = mapstd(data);
   clear data aux;
     
   %Applying onto the dataset.
   for i=1:N,
-    nTrn{i} = single(mapstd('apply', double(trn{i}), ps));
-    nVal{i} = single(mapstd('apply', double(val{i}), ps));
-    nTst{i} = single(mapstd('apply', double(tst{i}), ps));
+    nTrn{i} = mapstd('apply', trn{i}, ps));
+    nVal{i} = mapstd('apply', val{i}, ps));
+    nTst{i} = mapstd('apply', tst{i}, ps));
   end
  

@@ -33,7 +33,6 @@ function plotProjectionAnalysis(data, ringsDist, secNames, w_all, w_seg)
 %
 
 
-data = double(data);
 nLayers = length(ringsDist);
 
 doProj = true;

@@ -5,7 +5,6 @@ function [inTrn_W, inVal_W, inTst_W] = get_pre_proc_data(inTrn, inVal, inTst, W)
 %
 nSets = length(inTrn);
 
-W = single(W);
 inTrn_W = cell(1,nSets);
 inVal_W = cell(1,nSets);
 inTst_W = cell(1,nSets);

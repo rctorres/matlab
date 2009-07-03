@@ -28,9 +28,9 @@ trn = cell(1,nClasses);
 val = cell(1,nClasses);
 tst = cell(1,nClasses);
 for i=1:nClasses,
-  trn{i} = zeros(newEvSize, size(inTrn{i},2), 'single');
-  val{i} = zeros(newEvSize, size(inVal{i},2), 'single');
-  tst{i} = zeros(newEvSize, size(inTst{i},2), 'single');
+  trn{i} = zeros(newEvSize, size(inTrn{i},2));
+  val{i} = zeros(newEvSize, size(inVal{i},2));
+  tst{i} = zeros(newEvSize, size(inTst{i},2));
 end
 
 %Getting the data from each layer.
