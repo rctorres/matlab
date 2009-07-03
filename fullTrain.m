@@ -120,8 +120,8 @@ function [nTrn, nVal, nTst, ps] = normalize(trn, val, tst)
     
   %Applying onto the dataset.
   for i=1:N,
-    nTrn{i} = mapstd('apply', trn{i}, ps));
-    nVal{i} = mapstd('apply', val{i}, ps));
-    nTst{i} = mapstd('apply', tst{i}, ps));
+    nTrn{i} = mapstd('apply', trn{i}, ps);
+    nVal{i} = mapstd('apply', val{i}, ps);
+    nTst{i} = mapstd('apply', tst{i}, ps);
   end
  
