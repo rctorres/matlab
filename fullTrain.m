@@ -84,6 +84,7 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
   net.trainParam.max_fail = 100;
   net.trainParam.show = 0;
   net.trainParam.batchSize = batchSize;
+  net.trainParam.useSP = true;
   numTrains = 5;
 
   %Doing the training.
