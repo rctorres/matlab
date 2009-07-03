@@ -1,4 +1,4 @@
-function [inTrn, inVal, inTst, ringsDist] = load4Train(globalInfo)
+function [inTrn, inVal, inTst, ringsDist] = load4Train(normType, globalInfo)
 %function [inTrn, inVal, inTst, ringsDist] = load4Train(globalInfo)
 %Loads the dataset files, and organize them already into train, val e test
 %sets. This script is intelligent enough to read data in UBUNTU and also MAC OS,
@@ -7,7 +7,7 @@ function [inTrn, inVal, inTst, ringsDist] = load4Train(globalInfo)
 %ommited, it will try access the file stored in ../globals.mat
 %
 
-if nargin == 0,
+if nargin == 1,
   globalInfo = '../globals.mat';
 end
 
@@ -20,8 +20,9 @@ else %If MAC.
   pathVal = DATAPATH_MAC;
 end
 
-fprintf('Loading data from "%s"\n', pathVal);
-load(pathVal);
+fileName = sprintf('%snn-data-%s.mat', pathVal, normType);
+fprintf('Loading data from "%s"\n', fileName);
+load(fileName);
 inTrn = {eTrn.rings jTrn.rings};
 inVal = {eVal.rings jVal.rings};
 inTst = {eTst.rings jTst.rings};
