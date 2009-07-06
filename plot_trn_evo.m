@@ -22,12 +22,14 @@ title('Evolucao do Treinamento');
 xlabel('Epoca')
 ylabel('MSE / SP');
 grid on;
-
-fprintf('SP maximo atraves de parada por MSE = %f\n', max_mse);
-fprintf('SP maximo atraves de parada por SP = %f\n', max_sp);
 fprintf('\n');
-fprintf('Ultimo SP obtido com MSE = %f\n', d.sp_val(i_mse));
-fprintf('Ultimo SP obtido com SP = %f\n', d.sp_val(i_sp));
+fprintf('SP maximo obtido ao final do treinamento: %f\n', max_sp_global);
+fprintf('\n');
+fprintf('SP maximo obtido se a parada fosse apenas por MSE: %f\n', max_mse);
+fprintf('SP maximo obtido se a parada fosse apenas por SP : %f\n', max_sp);
+fprintf('\n');
+fprintf('Ultimo SP obtido se a parada fosse apenas por MSE: %f\n', d.sp_val(i_mse));
+fprintf('Ultimo SP obtido se a parada fosse apenas por SP : %f\n', d.sp_val(i_sp));
 
 %plotando o flags de melhor MSE lobal e melhor SP global.
 figure
