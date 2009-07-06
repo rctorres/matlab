@@ -1,9 +1,10 @@
-function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, nNodes, skipNSeg, proj, proj_seg, ringsDist)
-%function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, nNodes, skipNSeg, proj, proj_seg, ringsDist)
+function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean, nNodes, skipNSeg, proj, proj_seg, ringsDist)
+%function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean, nNodes, skipNSeg, proj, proj_seg, ringsDist)
 %Perform segmented and non-segmented training.
 % batchSize : The batch size for each epoch.
 % trn, val, tst - cell vectors with trn, val and tst data.
 % doSpher - if true, will apply mapstd to the inputs.
+% remMean - if true, will remove the mean of the input events, calculating it from the training set 
 % nNodes : if 0, trains a fisher classifier. If 1, then a neural-network is trained and the number of
 %          hidden nodes are calculated via PCD. Otherwise, a network is trained with nNodes nodes in
 %          the hidden layer.
@@ -18,6 +19,7 @@ function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, nNodes,
 %    - N : A vector with the number of projections to use for each layer.
 %        If proj_seg = [], then no projection is performed, AND the training is not done (skipped).
 %
+% ringsDist - Vector containing the number of rings in each layer.
 %Returns:
 % oNet and oNet_seg : trained structure with the following fields:
 %   For the non-linear case:
@@ -31,8 +33,15 @@ function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, nNodes,
 % If any of the cases (seg or non-seg) are skipped, it corresponding return structure is set to [].
 % 
 
-if (nargin ~= 10),
+if (nargin ~= 11),
   error('Invalid number of parameters. See help!');
+end
+
+if remMean,
+  disp('Removendo a media dos dados...');
+  [trn, val, tst] = remove_mean(trn, val, tst);
+else
+  disp('Dados serao processados SEM a remocao da media...');
 end
 
 %Non seg case.
