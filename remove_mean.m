@@ -17,6 +17,6 @@ oTst = cell(size(tst));
 
 for i=1:length(trn),
   oTrn{i} = trn{i} - repmat(meanVec,1,size(trn{i},2));
-  oTrn{i} = val{i} - repmat(meanVec,1,size(val{i},2));
-  oTrn{i} = tst{i} - repmat(meanVec,1,size(tst{i},2));
+  oVal{i} = val{i} - repmat(meanVec,1,size(val{i},2));
+  oTst{i} = tst{i} - repmat(meanVec,1,size(tst{i},2));
 end
