@@ -40,6 +40,8 @@ end
 if remMean,
   disp('Removendo a media dos dados...');
   [trn, val, tst] = remove_mean(trn, val, tst);
+else
+  disp('Dados serao processados SEM a remocao da media...');
 end
 
 %Non seg case.
