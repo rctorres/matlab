@@ -1,15 +1,9 @@
-function [oTrn, oVal, oTst, meanVec] = remove_mean(trn, val, tst, mv)
+function [oTrn, oVal, oTst] = remove_mean(trn, val, tst)
 %function [oTrn, oVal, oTst, meanVec] = remove_mean(trn, val, tst, mv)
-%Remove a media dos conjuntos de dados.
-%Se um vetor de medias 'mv' previamente calculado e passado, ele sera usado nos 3 conjuntos.
-%Do contrario, a media de cada variavel sera calculada do vetor 'trn'
+%Remove a media dos conjuntos de dados. A media de cada variavel sera calculada do vetor 'trn'
 %
 
-if nargin == 3,
-  meanVec = mean([trn{1} trn{2}], 2);
-else
-  meanVec = mv;
-end
+meanVec = mean([trn{1} trn{2}], 2);
 
 oTrn = cell(size(trn));
 oVal = cell(size(val));
