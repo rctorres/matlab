@@ -39,7 +39,7 @@ end
 if ~skipNSeg,
   if size(proj,1) ~= 0,
     disp('Performing non-segmented projection.');
-    [inTrn, inVal, inTst] = get_pre_proc_data(trn, val, tst, proj.W(1:proj.N,:));
+    [inTrn, inVal, inTst] = get_pre_proc_data(trn, val, tst, proj.W);
   else
     inTrn = trn; inVal = val; inTst = tst;
   end
@@ -52,7 +52,7 @@ end
 
 %Seg case.
 if size(proj_seg,1) ~= 0,
-  [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg.N, proj_seg.W);
+  [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg);
   fprintf('Input dimension for the segmented case: %d\n', size(inTrn{1},1));
   oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize);
 else
@@ -80,16 +80,17 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
     disp('Training a non-linear classifier.');
     net = newff2([size(inTrn{1},1) nNodes  1], {'tansig', 'tansig'});
   end
-  net.trainParam.epochs = 3000;
-  net.trainParam.max_fail = 30;
+  net.trainParam.epochs = 4000;
+  net.trainParam.max_fail = 100;
   net.trainParam.show = 0;
   net.trainParam.batchSize = batchSize;
+  net.trainParam.useSP = true;
   numTrains = 5;
 
   %Doing the training.
   if (nNodes == 1),
     disp('Extracting the number of hidden nodes via PCD.');
-    [aux, oNet.net, oNet.epoch, oNet.trnError, oNet.valError, oNet.efic] = npcd(net, inTrn, inVal, inTst, false, numTrains);
+    [aux, oNet.net, oNet.trnEvo, oNet.efic] = npcd(net, inTrn, inVal, inTst, false, numTrains);
   else
     [netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);
     oNet = netVec{I};
@@ -114,13 +115,13 @@ function [nTrn, nVal, nTst, ps] = normalize(trn, val, tst)
   for i=1:N,
     data = [data trn{i}];
   end
-  [aux, ps] = mapstd(double(data));
+  [aux, ps] = mapstd(data);
   clear data aux;
     
   %Applying onto the dataset.
   for i=1:N,
-    nTrn{i} = single(mapstd('apply', double(trn{i}), ps));
-    nVal{i} = single(mapstd('apply', double(val{i}), ps));
-    nTst{i} = single(mapstd('apply', double(tst{i}), ps));
+    nTrn{i} = mapstd('apply', trn{i}, ps);
+    nVal{i} = mapstd('apply', val{i}, ps);
+    nTst{i} = mapstd('apply', tst{i}, ps);
   end
  
