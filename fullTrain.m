@@ -39,7 +39,7 @@ end
 if ~skipNSeg,
   if size(proj,1) ~= 0,
     disp('Performing non-segmented projection.');
-    [inTrn, inVal, inTst] = get_pre_proc_data(trn, val, tst, proj.W(1:proj.N,:));
+    [inTrn, inVal, inTst] = get_pre_proc_data(trn, val, tst, proj.W);
   else
     inTrn = trn; inVal = val; inTst = tst;
   end
@@ -52,7 +52,7 @@ end
 
 %Seg case.
 if size(proj_seg,1) ~= 0,
-  [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg.N, proj_seg.W);
+  [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg);
   fprintf('Input dimension for the segmented case: %d\n', size(inTrn{1},1));
   oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize);
 else
