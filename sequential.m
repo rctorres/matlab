@@ -56,7 +56,7 @@ function nData = doLayer(data, stopEnergy, energyThreshold)
     
     fixed = false;
     for j=2:nRings,
-      norm(j) = abs(norm(j-1) - rings(j-1));
+      norm(j) = abs(norm(j-1) - abs(rings(j-1)));
       if (fixed) || (norm(j) < stopEnergy),
         norm(j) = norm(1);
         fixed = true;
