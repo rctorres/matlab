@@ -1,12 +1,11 @@
-load pca.mat pca_all pca_seg
+function gen_pca_plots(pca, pca_seg)
 
 names = [{'PS'} {'EM1'} {'EM2'} {'EM3'} {'HD1'} {'HD2'} {'HD3'}];
 
-figure;
-
 for i=1:length(pca_seg),
+  pcRet = size(pca_seg{i}.W,1);
   subplot(2,4,i);
-  plotPCAcurve(pca_seg{i}.en);
+  plotPCAcurve(pca_seg{i}.en, size(pca_seg{i}.W,1));  
   title(names{i});
   xlabel('# PCA');
   ylabel('Energy (%)');
@@ -14,10 +13,8 @@ for i=1:length(pca_seg),
 end
 
 subplot(2,4,8);
-plotPCAcurve(pca_all.en);
+plotPCAcurve(pca.en, size(pca.W,1));
 title('ALL')
 xlabel('# PCA');
 ylabel('Energy (%)');
 grid on;
-
-saveas(gcf, 'carga_pca', 'fig');

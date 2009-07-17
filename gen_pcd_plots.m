@@ -2,8 +2,6 @@ function gen_pcd_plots(pcd, pcd_seg)
 
 names = [{'PS'} {'EM1'} {'EM2'} {'EM3'} {'HD1'} {'HD2'} {'HD3'}];
 
-figure;
-
 for i=1:length(pcd_seg),
   subplot(2,4,i);
   errorbar(pcd_seg{i}.efic.mean, pcd_seg{i}.efic.std, 'b*--');
