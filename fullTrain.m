@@ -5,7 +5,8 @@ function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean
 % trn, val, tst - cell vectors with trn, val and tst data.
 % doSpher - if true, will apply mapstd to the inputs.
 % remMean - if true, will remove the mean of the input events, calculating it from the training set 
-% nNodes : [1x2] vector containing the number of nodes for the non segmented and segmented case
+% nNodes : structure containing the number of nodes for the non segmented
+% (nseg)  and segmented (seg) cases
 %          (in this order).if 0, trains a fisher classifier. If 1, then a neural-network is trained and the number of
 %          hidden nodes are calculated via PCD. Otherwise, a network is trained with nNodes nodes in
 %          the hidden layer.
@@ -54,7 +55,7 @@ if ~skipNSeg,
     inTrn = trn; inVal = val; inTst = tst;
   end
   fprintf('Input dimension for the NON segmented case: %d\n', size(inTrn{1},1));
-  oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes(1), batchSize);
+  oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes.nseg, batchSize);
 else
   disp('Skipping the non-segmented training.');
   oNet = [];
@@ -64,7 +65,7 @@ end
 if size(proj_seg,1) ~= 0,
   [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg);
   fprintf('Input dimension for the segmented case: %d\n', size(inTrn{1},1));
-  oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes(2), batchSize);
+  oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes.seg, batchSize);
 else
   disp('Skipping the segmented training.');
   oNet_seg = [];
