@@ -47,8 +47,8 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
     bOut = 100;
   end
   
-  figure;
-  
+  if ~isempty(id), id = sprintf('(%s)', id); end
+    
   %Training evolution.
   if ~isempty(evo),
     tstData = ~isempty(evo.mse_tst(evo.mse_tst ~= 0));
@@ -132,10 +132,10 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   xlabel('E_t (Mev)');
   ylabel('Efficiency (%)');
   legend('Detection', 'False Alarm', 'Location', 'East');
-  for i=1:bE,
-    txt = sprintf('E=%d / J=%d', ne(i), nj(i));
+%  for i=1:bE,
+%    txt = sprintf('E=%d / J=%d', ne(i), nj(i));
 %    text(cE(i),floor(pd(i)-10),txt,'FontSize',8, 'Rotation', 90, 'HorizontalAlignment', 'right', 'Color', 'y', 'FontUnits', 'normalized');
-  end
+%  end
   
   %Doing eta.
   [inEta, supEta, cEta] = getBimRanges(-2.5, 2.5, bEta);
@@ -150,10 +150,10 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   ylabel('Efficiency (%)');
   legend('Detection', 'False Alarm', 'Location', 'East');
   set(gca, 'XLim', [-2.6 2.6]);
-  for i=1:bEta,
-    txt = sprintf('E=%d / J=%d', ne(i), nj(i));
+%  for i=1:bEta,
+%    txt = sprintf('E=%d / J=%d', ne(i), nj(i));
 %    text(cEta(i),floor(pd(i))-10,txt,'FontSize',8, 'Rotation', 90, 'HorizontalAlignment', 'right', 'Color', 'y', 'FontUnits', 'normalized');
-  end
+%  end
 
   %Doing phi.
   [in, sup, c] = getBimRanges(-pi, pi, bPhi);
@@ -168,10 +168,10 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   ylabel('Efficiency (%)');
   legend('Detection', 'False Alarm', 'Location', 'East');
   set(gca, 'XLim', [-3.2 3.2]);
-  for i=1:bPhi,
-    txt = sprintf('E=%d / J=%d', ne(i), nj(i));
+%  for i=1:bPhi,
+%    txt = sprintf('E=%d / J=%d', ne(i), nj(i));
 %    text(c(i),floor(pd(i)-10),txt,'FontSize',8, 'Rotation', 90, 'HorizontalAlignment', 'right', 'Color', 'y', 'FontUnits', 'normalized');
-  end
+%  end
 
   set(gcf, 'Position', [1 1 1440 800]);
   
