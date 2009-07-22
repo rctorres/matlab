@@ -46,11 +46,13 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   elseif nargin == 9,
     bOut = 100;
   end
-
+  
+  figure;
+  
   %Training evolution.
   if ~isempty(evo),
     tstData = ~isempty(evo.mse_tst(evo.mse_tst ~= 0));
-    figure;
+    subplot(2,3,1);
     plot(evo.epoch, evo.mse_trn, 'b-', evo.epoch, evo.mse_val, 'r-');
     hold on;
     leg = {'MSE (trn)', 'MSE (val)'};
@@ -69,7 +71,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
       end
     end
     hold off;
-    legend(leg, 'Location', 'Best');
+    legend(leg, 'Location', 'East');
     title('Training Evolution');
     xlabel('Epoch');
     ylabel('MSE / SP');
@@ -87,7 +89,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   cut = cutVec(Isp);
   
   %Histogram with network outputs.
-  figure;
+  subplot(2,3,2);
   [inOut, supOut, cOut] = getBimRanges(-1, 1, bOut);
   eHist = hist(oE, cOut);
   jHist = hist(oJ, cOut);
@@ -101,13 +103,13 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   ylabel('Frequency');
   eTxt = sprintf('Electron (%2.2f%%)', 100*detVec(Isp));
   jTxt = sprintf('Jet (%2.2f%%)', 100*(1-faVec(Isp)));
-  trhTxt = sprintf('Threshold (%1.3f%%)', cut);
-  legend(eTxt, jTxt, trhTxt, 'Location', 'Best');
+  trhTxt = sprintf('Threshold (%1.3f)', cut);
+  legend(eTxt, jTxt, trhTxt, 'Location', 'North');
 %  set(gca, 'yScale', 'log');
 
 
   %ROC figure.
-  figure;
+  subplot(2,3,3);
   plot(100*faVec, 100*detVec, 'b-', 100*faVec(Isp), 100*detVec(Isp), 'b*');
   spTxt = sprintf('max. SP (%2.2f)', 100*maxSP);
   legend('ROC', spTxt, 'Location', 'SouthEast');
@@ -121,7 +123,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   %Doing energy analysis.
   [inE, supE, cE] = getBimRanges(7000, 80000, bE);
   [pd, pfa, ne, nj] = getProbabilities(net, cut, electrons.rings, jets.rings, electrons.et, jets.et, inE, supE);
-  figure;
+  subplot(2,3,4);
   bar(cE,pd,'b');
   hold on;
   bar(cE,pfa,'r');
@@ -138,7 +140,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   %Doing eta.
   [inEta, supEta, cEta] = getBimRanges(-2.5, 2.5, bEta);
   [pd, pfa, ne, nj] = getProbabilities(net, cut, electrons.rings, jets.rings, electrons.lvl2_eta, jets.lvl2_eta, inEta, supEta);
-  figure;
+  subplot(2,3,5);
   bar(cEta,pd,'b');
   hold on;
   bar(cEta,pfa,'r');
@@ -156,7 +158,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   %Doing phi.
   [in, sup, c] = getBimRanges(-pi, pi, bPhi);
   [pd, pfa, ne, nj] = getProbabilities(net, cut, electrons.rings, jets.rings, electrons.lvl2_phi, jets.lvl2_phi, in, sup);
-  figure;
+  subplot(2,3,6);
   bar(c,pd,'b');
   hold on;
   bar(c,pfa,'r');
@@ -171,6 +173,8 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
 %    text(c(i),floor(pd(i)-10),txt,'FontSize',8, 'Rotation', 90, 'HorizontalAlignment', 'right', 'Color', 'y', 'FontUnits', 'normalized');
   end
 
+  set(gcf, 'Position', [1 1 1440 800]);
+  
 function show(x,y,e,c,error)
   if error,
     errorbar(x,y,e,c);
