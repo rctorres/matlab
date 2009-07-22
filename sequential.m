@@ -65,12 +65,12 @@ function nData = doLayer(data, stopEnergy, energyThreshold, fixNorm, doSequentia
       norm(1) = max( norm(1), max(abs(rings)) );
     
       if norm(1) < energyThreshold,
-        fprintf('Layer energy (%f) is less than the energy threshold. I will use the fixed_norm for everybody...\n', norm(1));
+%        fprintf('Layer energy (%f) is less than the energy threshold. I will use the fixed_norm for everybody...\n', norm(1));
         nData(:,i) = rings ./ fixNorm;
         continue;
       end
       
-      fprintf('Layer with energy (%f) less than stop_energy. Dividing by the total layer energy...\n', norm(1));
+%      fprintf('Layer with energy (%f) less than stop_energy. Dividing by the total layer energy...\n', norm(1));
       nData(:,i) = rings ./ norm(1);
       continue;
     end
