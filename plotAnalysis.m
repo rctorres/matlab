@@ -1,5 +1,5 @@
 function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
-%function plotAnalysis(net, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
+%function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
 %Gera as figuras de Plots para analise. Os parametros de entrada sao:
 % - net: a rede neural a ser utilizada.
 % - evo: A estrutura com as informacoes sobre a evolucao do treino.
