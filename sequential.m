@@ -53,14 +53,14 @@ function etot = getTotalEnergy2USe(data, ringsDist, etot2Use)
     etot = repmat(abs(sum(data)), nLayers, 1);
   elseif strcmp(etot2Use, 'section'),
     disp('Usando norma unitaria do secao...');
-    etot = zeros(size(data));
+    etot = zeros(nLayers, size(data,2));
     nEMLayers = 4;
     nEM = sum(ringsDist(1:nEMLayers));  
-    etot(1:nEM,:) = repmat( abs(sum(data(1:nEM,:))), nEMLayers, 1);
-    etot((nEM+1):end,:) = repmat( abs(sum(data((nEM+1):end,:))), (nLayers-nEMLayers), 1);
+    etot(1:nEMLayers,:) = repmat( abs(sum(data(1:nEM,:))), nEMLayers, 1);
+    etot((nEMLayers+1):end,:) = repmat( abs(sum(data((nEM+1):end,:))), (nLayers-nEMLayers), 1);
   elseif strcmp(etot2Use, 'layer'),
     disp('Usando norma unitaria da camada...');
-    etot = zeros(size(data));
+    etot = zeros(nLayers, size(data,2));
     for i=1:nLayers,
       etot(i,:) = abs(sum(getLayer(data, ringsDist, i)));
     end
