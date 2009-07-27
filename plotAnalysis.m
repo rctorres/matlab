@@ -83,8 +83,8 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   title(sprintf('Network Output %s', id));
   xlabel('Output value');
   ylabel('Frequency');
-  eTxt = sprintf('Electron (%2.2f%%) out: %1.3f +- %1.3f', 100*detVec(Isp), mean_oE, std_oE);
-  jTxt = sprintf('Jet (%2.2f%%) out: %1.3f +- %1.3f', 100*(1-faVec(Isp)), mean_oJ, std_oJ);
+  eTxt = sprintf('Electron (Efic: %2.2f%%)\nout: %1.3f +- %1.3f', 100*detVec(Isp), mean_oE, std_oE);
+  jTxt = sprintf('Jet (Efic: %2.2f%%)\nout: %1.3f +- %1.3f', 100*(1-faVec(Isp)), mean_oJ, std_oJ);
   trhTxt = sprintf('Threshold (%1.3f)', cut);
   legend(eTxt, jTxt, trhTxt, 'Location', 'North');
 %  set(gca, 'yScale', 'log');
