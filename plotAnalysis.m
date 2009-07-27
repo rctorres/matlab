@@ -18,34 +18,12 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
 % - Variacao da deteccao e do falso alarme por phi.
 %
 
-  if nargin == 4,
-    id = '';
-    nROC = 200;
-    bE = 50;
-    bEta = 50;
-    bPhi = 50;
-    bOut = 100;
-  elseif nargin == 5,
-    nROC = 200;
-    bE = 50;
-    bEta = 50;
-    bPhi = 50;
-    bOut = 100;
-  elseif nargin == 6,
-    bE = 50;
-    bEta = 50;
-    bPhi = 50;
-    bOut = 100;
-  elseif nargin == 7,
-    bEta = 50;
-    bPhi = 50;
-    bOut = 100;
-  elseif nargin == 8,
-    bPhi = 50;
-    bOut = 100;
-  elseif nargin == 9,
-    bOut = 100;
-  end
+  if nargin < 5, id = ''; end
+  if nargin < 6, nROC = 200; end
+  if nargin < 7, bE = 50; end
+  if nargin < 8, bEta = 50; end
+  if nargin < 9, bPhi = 50; end
+  if nargin < 10, bOut = 100; end
   
   if ~isempty(id), id = sprintf('(%s)', id); end
     
@@ -81,7 +59,11 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   
   %Calculating net Output
   oE = nsim(net, electrons.rings);
+  mean_oE = mean(oE);
+  std_oE = std(oE);
   oJ = nsim(net, jets.rings);
+  mean_oJ = mean(oJ);
+  std_oJ = std(oJ);
   
   %Calculating ROC
   [spVec, cutVec, detVec, faVec] = genROC(oE, oJ, nROC);
@@ -101,8 +83,8 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   title(sprintf('Network Output %s', id));
   xlabel('Output value');
   ylabel('Frequency');
-  eTxt = sprintf('Electron (%2.2f%%)', 100*detVec(Isp));
-  jTxt = sprintf('Jet (%2.2f%%)', 100*(1-faVec(Isp)));
+  eTxt = sprintf('Electron (%2.2f%%) out: %1.3f +- %1.3f', 100*detVec(Isp), mean_oE, std_oE);
+  jTxt = sprintf('Jet (%2.2f%%) out: %1.3f +- %1.3f', 100*(1-faVec(Isp)), mean_oJ, std_oJ);
   trhTxt = sprintf('Threshold (%1.3f)', cut);
   legend(eTxt, jTxt, trhTxt, 'Location', 'North');
 %  set(gca, 'yScale', 'log');
