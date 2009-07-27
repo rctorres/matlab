@@ -1,5 +1,5 @@
 function nData = event(data, ringsDist, energyThreshold, fixNorm, layers2Normalize, etot2Use)
-%function nData = sequential(data, ringsDist, energyThreshold, fixNorm, layers2Normalize, etot2Use)
+%function nData = event(data, ringsDist, energyThreshold, fixNorm, layers2Normalize, etot2Use)
 %Realiza a normalizacao por evento, tal como o Rabello no Ringer.
 %
 
@@ -65,7 +65,7 @@ function etot = getTotalEnergy2USe(data, ringsDist, etot2Use)
 
 
 
-function nData = doLayer(data, etot, stopEnergy, energyThreshold, fixNorm, doNorm)
+function nData = doLayer(data, etot, energyThreshold, fixNorm, doNorm)
   fprintf('For layer with %d rings, energy_threshold = %f, fixed_norm = %f, do_norm = %d\n', size(data,1), energyThreshold, fixNorm, doNorm);
   nData = zeros(size(data));
   [nRings, nEvents] = size(data);
