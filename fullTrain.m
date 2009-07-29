@@ -86,10 +86,10 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
   %Creating the neural network.  
   if nNodes == 0,
     disp('Training a Fisher classifier.');
-    net = newff2([size(inTrn{1},1) 1], {'tansig'});
+    net = newff2(inTrn);
   else
     disp('Training a non-linear classifier.');
-    net = newff2([size(inTrn{1},1) nNodes  1], {'tansig', 'tansig'});
+    net = newff2(inTrn, [1 -1], nNodes, {'tansig', 'tansig'});
   end
   net.trainParam.epochs = 4000;
   net.trainParam.max_fail = 100;
