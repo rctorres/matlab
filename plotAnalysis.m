@@ -29,7 +29,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
     
   %Training evolution.
   if ~isempty(evo),
-    tstData = ~isempty(evo.mse_tst(evo.mse_tst ~= 0));
+    tstData = isfield(evo, 'mse_tst');
     subplot(2,3,1);
     plot(evo.epoch, evo.mse_trn, 'b-', evo.epoch, evo.mse_val, 'r-');
     hold on;
