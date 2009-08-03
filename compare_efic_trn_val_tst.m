@@ -5,7 +5,7 @@ function compare_efic_trn_val_tst(netVec, trn, val, tst)
 %
 
   data = {trn val tst};
-  leg = {'trn', 'val', 'tst'};
+  leg = {'Treino', 'Validacao', 'Teste'};
   color = {'b', 'r', 'k'};
   marker = {'b*', 'ro', 'kd'};
 
@@ -27,7 +27,9 @@ function compare_efic_trn_val_tst(netVec, trn, val, tst)
   xlabel('Falso Alarme (%)');
   ylabel('Prob. de Deteccao (%)');
   grid on;
-  legend(leg);
+  set(gca, 'XLim', [0.001 12]);
+  set(gca, 'YLim', [95 100]);
+  legend(leg, 'Location', 'SouthEast');
   
   subplot(1,2,2);
   hold off;
@@ -53,7 +55,7 @@ function [sp, det, fa] = getPlots(netVec, data)
   end
 
   detVec = 100*detVec;
-  fatVec = 100*faVec;
+  faVec = 100*faVec;
   sp.mean = mean(spVec);
   sp.std = std(spVec);
   det.mean = mean(detVec);
