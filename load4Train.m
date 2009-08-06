@@ -11,10 +11,10 @@ function [inTrn, inVal, inTst, ringsDist] = load4Train(normType, tstOnly, global
 %
 
 if nargin == 1,
-  globalInfo = '../globals.mat';
+  globalInfo = '../../globals.mat';
   tstOnly = false;
 elseif nargin == 2,
-  globalInfo = '../globals.mat';
+  globalInfo = '../../globals.mat';
 end
 
 name = getenv('LOGNAME');
