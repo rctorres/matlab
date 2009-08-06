@@ -51,7 +51,7 @@ function [sp, det, fa] = getPlots(netVec, data)
   for i=1:N,
     out = nsim(netVec{i}, data);
     [spV, aux, detVec(i,:), faVec(i,:)] = genROC(out{1}, out{2}, NROC);
-    spVec(i) = max(spV);
+    spVec(i) = 100*max(spV);
   end
 
   detVec = 100*detVec;
