@@ -22,6 +22,8 @@ title('Evolucao do Treinamento');
 xlabel('Epoca')
 ylabel('MSE / SP');
 grid on;
+set(gca, 'xScale', 'log');
+
 fprintf('\n');
 fprintf('SP maximo obtido ao final do treinamento: %f\n', max_sp_global);
 fprintf('\n');
