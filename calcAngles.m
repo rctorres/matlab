@@ -23,4 +23,4 @@ p(p>1) = 1;
 ang = acosd(p);
 
 %Limiting the result to +- 90 degrees.
-ang(ang > 90) = 180 - ang(ang > 90);
+%ang(ang > 90) = 180 - ang(ang > 90);
