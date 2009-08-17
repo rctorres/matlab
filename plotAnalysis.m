@@ -94,7 +94,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   subplot(2,3,3);
   plot(100*faVec, 100*detVec, 'b-', 100*faVec(Isp), 100*detVec(Isp), 'b*');
   spTxt = sprintf('max. SP (%2.2f)', 100*maxSP);
-  legend('ROC', spTxt, 'Location', 'SouthEast');
+  legend(sprintf('ROC (%s)', getNumNodesAsText(net)), spTxt, 'Location', 'SouthEast');
   title(sprintf('ROC %s', id));
   xlabel('False Alarm (%)');
   ylabel('Detection Efficiency (%)');
