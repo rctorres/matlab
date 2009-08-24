@@ -13,12 +13,12 @@ function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean
 % skipNSeg : If true, will skip the non-segmented training. To skip the segment training, just set proj_seg = [].
 % proj : A projection structure for the non-segmented case containing the following fields:
 %    - W : The projection matrix, with one projection per ROW.
-%    - N : The number of projections to use.
+%    - pos_proc : A (optional) pointer to a function that I want to pass the pre-processed data through.
 %        If proj = [], then no projection is performed, but the training is done.
 % proj_seg : A projection structure for the segmented case containing the following fields:
 %    - W : A cell vector, where each cell is a structure containing a field named 'W' containing
 %            the projections direction for that given layer. Each ROW is a direction.
-%    - N : A vector with the number of projections to use for each layer.
+%    - pos_proc : A (optional) pointer to a function that I want to pass the pre-processed data through.
 %        If proj_seg = [], then no projection is performed, AND the training is not done (skipped).
 %
 % ringsDist - Vector containing the number of rings in each layer.

@@ -6,7 +6,9 @@ function [trn val tst] = joinSegments(inTrn, inVal, inTst, ringsDist, wVec)
 %inTst, as well as the number of original rings in each layer (ringsDist).
 %wVec must containg the projection matrix for each cell in a field named 'W' 
 % (wVec.W) with each projection as a row vector, so wVec.W * data is correct.
-%. At the end, all d_W obtained from each
+%Also, wVec can containg a field named 'pos_proc', which should point to a function
+%that will be applied to the data after the projection onto W. If this fiedl is ommited,
+%nothing will be done after the projection. At the end, all d_W obtained from each
 %layer are concatenated, generatig a new, single input vent.
 %The function returns the trn, val and tst datasets, also as cell vectors,
 %but with the conpacted information of each layer concatenated as a single
@@ -36,6 +38,14 @@ for i=1:nClasses,
   tst{i} = zeros(newEvSize, size(inTst{i},2));
 end
 
+%Deciding whether to use a pos-processing function.
+if isfield(wVec, 'pos_proc'),
+  func = wVec.pos_proc;
+  disp('I will apply a pos-processing function after projecting each segment.');
+else
+  func = @do_nothing;
+end
+
 %Getting the data from each layer.
 for i=1:nLayers,
   %Taking the limits of the new event for the current layer.
@@ -51,8 +61,14 @@ for i=1:nLayers,
 
   %Inserting the layer info in the final output vectors.
   for j=1:nClasses,
-    trn{j}(ip:ep,:) = lTrn{j};
-    val{j}(ip:ep,:) = lVal{j};
-    tst{j}(ip:ep,:) = lTst{j};
+    trn{j}(ip:ep,:) = func(lTrn{j});
+    val{j}(ip:ep,:) = func(lVal{j});
+    tst{j}(ip:ep,:) = func(lTst{j});
   end  
 end
+
+
+
+
+function ret = do_nothing(data)
+  ret = data;
