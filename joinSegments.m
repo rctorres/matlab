@@ -6,7 +6,7 @@ function [trn val tst] = joinSegments(inTrn, inVal, inTst, ringsDist, wVec)
 %inTst, as well as the number of original rings in each layer (ringsDist).
 %wVec must containg the projection matrix for each cell in a field named 'W' 
 % (wVec.W) with each projection as a row vector, so wVec.W * data is correct.
-%Also, wVec can containg a field named 'pos_proc', which should point to a function
+%Also, wVec can containg a field named 'pos_proc' for each cell, which should point to a function
 %that will be applied to the data after the projection onto W. If this fiedl is ommited,
 %nothing will be done after the projection. At the end, all d_W obtained from each
 %layer are concatenated, generatig a new, single input vent.
@@ -38,16 +38,17 @@ for i=1:nClasses,
   tst{i} = zeros(newEvSize, size(inTst{i},2));
 end
 
-%Deciding whether to use a pos-processing function.
-if isfield(wVec, 'pos_proc'),
-  func = wVec.pos_proc;
-  disp('I will apply a pos-processing function after projecting each segment.');
-else
-  func = @do_nothing;
-end
-
 %Getting the data from each layer.
 for i=1:nLayers,
+  
+  %Deciding whether to use a pos-processing function.
+  if isfield(wVec{i}, 'pos_proc'),
+    func = wVec{i}.pos_proc;
+    disp('I will apply a pos-processing function after projecting each segment.');
+  else
+    func = @do_nothing;
+  end
+
   %Taking the limits of the new event for the current layer.
   [ip, ep] = getLayerLimits(inList,i);
 
