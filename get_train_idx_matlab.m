@@ -1,4 +1,4 @@
-function [in_data, out_data, trnIdx, valIdx, tstIdx] = get_train_idx_matlab(trn, val, tst)
+function [in_data, out_data, idx] = get_train_idx_matlab(trn, val, tst)
 %function [trnIdx, valIdx, tstIdx] = get_train_idx_matlab(trn, val, tst)
 %Esta funcao pega o conjunto de trino, validacao e teste passado, onde cada
 %conjunto e um vetor de celulas, e retorna:
@@ -6,7 +6,7 @@ function [in_data, out_data, trnIdx, valIdx, tstIdx] = get_train_idx_matlab(trn,
 % de redes neurais do Matlab.
 % out_data, os valores de alvos correspondentes (+1 p/ eletrons e -1 para
 % jatos).
-% trnIdx, valIdx, tstIdx: os indices em in_data onde se encontram os
+% id : Estrutura com os indices em in_data onde se encontram os
 % eventos outrora em trn, val e tst.
 %
 %Se tst for omitido da entrada, a funcao trabalhara somente com trn e val.
@@ -41,9 +41,11 @@ end
 
 in_data = cell2mat(aux);
 out_data = cell2mat(out);
-trnIdx = [ind{1} ind{2}];
-valIdx = [ind{3} ind{4}];
+idx.trainInd = [ind{1} ind{2}];
+idx.valInd = [ind{3} ind{4}];
 
 if nargin == 3,
-  tstIdx = [ind{5} ind{6}];
+  idx.testInd = [ind{5} ind{6}];
+else
+  idx.testInd = [];
 end
