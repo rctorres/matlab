@@ -24,5 +24,5 @@ else
   [y,x] = hist(data, nBims);
 end
 
-bar(x,y,0.5,'grouped');
+bar(x,y,1.0,'grouped');
 set(gca, 'YScale', 'log');

@@ -1,5 +1,5 @@
 function [in_data, out_data, idx] = get_train_idx_matlab(trn, val, tst)
-%function [trnIdx, valIdx, tstIdx] = get_train_idx_matlab(trn, val, tst)
+%function [in_data, out_data, idx] = get_train_idx_matlab(trn, val, tst)
 %Esta funcao pega o conjunto de trino, validacao e teste passado, onde cada
 %conjunto e um vetor de celulas, e retorna:
 % in_data: a concatenacao dos conjuntos de trn, val e tst, para o toolbox
