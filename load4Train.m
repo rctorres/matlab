@@ -24,6 +24,9 @@ if strcmp(name, 'CERN'),
 elseif strcmp(name, 'MAC'),
   load(globalInfo, 'DATAPATH_MAC');
   pathVal = DATAPATH_MAC;
+elseif strcmp(name, 'LPS'),
+  load(globalInfo, 'DATAPATH_LPS');
+  pathVal = DATAPATH_LPS;
 end
 
 fileName = sprintf('%snn-data-%s.mat', pathVal, normType);
