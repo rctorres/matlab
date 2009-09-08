@@ -17,11 +17,11 @@ elseif nargin == 2,
   globalInfo = '../../globals.mat';
 end
 
-name = getenv('LOGNAME');
-if strcmp(name, 'torres'), %If ubuntu, logname is torres, otherwise os rtorres
+name = getenv('CLUSTER_NAME');
+if strcmp(name, 'CERN'),
   load(globalInfo, 'DATAPATH');
   pathVal = DATAPATH;
-else %If MAC.
+elseif strcmp(name, 'MAC'),
   load(globalInfo, 'DATAPATH_MAC');
   pathVal = DATAPATH_MAC;
 end
