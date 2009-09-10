@@ -24,3 +24,13 @@ ang = acosd(p);
 
 %Limiting the result to +- 90 degrees.
 %ang(ang > 90) = 180 - ang(ang > 90);
+
+if nargout == 0,
+  ang = [ang ang(:,end)];
+  ang = [ang; ang(end,:)];
+  pcolor(ang);
+  title('Angles Between Vectors');
+  ylabel('A');
+  xlabel('B');
+  colorbar;
+end
