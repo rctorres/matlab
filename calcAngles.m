@@ -19,7 +19,7 @@ end
 % the maximum size of p wil allways be 1. So there is no problem in 
 % Assigning values >1 to 1.
 p = A'*B;
-p(p>1) = 1;
+p(abs(p)>1) = 1;
 ang = acosd(p);
 
 %Limiting the result to +- 90 degrees.
