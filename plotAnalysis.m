@@ -77,7 +77,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   jHist = hist(oJ, cOut);
   bar(cOut,eHist,'b');
   hold on;
-  bar(cOut,jHist,'r');
+  bar(cOut,jHist,'c');
   plot([cut cut], [0 max([eHist jHist])], 'k--');
   hold off;
   title(sprintf('Network Output %s', id));
@@ -108,7 +108,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   subplot(2,3,4);
   bar(cE,pd,'b');
   hold on;
-  bar(cE,pfa,'r');
+  bar(cE,pfa,'c');
   hold off;
   title(sprintf('Detection Efficiency over E_t %s', id));
   xlabel('E_t (Mev)');
@@ -125,7 +125,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   subplot(2,3,5);
   bar(cEta,pd,'b');
   hold on;
-  bar(cEta,pfa,'r');
+  bar(cEta,pfa,'c');
   hold off;
   title(sprintf('Detection Efficiency over eta %s', id));
   xlabel('\eta');
@@ -143,7 +143,7 @@ function plotAnalysis(net, evo, electrons, jets, id, nROC, bE, bEta, bPhi, bOut)
   subplot(2,3,6);
   bar(c,pd,'b');
   hold on;
-  bar(c,pfa,'r');
+  bar(c,pfa,'c');
   hold off;
   title(sprintf('Detection Efficiency over phi %s', id));
   xlabel('\phi');
