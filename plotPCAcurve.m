@@ -5,6 +5,7 @@ function res = plotPCAcurve(val, nRet, retStyle, discStyle, lineStyle)
 %The points of the components retained will be plot for visualization.
 %
 
+if nargin < 2, nRet = length(val); end
 if nargin < 3, retStyle = 'bo'; end
 if nargin < 4, discStyle = 'r*'; end
 if nargin < 5, lineStyle = 'k--'; end
@@ -25,10 +26,16 @@ end
 
 if nargout == 0,
   plot([1:nRet], res(1:nRet), retStyle);
+  hold on
   if nRet < N,
     hold on;
     plot([nRet+1:N], res(nRet+1:end), discStyle);
     legend(sprintf('Retained   (%d)', nRet), sprintf('Discarded (%d)', N-nRet), 'Location', 'Southeast');
-    plot([1:N], res, lineStyle);
   end
+  plot(res, lineStyle);
+  hold off;
+  title('Amount of Energy Retained');
+  xlabel('# PCA Used');
+  ylabel('Retained Energy (%)');
+  grid on;
 end
