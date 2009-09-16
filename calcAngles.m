@@ -26,9 +26,9 @@ ang = acosd(p);
 %ang(ang > 90) = 180 - ang(ang > 90);
 
 if nargout == 0,
-  ang = [ang ang(:,end)];
-  ang = [ang; ang(end,:)];
-  pcolor(ang);
+  angPlot = [ang ang(:,end)];
+  angPlot = [angPlot; angPlot(end,:)];
+  pcolor(angPlot);
   title('Angles Between Vectors');
   ylabel('A');
   xlabel('B');
