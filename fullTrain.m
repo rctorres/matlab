@@ -101,7 +101,7 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
   %Doing the training.
   if (nNodes == 1),
     disp('Extracting the number of hidden nodes via PCD.');
-    [aux, oNet.net, oNet.trnEvo, oNet.efic] = npcd(net, inTrn, inVal, inTst, false, numTrains);
+    [aux, oNet.net, oNet.trnEvo, oNet.efic] = npcd(net, inTrn, inVal, inTst, numTrains);
   else
     fprintf('Training an specific network with %d nodes in the hidden layer.\n', nNodes);
     [netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);

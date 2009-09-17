@@ -51,7 +51,7 @@ function rNet = doRelev(net, trn, val, tst)
   numTrains = 5;
   
   %calculando a melhor  rede ICA usando PCD.
-  [pcd, netVec, e, trnE, valE, efic] = npcd(net, trn, val, tst, false, numTrains);
+  [pcd, netVec, e, trnE, valE, efic] = npcd(net, trn, val, tst, numTrains);
 
   rNet.netVec = netVec;
   rNet.e = e;
