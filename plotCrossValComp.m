@@ -36,7 +36,10 @@ for i=1:nFields,
   handles(i) = h(1);
   
   figure(sp);
-  errorbar(i, 100*mean(str.(f).sp), 100*std(str.(f).sp), [c m]);
+  m_val = mean(str.(f).sp);
+  s_val = std(str.(f).sp);
+  [ei, es] = adjustErrorRanges(m_val, s_val);
+  errorbar(i, 100*m_val, 100*ei, 100*es, [c m]);
 end
 
 figure(roc);
@@ -46,11 +49,10 @@ title('ROC');
 xlabel('Falso Alarme (%)');
 ylabel('Detecao (%)');
 
-
 figure(sp);
 grid on;
-legend(leg);
+legend(leg, 'Location', 'Best');
 title('Maximo SP Obtido');
 xlabel('Caso');
 ylabel('Falso Alarme (%)');
-
+  
