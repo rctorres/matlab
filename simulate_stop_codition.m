@@ -37,7 +37,7 @@ function nevo = do_job(evo, num_epochs, max_fail, use_sp)
   %Truncando o numero de epocas pela parada por max_fail.
   I = find(nevo.stop_sp & nevo.stop_mse, 1, 'first');
   if ~isempty(I),
-    nevo = truncate(evo, I);    
+    nevo = truncate(nevo, I);    
   end
 
   
