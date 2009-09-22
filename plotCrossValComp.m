@@ -1,10 +1,10 @@
-function plotCrossValComp(str)
-%function plotCrossValComp(str)
+function plotCrossValComp(str, tit)
+%function plotCrossValComp(str, tit)
 %Recebe uma estrutura contendo uma subestrutura para cada pre-processamento
 %feito. Cada subestrutura contem a estrutura retornada pelo crossVal. Eu
 %plot as ROCs e o SP maximo dos casos. O maximo que a funcao suporta sao 7
 %pre-processamentos, para nao estourar o numero de cores disponiveis no
-%plot.
+%plot. tit e um identificador, que sera colocado no titulod e cada grafico.
 %
 
 fields = fieldnames(str);
@@ -45,7 +45,7 @@ subplot(1,2,1);
 hold off;
 grid on;
 legend(handles, leg, 'Location', 'SouthEast');
-title('ROC');
+title(sprintf('ROC (%s)', tit));
 xlabel('Falso Alarme (%)');
 ylabel('Detecao (%)');
 
@@ -53,7 +53,7 @@ subplot(1,2,2);
 hold off;
 grid on;
 legend(leg, 'Location', 'Best');
-title('Maximo SP Obtido');
+title(sprintf('Maximo SP Obtido (%s)', tit));
 xlabel('Caso');
 ylabel('Falso Alarme (%)');
   
