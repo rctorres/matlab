@@ -13,7 +13,7 @@ if iscell(evo),
   [M,N] = size(evo);
   for i=1:M,
     for j=1:N,
-      nevo{1,j} = do_job(evo{1,j}, num_epochs, max_fail, use_sp);
+      nevo{i,j} = do_job(evo{i,j}, num_epochs, max_fail, use_sp);
     end
   end
 else
