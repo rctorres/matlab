@@ -1,5 +1,5 @@
-function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean, nNodes, skipNSeg, proj, proj_seg, ringsDist)
-%function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean, nNodes, skipNSeg, proj, proj_seg, ringsDist)
+function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean, nNodes, skipNSeg, proj, proj_seg, ringsDist, hasDistinctTst)
+%function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean, nNodes, skipNSeg, proj, proj_seg, ringsDist, hasDistinctTst)
 %Perform segmented and non-segmented training.
 % batchSize : The batch size for each epoch.
 % trn, val, tst - cell vectors with trn, val and tst data.
@@ -7,9 +7,9 @@ function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean
 % remMean - if true, will remove the mean of the input events, calculating it from the training set 
 % nNodes : structure containing the number of nodes for the non segmented
 % (nseg)  and segmented (seg) cases
-%          (in this order).if 0, trains a fisher classifier. If 1, then a neural-network is trained and the number of
+%          (in this order).if 0, trains a fisher classifier (using cross validation). If 1, then a neural-network is trained and the number of
 %          hidden nodes are calculated via PCD. Otherwise, a network is trained with nNodes nodes in
-%          the hidden layer.
+%          the hidden layer by means of cross validation.
 % skipNSeg : If true, will skip the non-segmented training. To skip the segment training, just set proj_seg = [].
 % proj : A projection structure for the non-segmented case containing the following fields:
 %    - W : The projection matrix, with one projection per ROW.
@@ -22,6 +22,9 @@ function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean
 %        If proj_seg = [], then no projection is performed, AND the training is not done (skipped).
 %
 % ringsDist - Vector containing the number of rings in each layer.
+% hasDistinctTst - if true, then the function assumes that the TST set is
+%                  not equal to the VAL set (used only for the 
+%                  cross validation). Default is true.
 %Returns:
 % oNet and oNet_seg : trained structure with the following fields:
 %   For the non-linear case:
@@ -35,9 +38,12 @@ function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean
 % If any of the cases (seg or non-seg) are skipped, it corresponding return structure is set to [].
 % 
 
-if (nargin ~= 11),
+if (nargin > 12) || (nargin < 11),
   error('Invalid number of parameters. See help!');
 end
+
+if (nargin < 12), hasDistinctTst = true; end
+
 
 if remMean,
   disp('Removendo a media dos dados...');
@@ -89,7 +95,7 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
     net = newff2(inTrn);
   else
     disp('Training a non-linear classifier.');
-    net = newff2(inTrn, [1 -1], nNodes, {'tansig', 'tansig'});
+    net = newff2(inTrn, [-1 1], nNodes, {'tansig', 'tansig'});
   end
   net.trainParam.epochs = 5000;
   net.trainParam.max_fail = 100;
@@ -103,14 +109,24 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
     disp('Extracting the number of hidden nodes via PCD.');
     [aux, oNet.net, oNet.trnEvo, oNet.efic] = npcd(net, inTrn, inVal, inTst, numTrains);
   else
-    fprintf('Training an specific network with %d nodes in the hidden layer.\n', nNodes);
-    [netVec, I] = trainMany(net, inTrn, inVal, inTst, numTrains);
-    oNet = netVec{I};
+    fprintf('Training an specific network with %d nodes in the hidden layer by cross validation.\n', nNodes);
+    crossData = getCrossData(inTrn, inVal, inTst, hasDistinctTst);
+    oNet = crossVal(crossData, net);
   end
 
   %Saving the spherization values.
   if doSpher,
     oNet.ps = ps;
+  end
+
+
+function data = getCrossData(trn, val, tst, hasDistinctTst)
+  data = {[trn{1} val{1}], [trn{2} val{2}]};
+  if hasDistinctTst,
+    disp('The passed data set has a distinct test set.');
+    data = {[data{1} tst{1}], [data{2} tst{2}]};
+  else
+    disp('The passed data set does NOT have a distinct test set.');
   end
 
 
