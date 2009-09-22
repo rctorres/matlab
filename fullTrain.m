@@ -61,7 +61,7 @@ if ~skipNSeg,
     inTrn = trn; inVal = val; inTst = tst;
   end
   fprintf('Input dimension for the NON segmented case: %d\n', size(inTrn{1},1));
-  oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes.nseg, batchSize);
+  oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes.nseg, batchSize, hasDistinctTst);
 else
   disp('Skipping the non-segmented training.');
   oNet = [];
@@ -71,7 +71,7 @@ end
 if size(proj_seg,1) ~= 0,
   [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg);
   fprintf('Input dimension for the segmented case: %d\n', size(inTrn{1},1));
-  oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes.seg, batchSize);
+  oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes.seg, batchSize, hasDistinctTst);
 else
   disp('Skipping the segmented training.');
   oNet_seg = [];
@@ -79,7 +79,7 @@ end
 
 
 
-function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize)
+function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize, hasDistinctTst)
   %Should we spherize?
 
   ps = [];
