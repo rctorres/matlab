@@ -35,7 +35,7 @@ fprintf('Loading data from "%s"\n', fileName);
 if tstOnly,
   disp('Loading only the test data set.');
   load(fileName, 'eTst', 'jTst');
-  inTrn = {eTst.rings jTst.rings};
+  inTrn = {eTst jTst};
 else
   load(fileName);
   inTrn = {eTrn jTrn};
