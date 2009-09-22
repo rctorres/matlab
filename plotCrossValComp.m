@@ -19,10 +19,7 @@ markers = 'o*sdphx';
 leg = cell(1, nFields);
 handles = zeros(1, nFields);
 
-roc = figure;
-hold on;
-sp = figure;
-hold on;
+figure;
 
 for i=1:nFields,
   f = fields{i};
@@ -31,25 +28,29 @@ for i=1:nFields,
   
   leg{i} = f;
   
-  figure(roc);
+  subplot(1,2,1);
+  hold on;
   h = plot(100*str.(f).fa', 100*str.(f).det', c);
   handles(i) = h(1);
   
-  figure(sp);
+  subplot(1,2,2);
+  hold on;
   m_val = mean(str.(f).sp);
   s_val = std(str.(f).sp);
   [ei, es] = adjustErrorRanges(m_val, s_val);
   errorbar(i, 100*m_val, 100*ei, 100*es, [c m]);
 end
 
-figure(roc);
+subplot(1,2,1);
+hold off;
 grid on;
 legend(handles, leg, 'Location', 'SouthEast');
 title('ROC');
 xlabel('Falso Alarme (%)');
 ylabel('Detecao (%)');
 
-figure(sp);
+subplot(1,2,2);
+hold off;
 grid on;
 legend(leg, 'Location', 'Best');
 title('Maximo SP Obtido');
