@@ -1,10 +1,12 @@
-function gen_pca_plots(pca, pca_seg, retStyle, discStyle, lineStyle)
-%function gen_pca_plots(pca, pca_seg, retStyle, discStyle, lineStyle)
+function gen_pca_plots(pca, pca_seg, marker)
+%function gen_pca_plots(pca, pca_seg, marker)
+%Plota a curva de carga das PCAs de todas as camadas, mas a do evento
+%nao-segmentado usando o marcador marker ('b*--', etc.) pca deve ser uma
+%estrutura contendo o campo 'en', e pca_seg, um vetor de celulas, onde cada
+%celula e uma estrutura contendo o campo 'en'.
 %
 
-if nargin < 3, retStyle = 'bo'; end
-if nargin < 4, discStyle = 'r*'; end
-if nargin < 5, lineStyle = 'k--'; end
+if nargin < 3, marker = 'b*--'; end
 
 names = [{'PS'} {'EM1'} {'EM2'} {'EM3'} {'HD1'} {'HD2'} {'HD3'}];
 
@@ -12,7 +14,7 @@ for i=1:length(pca_seg),
   hold on;
   pcRet = size(pca_seg{i}.W,1);
   subplot(2,4,i);
-  plotPCAcurve(pca_seg{i}.en, size(pca_seg{i}.W,1), retStyle, discStyle, lineStyle);
+  plotPCAcurve(pca_seg{i}.en, marker);
   title(names{i});
   xlabel('# PCA');
   ylabel('Energy (%)');
@@ -22,7 +24,7 @@ end
 
 subplot(2,4,8);
 hold on;
-plotPCAcurve(pca.en, size(pca.W,1), retStyle, discStyle, lineStyle);
+plotPCAcurve(pca.en, marker);
 title('ALL')
 xlabel('# PCA');
 ylabel('Energy (%)');
