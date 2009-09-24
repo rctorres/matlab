@@ -15,6 +15,7 @@ for i=1:length(pca_seg),
   pcRet = size(pca_seg{i}.W,1);
   subplot(2,4,i);
   plotPCAcurve(pca_seg{i}.en, marker);
+  hold on;
   title(names{i});
   xlabel('# PCA');
   ylabel('Energy (%)');
