@@ -26,7 +26,7 @@ for i=1:nFields,
   c = colors(i);
   m = markers(i);
   
-  leg{i} = f;
+  leg{i} = sprintf('%s (%s)', f, getNumNodesAsText(str.(f).net{1}));
   
   subplot(1,2,1);
   hold on;
