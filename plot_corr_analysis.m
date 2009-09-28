@@ -1,4 +1,4 @@
-function plot_corr_analysis(data, ringsDist, tit, w, w_seg)
+function plot_corr_analysis(data, ringsDist, tit, fname, w, w_seg)
 %function plot_corr_analysis(data, ringsDist, tit, w, w_seg)
 %Plota, p/ o caso segmentado e nao segmentado, as matrizes de correlacao
 %linear e nao-linear. Caso w seja especificado, devera ser uma estrutura
@@ -9,20 +9,29 @@ function plot_corr_analysis(data, ringsDist, tit, w, w_seg)
 %a ser adicionado a plot gerada.
 %
 
-if nargin < 3, tit = ''; end;
-if nargin < 4, w = []; end;
-if nargin < 5, w_seg = []; end;
+if nargin < 3, fname = ''; end;
+if nargin < 4, tit = ''; end;
+if nargin < 5, w = []; end;
+if nargin < 6, w_seg = []; end;
 
 %Correlacao linear.
-do_plot(data, ringsDist, w, w_seg, sprintf('%s (linear)', tit));
+[fs, fb] = do_plot(data, ringsDist, w, w_seg, sprintf('%s (linear)', tit));
+if ~isempty(fname),
+  saveas(fs, sprintf('%s-seg-linear', fname), 'fig');
+  saveas(fs, sprintf('%s-nseg_plus_em1-linear', fname), 'fig');
+end
 
 %Correlacao nao-linear.
-do_plot(tanh(data), ringsDist, w, w_seg, sprintf('%s (nao-linear)', tit));
+[fs, fb] = do_plot(tanh(data), ringsDist, w, w_seg, sprintf('%s (nao-linear)', tit));
+if ~isempty(fname),
+  saveas(fs, sprintf('%s-seg-nao_linear', fname), 'fig');
+  saveas(fs, sprintf('%s-nseg_plus_em1-nao_linear', fname), 'fig');
+end
 
 
-function do_plot(data, ringsDist, w, w_seg, tit)
+function [fs, fb] = do_plot(data, ringsDist, w, w_seg, tit)
   leg = {'PS', 'EM1', 'EM2', 'EM3', 'HD1', 'HD2', 'HD3'};
-  figure;
+  fs = figure;
 
   toPlot = [1 3 4 5 6 7]; %Pegando todas menos EM1.
   for p=1:length(toPlot),
@@ -35,7 +44,7 @@ function do_plot(data, ringsDist, w, w_seg, tit)
     do_job(ldata, sprintf('%s %s', leg{i}, tit));
   end
 
-  figure;
+  fb = figure;
   subplot(1,2,1);
   ldata = getLayer(data, ringsDist, 2);  
   if ~isempty(w_seg),
