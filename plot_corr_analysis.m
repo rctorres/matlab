@@ -21,7 +21,6 @@ do_plot(tanh(data), ringsDist, w, w_seg, sprintf('%s (nao-linear)', tit));
 
 
 function do_plot(data, ringsDist, w, w_seg, tit)
-  N = length(ringsDist);
   leg = {'PS', 'EM1', 'EM2', 'EM3', 'HD1', 'HD2', 'HD3'};
   figure;
 
