@@ -22,11 +22,13 @@ do_plot(tanh(data), ringsDist, w, w_seg, sprintf('%s (nao-linear)', tit));
 
 function do_plot(data, ringsDist, w, w_seg, tit)
   N = length(ringsDist);
-  leg = {'PS', 'EM1', 'EM2', 'EM2', 'HD1', 'HD2', 'HD3'};
+  leg = {'PS', 'EM1', 'EM2', 'EM3', 'HD1', 'HD2', 'HD3'};
   figure;
 
-  for i=1:N,
-    subplot(2,4,i);
+  toPlot = [1 3 4 5 6 7]; %Pegando todas menos EM1.
+  for p=1:length(toPlot),
+    i = toPlot(p);
+    subplot(2,3,p);
     ldata = getLayer(data, ringsDist, i);  
     if ~isempty(w_seg),
       ldata = w_seg{i}.W * ldata;
@@ -34,7 +36,15 @@ function do_plot(data, ringsDist, w, w_seg, tit)
     do_job(ldata, sprintf('%s %s', leg{i}, tit));
   end
 
-  subplot(2,4,8);
+  figure;
+  subplot(1,2,1);
+  ldata = getLayer(data, ringsDist, 2);  
+  if ~isempty(w_seg),
+    ldata = w_seg{2}.W * ldata;
+  end
+  do_job(ldata, sprintf('%s %s', leg{2}, tit));
+
+  subplot(1,2,2);
   if ~isempty(w),
     data = w.W * data;
   end
