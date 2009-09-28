@@ -18,14 +18,14 @@ if nargin < 6, w_seg = []; end;
 [fs, fb] = do_plot(data, ringsDist, w, w_seg, sprintf('%s (linear)', tit));
 if ~isempty(fname),
   saveas(fs, sprintf('%s-seg-linear', fname), 'fig');
-  saveas(fs, sprintf('%s-nseg_plus_em1-linear', fname), 'fig');
+  saveas(fb, sprintf('%s-nseg_plus_em1-linear', fname), 'fig');
 end
 
 %Correlacao nao-linear.
 [fs, fb] = do_plot(tanh(data), ringsDist, w, w_seg, sprintf('%s (nao-linear)', tit));
 if ~isempty(fname),
   saveas(fs, sprintf('%s-seg-nao_linear', fname), 'fig');
-  saveas(fs, sprintf('%s-nseg_plus_em1-nao_linear', fname), 'fig');
+  saveas(fb, sprintf('%s-nseg_plus_em1-nao_linear', fname), 'fig');
 end
 
 
