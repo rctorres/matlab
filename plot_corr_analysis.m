@@ -2,7 +2,7 @@ function plot_corr_analysis(data, ringsDist, tit, w, w_seg)
 %function plot_corr_analysis(data, ringsDist, tit, w, w_seg)
 %Plota, p/ o caso segmentado e nao segmentado, as matrizes de correlacao
 %linear e nao-linear. Caso w seja especificado, devera ser uma estrutura
-%contendo um campo chamado 'w' contendo as direcoes de projecao (uma
+%contendo um campo chamado 'W' contendo as direcoes de projecao (uma
 %direcao por LINHA). w_seg e um vetor de celulas (1 p/ cada segmento), onde
 %cada celula carrega uma estrutura com a mesma organizacao de w. Se forem
 %omitidos, ou [], a funcao nao realizara nenhuma projecao. tit e um titulo
@@ -29,14 +29,14 @@ function do_plot(data, ringsDist, w, w_seg, tit)
     subplot(2,4,i);
     ldata = getLayer(data, ringsDist, i);  
     if ~isempty(w_seg),
-      ldata = w_seg{i}.w * ldata;
+      ldata = w_seg{i}.W * ldata;
     end
     do_job(ldata, sprintf('%s %s', leg{i}, tit));
   end
 
   subplot(2,4,8);
   if ~isempty(w),
-    data = w.w * data;
+    data = w.W * data;
   end
   do_job(data, sprintf('All %s', tit));
 
