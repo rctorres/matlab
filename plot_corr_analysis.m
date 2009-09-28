@@ -65,4 +65,5 @@ function do_job(data, tit)
   c = [c; c(end,:)];
   pcolor(c);
   colorbar('Location', 'SouthOutside');
+  colormap('cool');
   title(tit);
