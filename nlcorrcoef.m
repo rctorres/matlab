@@ -8,7 +8,7 @@ function C = nlcorrcoef(data)
   
 N = size(data, 1);
 data = data - repmat(mean(data), N, 1);
-X = tanh(data);
+X = data.^3;
 Y = data.^3;
 C = (1/N)*(X'*Y);
 d = sqrt(diag(C));
