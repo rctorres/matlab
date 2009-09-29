@@ -6,10 +6,15 @@ function C = nlcorrcoef(data)
 %funcoes nao-lineares.
 %
   
-N = size(data, 1);
+[N,M] = size(data);
 data = data - repmat(mean(data), N, 1);
 X = data.^3;
-Y = data.^3;
+Y = tanh(data);
 C = (1/N)*(X'*Y);
 d = sqrt(diag(C));
 C = C ./ (d*d');
+
+%Fazendo o mesmo fix que o corrcoef faz, p/ garanir os resultados ente +-1.
+t = find(abs(C) > 1); 
+C(t) = C(t)./abs(C(t));
+C(1:M+1:end) = sign(diag(C));
