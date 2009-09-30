@@ -81,8 +81,6 @@ end
 
 function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize, hasDistinctTst)
   %Should we spherize?
-
-  ps = [];
   nNodes = abs(nNodes);
   
   if doSpher,
@@ -139,12 +137,8 @@ function [nTrn, nVal, nTst, ps] = normalize(trn, val, tst)
   disp('Applying input spherization.');
 
   %Calculating the pre-proc parameters.
-  data = [];
-  for i=1:N,
-    data = [data trn{i}];
-  end
-  [aux, ps] = mapstd(data);
-  clear data aux;
+  [aux, ps] = mapstd(cell2mat(trn));
+  clear aux;
     
   %Applying onto the dataset.
   for i=1:N,
