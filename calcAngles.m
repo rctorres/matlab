@@ -1,11 +1,14 @@
-function ang = calcAngles(A,B)
-%function [ang]=calcAngles(A,B)
+function ang = calcAngles(A, B, force90Deg)
+%function [ang]=calcAngles(A, B, force90Deg)
 % Calculates the angles (in degrees) between the columns of matrices A and B.
+%if force90Deg = true (default is false), then, all angles will be limited
+%to the [0,90] degrees range by subtracting it from 180 degrees and taking
+%it modulus.
 %
 
-if nargin == 1,
-  B = A;
-end
+if nargin < 2, B = A; end
+if nargin < 3, force90Deg = false; end
+
 
 % Normalizes A and B
 for c = 1:size(A,2)
@@ -23,7 +26,10 @@ p(abs(p)>1) = 1;
 ang = acosd(p);
 
 %Limiting the result to +- 90 degrees.
-%ang(ang > 90) = 180 - ang(ang > 90);
+if force90Deg,
+  I = find(ang > 90);
+  ang(I) = abs(180 - ang(I));
+end
 
 if nargout == 0,
   angPlot = [ang ang(:,end)];
