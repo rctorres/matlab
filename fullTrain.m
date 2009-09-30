@@ -42,9 +42,6 @@ if (nargin > 12) || (nargin < 11),
   error('Invalid number of parameters. See help!');
 end
 
-if (nargin < 12), hasDistinctTst = true; end
-
-
 if remMean,
   disp('Removendo a media dos dados...');
   [trn, val, tst] = remove_mean(trn, val, tst);
