@@ -3,6 +3,7 @@ function [otrn, oval, otst] = event(trn, val, tst)
 %Faz a normalizacao por evento (energia total). trn, val, tst precisam ser
 %vetores de celulas, com 1 celula p/ cada classe.
 %
+  disp('Fazendo normalizacao por evento.');
 
   nClasses = length(trn);
   otrn = cell(1, nClasses);
