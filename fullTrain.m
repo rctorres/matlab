@@ -59,7 +59,7 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp_func, tstIsVal)
     fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
     [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
   else
-    fprintf('Training an specific network with %d nodes in the hidden layer by cross validation.\n', nNodes);
+    fprintf('Training a network (%s) by cross validation.\n', getNumNodesAsText(net));
     data = getCrossData(trn, val, tst, tstIsVal);
     oNet = crossVal(data, net, pp_func, tstIsVal);
   end
@@ -70,7 +70,7 @@ function data = getCrossData(trn, val, tst, tstIsVal)
   if tstIsVal,
     disp('The passed data set does NOT have a distinct test set.');
   else
-    disp('The passed data set has a distinct test set.');
+    disp('The passed data set HAS a distinct test set.');
     data = {[data{1} tst{1}], [data{2} tst{2}]};
   end
 
