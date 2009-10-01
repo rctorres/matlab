@@ -1,12 +1,11 @@
-function [inTrn, inVal, inTst, ringsDist] = load4Train(normType, tstOnly, globalInfo)
-%function [inTrn, inVal, inTst, ringsDist] = load4Train(normType, tstOnly, globalInfo)
+function [inTrn, inVal, inTst, ringsDist] = load4Train(tstOnly, globalInfo)
+%function [inTrn, inVal, inTst, ringsDist] = load4Train(tstOnly, globalInfo)
 %Loads the dataset files, and organize them already into train, val e test
 %sets. This script is intelligent enough to read data in UBUNTU and also MAC OS,
 %by reading the environment variable "OSTYPE". The path information is read from the variable
 %DATAPATH or DATAPATH_MAC, depending on the operating system being used. If globalInfo is
-%ommited, it will try access the file stored in ../globals.mat. normType is
-%the name of the normalization initially used for the data (set,s ection,
-%sequential, etc), and tstOnly, if true, will return ONLY the test set, for
+%ommited, it will try access the file stored in ../globals.mat. tstOnly, 
+%if true, will return ONLY the test set, for
 %validation purposes. Otherwise, all 3 sets will be returned.
 %
 
@@ -29,7 +28,7 @@ elseif strcmp(name, 'LPS'),
   pathVal = DATAPATH_LPS;
 end
 
-fileName = sprintf('%snn-data-%s.mat', pathVal, normType);
+fileName = sprintf('%snn-data.mat', pathVal);
 fprintf('Loading data from "%s"\n', fileName);
 
 if tstOnly,
