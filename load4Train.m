@@ -1,5 +1,5 @@
 function [inTrn, inVal, inTst, ringsDist] = load4Train(tstOnly, ringsOnly, globalInfo)
-%function [inTrn, inVal, inTst, ringsDist] = load4Train(tstOnly, globalInfo)
+%function [inTrn, inVal, inTst, ringsDist] = load4Train(tstOnly, ringsOnly, globalInfo)
 %Loads the dataset files, and organize them already into train, val e test
 %sets. This script is intelligent enough to read data in UBUNTU and also MAC OS,
 %by reading the environment variable "OSTYPE". The path information is read from the variable
