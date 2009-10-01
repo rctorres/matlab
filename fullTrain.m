@@ -1,97 +1,50 @@
-function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean, nNodes, skipNSeg, proj, proj_seg, ringsDist, hasDistinctTst)
-%function [oNet, oNet_seg] = fullTrain(trn, val, tst, batchSize, doSpher, remMean, nNodes, skipNSeg, proj, proj_seg, ringsDist, hasDistinctTst)
-%Perform segmented and non-segmented training.
-% batchSize : The batch size for each epoch.
-% trn, val, tst - cell vectors with trn, val and tst data.
-% doSpher - if true, will apply mapstd to the inputs.
-% remMean - if true, will remove the mean of the input events, calculating it from the training set 
-% nNodes : structure containing the number of nodes for the non segmented
-% (nseg)  and segmented (seg) cases
-%          (in this order).if 0, trains a fisher classifier (using cross validation). If 1, then a neural-network is trained and the number of
-%          hidden nodes are calculated via PCD. Otherwise, a network is trained with nNodes nodes in
-%          the hidden layer by means of cross validation.
-% skipNSeg : If true, will skip the non-segmented training. To skip the segment training, just set proj_seg = [].
-% proj : A projection structure for the non-segmented case containing the following fields:
-%    - W : The projection matrix, with one projection per ROW.
-%    - pos_proc : A (optional) pointer to a function that I want to pass the pre-processed data through.
-%        If proj = [], then no projection is performed, but the training is done.
-% proj_seg : A projection structure for the segmented case containing the following fields:
-%    - W : A cell vector, where each cell is a structure containing a field named 'W' containing
-%            the projections direction for that given layer. Each ROW is a direction.
-%    - pos_proc : A (optional) pointer to a function that I want to pass the pre-processed data through.
-%        If proj_seg = [], then no projection is performed, AND the training is not done (skipped).
+function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp_func, tstIsVal)
+%function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp_func, tstIsVal)
+%Perform the standard training.
+% -trn, val, tst - cell vectors with trn, val and tst data.
+% -batchSize : The batch size for each epoch.
+% -nNodes : the number of hidden nodes for the neural network.
+% -pp_func : A pointer to a function the will be called once the trn, val,
+%             tst sets are created. The function must have the following
+%             interface [otrn, oval, otst] = pp_func(trn, val, tst). If
+%             this parameter os ommited, or [], no pre-processing will be
+%             done.
+% -tstIsVal : If true, the data will be split into trn and
+%             val only, and tst = val. 
 %
-% ringsDist - Vector containing the number of rings in each layer.
-% hasDistinctTst - if true, then the function assumes that the TST set is
-%                  not equal to the VAL set (used only for the 
-%                  cross validation). Default is true.
 %Returns:
-% oNet and oNet_seg : trained structure with the following fields:
-%   For the non-linear case:
-%     - net: Either the net structure (fisher) or a cell vector with the net structure for each PCD.
-%     - epoch: Either the epochs vector (fisher) or a matrix where the rows are the epochs for each PCD.
-%     - trnError: Either the trn error vector (fisher) or a matrix where the rows are the trn error for each PCD.
-%     - valError: Either the val error vector (fisher) or a matrix where the rows are the val error for each PCD.
-%     - ps: if doSpher = true, will contain the ps structure to use with mapstd for inut spherization.
-%     - efic: only for the non-linear case. It is the mean, std and max SP values obtained for each PCD.
-%
-% If any of the cases (seg or non-seg) are skipped, it corresponding return structure is set to [].
+% oNet: trained structure with the following fields:
+%  1) If PCD was used:
+%     - net : Cell vector with the network corresponding to each PCD.
+%     - trnEvo : The evolution structure associated with each network.
+%     - efic : Atructure containing the max, mean and std values of the SP
+%              achieved for each PCD extracted.
+% 
+%  2) If cross val was done:
+%     - net : Cell vector with the network corresponding to each deal.
+%     - evo : The evolution structure associated with each network.
+%     - sp : The SP values achieved in each deal.
+%     - det : A matrix containing the detection values for each deal (ROC).
+%     - fa : A matrix containing the false alarm values for each deal (ROC).
 % 
 
-if (nargin > 12) || (nargin < 11),
-  error('Invalid number of parameters. See help!');
-end
-
-if remMean,
-  disp('Removendo a media dos dados...');
-  [trn, val, tst] = remove_mean(trn, val, tst);
-else
-  disp('Dados serao processados SEM a remocao da media...');
-end
-
-%Non seg case.
-if ~skipNSeg,
-  if size(proj,1) ~= 0,
-    disp('Performing non-segmented projection.');
-    [inTrn, inVal, inTst] = get_pre_proc_data(trn, val, tst, proj.W);
-  else
-    inTrn = trn; inVal = val; inTst = tst;
+  if (nargin ~= 7),
+    error('Invalid number of parameters. See help!');
   end
-  fprintf('Input dimension for the NON segmented case: %d\n', size(inTrn{1},1));
-  oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes.nseg, batchSize, hasDistinctTst);
-else
-  disp('Skipping the non-segmented training.');
-  oNet = [];
-end
-
-%Seg case.
-if size(proj_seg,1) ~= 0,
-  [inTrn, inVal, inTst] = joinSegments(trn, val, tst, ringsDist, proj_seg);
-  fprintf('Input dimension for the segmented case: %d\n', size(inTrn{1},1));
-  oNet_seg = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes.seg, batchSize, hasDistinctTst);
-else
-  disp('Skipping the segmented training.');
-  oNet_seg = [];
-end
-
-
-
-function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize, hasDistinctTst)
-  %Should we spherize?
-  nNodes = abs(nNodes);
   
-  if doSpher,
-    [inTrn, inVal, inTst, ps] = normalize(inTrn, inVal, inTst);
-  end
-
-  %Creating the neural network.  
+  %If no pre-processing function was passed, we use a dummy one.
+  if isempty(pp_func), pp_func = @do_nothing; end
+  
+  %Creating the neural network.
   if nNodes == 0,
     disp('Training a Fisher classifier.');
-    net = newff2(inTrn);
+    net = newff2(trn);
   else
     disp('Training a non-linear classifier.');
-    net = newff2(inTrn, [-1 1], nNodes, {'tansig', 'tansig'});
+    net = newff2(trn, [-1 1], nNodes, {'tansig', 'tansig'});
   end
+  
+  %Training parameters.
   net.trainParam.epochs = 5000;
   net.trainParam.max_fail = 100;
   net.trainParam.show = 0;
@@ -102,45 +55,29 @@ function oNet = trainNetwork(inTrn, inVal, inTst, doSpher, nNodes, batchSize, ha
   %Doing the training.
   if (nNodes == 1),
     disp('Extracting the number of hidden nodes via PCD.');
-    [aux, oNet.net, oNet.trnEvo, oNet.efic] = npcd(net, inTrn, inVal, inTst, numTrains);
+    [trn, val, tst] = pp_func(trn, val, tst);
+    fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
+    [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
   else
     fprintf('Training an specific network with %d nodes in the hidden layer by cross validation.\n', nNodes);
-    crossData = getCrossData(inTrn, inVal, inTst, hasDistinctTst);
-    oNet = crossVal(crossData, net);
-  end
-
-  %Saving the spherization values.
-  if doSpher,
-    oNet.ps = ps;
+    data = getCrossData(trn, val, tst, tstIsVal);
+    oNet = crossVal(data, net, pp_func, tstIsVal);
   end
 
 
-function data = getCrossData(trn, val, tst, hasDistinctTst)
+function data = getCrossData(trn, val, tst, tstIsVal)
   data = {[trn{1} val{1}], [trn{2} val{2}]};
-  if hasDistinctTst,
+  if tstIsVal,
+    disp('The passed data set does NOT have a distinct test set.');
+  else
     disp('The passed data set has a distinct test set.');
     data = {[data{1} tst{1}], [data{2} tst{2}]};
-  else
-    disp('The passed data set does NOT have a distinct test set.');
   end
 
 
-function [nTrn, nVal, nTst, ps] = normalize(trn, val, tst)
-  N = length(trn);
-  nTrn = cell(1,N);
-  nVal = cell(1,N);
-  nTst = cell(1,N);
-  
-  disp('Applying input spherization.');
-
-  %Calculating the pre-proc parameters.
-  [aux, ps] = mapstd(cell2mat(trn));
-  clear aux;
-    
-  %Applying onto the dataset.
-  for i=1:N,
-    nTrn{i} = mapstd('apply', trn{i}, ps);
-    nVal{i} = mapstd('apply', val{i}, ps);
-    nTst{i} = mapstd('apply', tst{i}, ps);
-  end
- 
+function [otrn, oval, otst] = do_nothing(trn, val, tst)
+%Dummy function to work with pp_function ponter.
+  disp('Applying NO pre-processing...');
+  otrn = trn;
+  oval = val;
+  otst = tst;
