@@ -3,7 +3,7 @@ function [oTrn, oVal, oTst] = remove_mean(trn, val, tst)
 %Remove a media dos conjuntos de dados. A media de cada variavel sera calculada do vetor 'trn'
 %
 
-meanVec = mean([trn{1} trn{2}], 2);
+meanVec = mean(cell2mat(trn), 2);
 
 oTrn = cell(size(trn));
 oVal = cell(size(val));
