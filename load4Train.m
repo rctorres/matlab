@@ -13,7 +13,7 @@ function [inTrn, inVal, inTst, ringsDist] = load4Train(tstOnly, ringsOnly, globa
 
 if nargin < 1, tstOnly = false; end
 if nargin < 2, ringsOnly = true; end
-if nargin < 3, globalInfo = '../../globals.mat'; end
+if nargin < 3, globalInfo = '../globals.mat'; end
 
 name = getenv('CLUSTER_NAME');
 if strcmp(name, 'CERN'),
