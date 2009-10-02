@@ -1,8 +1,9 @@
-function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
-%function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
+function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doCrossVal)
+%function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doCrossVal)
 %Perform the standard training.
 % -trn, val, tst - cell vectors with trn, val and tst data.
-% -batchSize : The batch size for each epoch.
+% -trainParam : structure containing th taining parameters 
+%               (I'll do net.trainParam = trainParam).
 % -nNodes : the number of hidden nodes for the neural network.
 % - pp :      A structure containing 2 fileds named 'func' and 'par'.
 %            'func' must be a pointer to a pre-processing function to be 
@@ -14,6 +15,8 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
 %             be done.
 % -tstIsVal : If true, the data will be split into trn and
 %             val only, and tst = val. 
+% -doCrossVal : If true, a cross validation analysis will be done.
+%               Othewise, a single training will be performed
 %
 %Returns:
 % oNet: trained structure with the following fields:
@@ -23,15 +26,18 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
 %     - efic : Atructure containing the max, mean and std values of the SP
 %              achieved for each PCD extracted.
 % 
-%  2) If cross val was done:
+%  2) If PCD was not used was done:
 %     - net : Cell vector with the network corresponding to each deal.
 %     - evo : The evolution structure associated with each network.
 %     - sp : The SP values achieved in each deal.
 %     - det : A matrix containing the detection values for each deal (ROC).
 %     - fa : A matrix containing the false alarm values for each deal (ROC).
-% 
+%
+%     If cross_val was not used, the returned structure will be the same as
+%     for cross val, but you will have only one occurence of each field.
+%
 
-  if (nargin ~= 7),
+  if (nargin ~= 8),
     error('Invalid number of parameters. See help!');
   end
   
@@ -41,21 +47,6 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
     pp.par = [];
   end
   
-  %Creating the neural network.
-  if nNodes == 0,
-    disp('Training a Fisher classifier.');
-    net = newff2(trn);
-  else
-    disp('Training a non-linear classifier.');
-    net = newff2(trn, [-1 1], nNodes, {'tansig', 'tansig'});
-  end
-  
-  %Training parameters.
-  net.trainParam.epochs = 5000;
-  net.trainParam.max_fail = 100;
-  net.trainParam.show = 0;
-  net.trainParam.batchSize = batchSize;
-  net.trainParam.useSP = true;
   numTrains = 5;
 
   %Doing the training.
@@ -63,12 +54,40 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
     disp('Extracting the number of hidden nodes via PCD.');
     [trn, val, tst, oNet.pp] = pp.func(trn, val, tst, pp.par);
     fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
+    net = create_network(trn, nNodes, trainParam);
     [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
   else
-    fprintf('Training a network (%s) by cross validation.\n', getNumNodesAsText(net));
-    data = getCrossData(trn, val, tst, tstIsVal);
-    oNet = crossVal(data, net, pp, tstIsVal);
+    if doCrossVal,
+      net = create_network(trn, nNodes, trainParam);
+      fprintf('Training a network (%s) by cross validation.\n', getNumNodesAsText(net));
+      data = getCrossData(trn, val, tst, tstIsVal);
+      oNet = crossVal(data, net, pp, tstIsVal);
+    else
+      [trn, val, tst, oNet.pp] = pp.func(trn, val, tst, pp.par);
+      fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
+      net = create_network(trn, nNodes, trainParam);
+      fprintf('Training only once the network (%s).\n', getNumNodesAsText(net));
+      [netVec, I] = trainMany(net, trn, val, tst, numTrains);
+      oNet.net = netVec{I}.net;
+      oNet.evo = netVec{I}.trnEvo;
+      out = nsim(oNet.net, tst);
+      [spVec, cutVec, oNet.det, oNet.fa] = genROC(out{1}, out{2});
+      oNet.sp = max(spVec);
+    end
   end
+
+
+function net = create_network(trn, nNodes, trainParam)
+  if nNodes == 0,
+    disp('Creating a Fisher Classifier.');
+    net = newff2(trn);
+  else
+    disp('Creating a Non-linear Classifier.');
+    net = newff2(trn, [-1 1], nNodes, {'tansig', 'tansig'});
+  end
+  
+  net.trainParam = trainParam;
+    
 
 
 function data = getCrossData(trn, val, tst, tstIsVal)
