@@ -1,5 +1,5 @@
 function [otrn, oval, otst, pp] = extract_pca_etot(trn, val, tst)
-%function [otrn, oval, otst] = extract_pca_etot(trn, val, tst)
+%function [otrn, oval, otst, pp] = extract_pca_etot(trn, val, tst)
 %Extrai as PCAS a partir dos eventos normalizados por Energia Total
 
 disp('Fazendo PCA Usando Aneis Normalizados por Energia Total');

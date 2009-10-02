@@ -1,5 +1,5 @@
 function [otrn, oval, otst, pp] = extract_pca_esf_had_fix(trn, val, tst)
-%function [otrn, oval, otst] = extract_pca_esf_had_fix(trn, val, tst)
+%function [otrn, oval, otst, pp] = extract_pca_esf_had_fix(trn, val, tst)
 %Extrai as PCAS a partir dos eventos normalizados por Esferizacao com
 %Hadronica Fixa.
 disp('Fazendo PCA Usando Aneis Normalizados por Esferizacao com Hadronica Fixa');

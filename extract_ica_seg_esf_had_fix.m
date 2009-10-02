@@ -1,5 +1,5 @@
 function [otrn, oval, otst, pp] = extract_ica_seg_esf_had_fix(trn, val, tst)
-%function [otrn, oval, otst] = extract_ica_etot(trn, val, tst)
+%function [otrn, oval, otst, pp] = extract_ica_etot(trn, val, tst)
 %Extrai as ICAS Segmentadas a partir dos eventos normalizados por
 %Esferizacao com Hadronica Fixa.
 %

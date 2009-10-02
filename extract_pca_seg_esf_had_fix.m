@@ -1,5 +1,5 @@
 function [otrn, oval, otst, pp] = extract_pca_seg_esf_had_fix(trn, val, tst)
-%function [otrn, oval, otst] = extract_pca_etot(trn, val, tst)
+%function [otrn, oval, otst, pp] = extract_pca_etot(trn, val, tst)
 %Extrai as PCAS Segmentadas a partir dos eventos normalizados por
 %Esferizacao com Hadronica Fixa.
 %
