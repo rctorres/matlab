@@ -1,7 +1,7 @@
-function [net, fisher] = train_aneis_puros(trn, val, tst, par, discover_via_pcd, batch_size, tst_equal_val)
-%function [net, fisher] = train_aneis_puros(trn, val, tst, par, discover_via_pcd, batch_size, tst_equal_val)
-%Faz o treino com aneis puros.
-%trn, val, tst sao dos datasets. par e a estrutura de treeino especifica
+function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, batch_size, tst_equal_val)
+%function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, batch_size, tst_equal_val)
+%Faz o treino de um caso especifico.
+%trn, val, tst sao dos datasets. par e a estrutura de treino especifica
 %para este caso, retornada pela funcao get_parameters existento no
 %diretorio de analise. discover_via_pcd, se true, vai fazer o sistema
 %realizar uma analise por PCD, p/ saber qual o melhor numero de nos na

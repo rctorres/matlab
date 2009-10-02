@@ -55,7 +55,7 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp_func, tstIsVal)
   %Doing the training.
   if (nNodes == 1),
     disp('Extracting the number of hidden nodes via PCD.');
-    [trn, val, tst] = pp_func(trn, val, tst);
+    [trn, val, tst, oNet.pp] = pp_func(trn, val, tst);
     fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
     [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
   else
