@@ -1,7 +1,7 @@
-function [oTrn, oVal, oTst, meanVec] = remove_mean(trn, val, tst)
+function [oTrn, oVal, oTst, pp] = remove_mean(trn, val, tst)
 %function [oTrn, oVal, oTst, meanVec] = remove_mean(trn, val, tst)
 %Remove a media dos conjuntos de dados. A media de cada variavel sera calculada do vetor 'trn'
-%meanVec e o vetor com as medias calculadas do conjunto de treino.
+%pp e o vetor com as medias calculadas do conjunto de treino.
 %
 
 meanVec = mean(cell2mat(trn), 2);
@@ -15,3 +15,6 @@ for i=1:length(trn),
   oVal{i} = val{i} - repmat(meanVec,1,size(val{i},2));
   oTst{i} = tst{i} - repmat(meanVec,1,size(tst{i},2));
 end
+
+pp.means = meanVec;
+pp.name = 'remove_mean';

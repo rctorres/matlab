@@ -1,9 +1,9 @@
-function [otrn, oval, otst, ps] = event(trn, val, tst)
-%function [trn, val, tst] = event(trn, val, tst)
+function [otrn, oval, otst, pp] = event(trn, val, tst)
+%function [trn, val, tst, pp] = event(trn, val, tst)
 %Faz a normalizacao por evento (energia total). trn, val, tst precisam ser
 %vetores de celulas, com 1 celula p/ cada classe.
 %
-  ps = [];
+  pp.name = 'event';
   disp('Fazendo normalizacao por evento.');
 
   nClasses = length(trn);

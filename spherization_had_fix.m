@@ -1,5 +1,5 @@
-function [otrn, oval, otst, ps] = spherization_had_fix(trn, val, tst)
-%function [otrn, oval, otst, ps] = spherization_had_fix(trn, val, tst)
+function [otrn, oval, otst, pp] = spherization_had_fix(trn, val, tst)
+%function [otrn, oval, otst, pp] = spherization_had_fix(trn, val, tst)
 %Faz a normalizacao por esferizacao, dividindo a secao hadronica por
 %um valor fixo. trn, val, tst precisam ser vetores de celulas, com 
 %1 celula p/ cada classe. ps e a estrutura usada p/ normalizar.
@@ -28,3 +28,7 @@ function [otrn, oval, otst, ps] = spherization_had_fix(trn, val, tst)
     oval{i} = mapstd('apply', val{i}, ps);
     otst{i} = mapstd('apply', tst{i}, ps);
   end
+
+  pp.ps = ps;
+  pp.name = 'spherization_had_fix';
+  
