@@ -1,5 +1,5 @@
-function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainParam, tst_equal_val)
-%function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainParam, tst_equal_val)
+function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainParam, tst_equal_val, doCrossVal)
+%function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainParam, tst_equal_val, doCrossVal)
 %Faz o treino de um caso especifico.
 %trn, val, tst sao dos datasets. par e a estrutura de treino especifica
 %para este caso, retornada pela funcao get_parameters existento no
@@ -9,7 +9,8 @@ function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainP
 %treinamento, de tal forma que net.trainParam = trainParam seja valido.
 %tst_equal_val, se true, diz a funcao que o conjunto de teste e identico ao
 %de validacao. Se discover_via_pcd = false, um fisher sera rodado, e, em
-%ambos os casos (fisher, net), a validacao cruzada sera feita.
+%ambos os casos (fisher, net), a validacao cruzada sera feita 
+%(se , doCrossVal = true). do Contrario, apaenas uma rede sera treinada.
 %
 
   fprintf('Fazendo %s\n', par.desc);
@@ -21,13 +22,13 @@ function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainP
   else
     %Fazendo Fisher.
     numNodes = 0;
-    fisher = fullTrain(trn, val, tst, trainParam, numNodes, par, tst_equal_val, par.doCrossVal);
+    fisher = fullTrain(trn, val, tst, trainParam, numNodes, par, tst_equal_val, doCrossVal);
     fisher.desc = par.desc;
     fisher.id = par.id;
     numNodes = par.hidden_nodes; %P/ o treino neural.
   end
 
   %Treino neural.
-  net = fullTrain(trn, val, tst, trainParam, numNodes, par, tst_equal_val, par.doCrossVal);
+  net = fullTrain(trn, val, tst, trainParam, numNodes, par, tst_equal_val, doCrossVal);
   net.desc = par.desc;
   net.id = par.id;
