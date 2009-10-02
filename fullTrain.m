@@ -36,7 +36,7 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
   end
   
   %If no pre-processing function was passed, we use a dummy one.
-  if isempty(pp_func),
+  if isempty(pp),
     pp.func = @do_nothing;
     pp.par = [];
   end
