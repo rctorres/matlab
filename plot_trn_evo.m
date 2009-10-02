@@ -5,19 +5,34 @@ function plot_trn_evo(d)
 
 %plotando a evolucao do erro de treino, validacao e SP
 figure
+hold on;
+
+%Plotando as linhas treivo e validacao.
 plot(d.epoch, d.mse_trn, 'b', d.epoch, d.mse_val, 'r', d.epoch, d.sp_val, 'k');
-hold on
+leg = {'Treino', 'Val (MSE)', 'Val (SP)'};
+
 i_mse = find(d.stop_mse == 1, 1, 'first');
 i_sp = find(d.stop_sp == 1, 1, 'first');
+if isempty(i_sp), i_sp = d.epoch(end); end
 plot(d.epoch(i_mse), d.sp_val(i_mse), 'r*', d.epoch(i_sp), d.sp_val(i_sp), 'k*');
+leg = [leg {'Stop (MSE)', 'Stop (SP)'}];
+
 [max_mse, i_max_mse] = max(d.sp_val(1:i_mse));
 [max_sp, i_max_sp] = max(d.sp_val(1:i_sp));
 [max_sp_global, i_max_sp_global] = max(d.sp_val);
 plot(d.epoch(i_max_mse), d.sp_val(i_max_mse), 'rs', d.epoch(i_max_sp), d.sp_val(i_max_sp), 'ks', d.epoch(i_max_sp_global), d.sp_val(i_max_sp_global), 'mv');
+leg = [leg {'Best SP (Stop MSE)', 'Best SP (Stop SP)', 'Best SP (Global)'}];
+
 [min_mse, i_min_mse] = min(d.mse_val(1:i_mse));
 plot(d.epoch(i_min_mse), d.mse_val(i_min_mse), 'rd');
-legend('Treino', 'Val (MSE)', 'Val (SP)', 'Stop (MSE)', 'Stop (SP)', 'Best SP (MSE)', 'Best SP (SP)', 'Best MSE (MSE)', 'Best SP (Global)', 'Location', 'East');
+leg = [leg {'Best MSE (Stop MSE)'}];
+
+legend(leg);
+%Este e a marca, na curva do MSE onde o melhor SP com Stop por MSE foi
+%atingido. Como esta marca tb ja existe na curva do SP, nao menciono ele
+%novamente na legenda.
 plot(d.epoch(i_mse), d.mse_val(i_mse), 'r*');
+
 title('Evolucao do Treinamento');
 xlabel('Epoca')
 ylabel('MSE / SP');
