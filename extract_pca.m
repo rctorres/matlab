@@ -2,9 +2,7 @@ function W = extract_pca(trn, ringsDist)
 %function W = extract_pca(trn, ringsDist)
 %Extrai as PCAs. Se ringsDist = [], ou omitido, a extracao sera nao segmentada. 
 %Do contrario, a extracao sera feita camada a camada, e W sera 
-%um vetor de celulas, com as projecoes. Se ringsDist for omitido, a funcao
-%usara o default [8 64 8 8 4 4 4]. As projecoes serao retornadas nas LINHAS
-%de W.
+%um vetor de celulas, com as projecoes.
 %
 
 if nargin < 2, ringsDist = []; end

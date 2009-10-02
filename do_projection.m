@@ -6,8 +6,6 @@ function [otrn, oval, otst] = do_projection(trn, val, tst, W, ringsDist)
 %Em W, cada direcao tem que ser uma LINHA!
 %
 
-if nargin < 5, ringsDist = [8 64 8 8 4 4 4]; end
-
 if iscell(W),
   [otrn, oval, otst] = project_segmented(trn, val, tst, W, ringsDist);
 else
