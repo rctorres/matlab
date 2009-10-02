@@ -30,7 +30,7 @@ end
 W = do_reduction(pp{3}.W, par.ringsDist, par.nComp);
 
 %Fazendo a projecao nas PCAs 
-[otrn, oval, otst] = do_projection(otrn, oval, otst, W);
+[otrn, oval, otst] = do_projection(otrn, oval, otst, W, par.ringsDist);
 
 
 function W = do_reduction(pca, ringsDist, nComp)

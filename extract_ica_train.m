@@ -24,4 +24,4 @@ else
 end
 
 %Fasendo a projecao nas ICAs 
-[otrn, oval, otst] = do_projection(otrn, oval, otst, pp{3}.W);
+[otrn, oval, otst] = do_projection(otrn, oval, otst, pp{3}.W, par.ringsDist);
