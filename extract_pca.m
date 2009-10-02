@@ -32,5 +32,5 @@ pca.en = en;
 
 function [W, en] = do_job(data)
   [W, en] = pcacov(cov(data'));
-  W = W';
+  W = W'; %Uma PCA (direcao) por LINHA.
   
