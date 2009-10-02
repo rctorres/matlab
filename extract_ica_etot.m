@@ -2,6 +2,7 @@ function [otrn, oval, otst, pp] = extract_ica_etot(trn, val, tst)
 %function [otrn, oval, otst] = extract_ica_etot(trn, val, tst)
 %Extrai as ICAS a partir dos eventos normalizados por Energia Total
 
+disp('Fazendo ICA Usando Aneis Normalizados por Energia Total');
 [otrn, oval, otst, pp{1}] = event(trn, val, tst);
 pp{2}.W = extract_ica(trn);
 pp{2}.name = 'ICA';
