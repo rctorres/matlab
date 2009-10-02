@@ -14,8 +14,8 @@ if isSegmented,
   N = length(ringsDist);
   W = cell(1,N);
   for i=1:N,
-    fprintf('Extraindo as %d ICAs do caso segmentado.\n', size(ldata,1));
     ldata = getLayer(data, ringsDist, i);
+    fprintf('Extraindo as %d ICAs do caso segmentado.\n', size(ldata,1));
     W{i} = jadeica(ldata);
   end  
 else
