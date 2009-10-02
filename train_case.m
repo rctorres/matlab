@@ -23,7 +23,7 @@ function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, batch_
     fisher = fullTrain(trn, val, tst, batch_size, numNodes, par.pp_func, tst_equal_val);
     fisher.desc = par.desc;
     fisher.id = par.id;
-    numNodes = p.hidden_nodes; %P/ o treino neural.
+    numNodes = par.hidden_nodes; %P/ o treino neural.
   end
 
   %Treino neural.
