@@ -1,4 +1,4 @@
-function [otrn, oval, otst, pp] = spherization_had_fix(trn, val, tst)
+function [otrn, oval, otst, pp] = spherization_had_fix(trn, val, tst, par)
 %function [otrn, oval, otst, pp] = spherization_had_fix(trn, val, tst)
 %Faz a normalizacao por esferizacao, dividindo a secao hadronica por
 %um valor fixo. trn, val, tst precisam ser vetores de celulas, com 

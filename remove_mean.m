@@ -1,4 +1,4 @@
-function [oTrn, oVal, oTst, pp] = remove_mean(trn, val, tst)
+function [oTrn, oVal, oTst, pp] = remove_mean(trn, val, tst, par)
 %function [oTrn, oVal, oTst, meanVec] = remove_mean(trn, val, tst)
 %Remove a media dos conjuntos de dados. A media de cada variavel sera calculada do vetor 'trn'
 %pp e o vetor com as medias calculadas do conjunto de treino.
