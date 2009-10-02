@@ -1,5 +1,5 @@
-function val = myload(name, globalInfo)
-%function val = myload(name, globalInfo)
+function val = myload(pname, globalInfo)
+%function val = myload(pname, globalInfo)
 %Loads the value 'name' from the dataset file.
 %This script is intelligent enough to read data in UBUNTU and also MAC OS,
 %by reading the environment variable "OSTYPE". The path information is read from the variable
@@ -22,7 +22,7 @@ elseif strcmp(name, 'LPS'),
 end
 
 fileName = sprintf('%snn-data.mat', pathVal);
-fprintf('Loading data from "%s"\n', fileName);
+fprintf('Loading "%s" from "%s"\n', pname, fileName);
 
-str = load(fileName, name);
-val = str.(name);
+str = load(fileName, pname);
+val = str.(pname);
