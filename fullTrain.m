@@ -1,14 +1,17 @@
-function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp_func, tstIsVal)
-%function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp_func, tstIsVal)
+function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
+%function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp, tstIsVal)
 %Perform the standard training.
 % -trn, val, tst - cell vectors with trn, val and tst data.
 % -batchSize : The batch size for each epoch.
 % -nNodes : the number of hidden nodes for the neural network.
-% -pp_func : A pointer to a function the will be called once the trn, val,
-%             tst sets are created. The function must have the following
-%             interface [otrn, oval, otst] = pp_func(trn, val, tst). If
-%             this parameter os ommited, or [], no pre-processing will be
-%             done.
+% - pp :      A structure containing 2 fileds named 'func' and 'par'.
+%            'func' must be a pointer to a pre-processing function to be 
+%             executed on the data. 'par' must be a structure containing 
+%             any parameter that must be used by func. The calling
+%             procedure is [trn,val,tst,] = pp.func(trn, val, tst, pp.par)
+%             if func does not use any par, pp.par must be [].
+%             If this parameter os ommited, or [], no pre-processing will 
+%             be done.
 % -tstIsVal : If true, the data will be split into trn and
 %             val only, and tst = val. 
 %
@@ -33,7 +36,10 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp_func, tstIsVal)
   end
   
   %If no pre-processing function was passed, we use a dummy one.
-  if isempty(pp_func), pp_func = @do_nothing; end
+  if isempty(pp_func),
+    pp.func = @do_nothing;
+    pp.par = [];
+  end
   
   %Creating the neural network.
   if nNodes == 0,
@@ -55,13 +61,13 @@ function [oNet] = fullTrain(trn, val, tst, batchSize, nNodes, pp_func, tstIsVal)
   %Doing the training.
   if (nNodes == 1),
     disp('Extracting the number of hidden nodes via PCD.');
-    [trn, val, tst, oNet.pp] = pp_func(trn, val, tst);
+    [trn, val, tst, oNet.pp] = pp.func(trn, val, tst, pp.par);
     fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
     [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
   else
     fprintf('Training a network (%s) by cross validation.\n', getNumNodesAsText(net));
     data = getCrossData(trn, val, tst, tstIsVal);
-    oNet = crossVal(data, net, pp_func, tstIsVal);
+    oNet = crossVal(data, net, pp, tstIsVal);
   end
 
 
@@ -75,9 +81,10 @@ function data = getCrossData(trn, val, tst, tstIsVal)
   end
 
 
-function [otrn, oval, otst] = do_nothing(trn, val, tst)
+function [otrn, oval, otst, pp] = do_nothing(trn, val, tst, par)
 %Dummy function to work with pp_function ponter.
   disp('Applying NO pre-processing...');
   otrn = trn;
   oval = val;
   otst = tst;
+  pp = [];

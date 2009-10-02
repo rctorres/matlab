@@ -20,13 +20,13 @@ function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, batch_
   else
     %Fazendo Fisher.
     numNodes = 0;
-    fisher = fullTrain(trn, val, tst, batch_size, numNodes, par.pp_func, tst_equal_val);
+    fisher = fullTrain(trn, val, tst, batch_size, numNodes, par, tst_equal_val);
     fisher.desc = par.desc;
     fisher.id = par.id;
     numNodes = par.hidden_nodes; %P/ o treino neural.
   end
 
   %Treino neural.
-  net = fullTrain(trn, val, tst, batch_size, numNodes, par.pp_func, tst_equal_val);
+  net = fullTrain(trn, val, tst, batch_size, numNodes, par, tst_equal_val);
   net.desc = par.desc;
   net.id = par.id;
