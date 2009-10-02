@@ -13,6 +13,10 @@ function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainP
 %(se , doCrossVal = true). do Contrario, apaenas uma rede sera treinada.
 %
 
+  if nargin ~= 8,
+    error('Numero invalido de argumentos na train_all_cases');
+  end
+
   fprintf('Fazendo %s\n', par.desc);
 
   if discover_via_pcd,
