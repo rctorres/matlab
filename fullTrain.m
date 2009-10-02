@@ -66,7 +66,7 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
       [trn, val, tst, oNet.pp] = pp.func(trn, val, tst, pp.par);
       fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
       net = create_network(trn, nNodes, trainParam);
-      fprintf('Training only once the network (%s).\n', getNumNodesAsText(net));
+      fprintf('Training the network (%s).\n', getNumNodesAsText(net));
       [netVec, I] = trainMany(net, trn, val, tst, numTrains);
       oNet.net = netVec{I}.net;
       oNet.evo = netVec{I}.trnEvo;
