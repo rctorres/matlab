@@ -20,6 +20,7 @@ disp('Preparando os Conjuntos para Treino Com PCA');
 
 %Extraindo as PCAs
 pp{3} = extract_pca(trn, par.ringsDist);
+pp{3}.nComp = par.nComp;
 if isempty(par.ringsDist),
   pp{3}.name = 'PCA';  
 else
