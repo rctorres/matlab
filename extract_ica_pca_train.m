@@ -4,12 +4,12 @@ function [trn, val, tst, pp] = extract_ica_pca_train(trn, val, tst, par)
 %classificador, reduzindo a domensao dos eventos via PCA.
 %par deve ser uma estrutura contendo os seguintes campos:
 % - norm : ponteiro p/ a funcao usada p/ normalizar (event, esf, etc)
-% - ringsDist : vetor com a distribuicao dos aneis. Se for [], a extracaos
+% - ringsDist : vetor com a distribuicao dos aneis. Se for [], a extracao
+%               sera NAO segmentada. Do contrario, faco a extracao segmentada.
 % - nComp : um valor (caso nao-segmentado), ou um vetor, especificando o
 %           numero de PCs p/ serem retidas do evento ou de cada segmento. 
-%           Se este campo for [], TODAS as PCs serao utilizadas.
+%           Este parametro NAO pode ser vazio.
 %
-% era NAO segmentada. Do contrario, faco a extracao segmentada.
 %
 
 disp('Preparando os Conjuntos para Treino Com ICA Compactadas por PCA');
@@ -28,22 +28,23 @@ else
   pp{3}.name = 'PCA-Seg';
 end
 
-%Fazendo a compactacao do sinal, se solicitado.
+%Fazendo a compactacao do sinal.
 W = do_reduction(pp{3}.W, par.ringsDist, par.nComp);
 
 %Fazendo a projecao nas PCAs 
 [trn, val, tst] = do_projection(trn, val, tst, W, par.ringsDist);
 
 %Extraindo as ICAs
-pp{3}.W = extract_ica(trn, par.nComp);
 if isempty(par.ringsDist),
-  pp{3}.name = 'ICA';
+  pp{4}.W = extract_ica(trn, []);
+  pp{4}.name = 'ICA';
 else
-  pp{3}.name = 'ICA-Seg';
+  pp{4}.W = extract_ica(trn, par.nComp); %nComp e o novo ringsDist, apos a compactacao.
+  pp{4}.name = 'ICA-Seg';
 end
 
-%Fasendo a projecao nas ICAs 
-[trn, val, tst] = do_projection(trn, val, tst, pp{3}.W, par.nComp);
+%Fazendo a projecao nas ICAs 
+[trn, val, tst] = do_projection(trn, val, tst, pp{4}.W, par.nComp);
 
 
 function W = do_reduction(pca, ringsDist, nComp)
