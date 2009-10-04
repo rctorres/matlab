@@ -1,12 +1,15 @@
-function [trn, val, tst] = sequential(trn, val, tst, ringsDist)
-%function [trn, val, tst] = sequential(trn, val, tst, ringsDist)
+function [trn, val, tst, pp] = sequential(trn, val, tst, par)
+%function [trn, val, tst, pp] = sequential(trn, val, tst, par)
 %Realiza a normalizacao sequencial.
+% - par.ringsDist : distribuicao dos aneis em cada camada.
 %
-  fprintf('Fazendo normalizacao sequencial.\n');
+  pp.name = 'sequential';
+  disp('Fazendo Normalizacao Sequencial');
+  
   for i=1:length(trn),
-    trn{i} = do_set(trn{i}, ringsDist);
-    val{i} = do_set(val{i}, ringsDist);
-    tst{i} = do_set(tst{i}, ringsDist);
+    trn{i} = do_set(trn{i}, par.ringsDist);
+    val{i} = do_set(val{i}, par.ringsDist);
+    tst{i} = do_set(tst{i}, par.ringsDist);
   end
 
 
