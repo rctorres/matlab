@@ -30,7 +30,7 @@ for i=1:N,
   end
 end
 
-x = (1:res:1000*nPt);
+x = (res:res:1000*nPt);
 x = repmat(x, N, 1);
 
 figure;
