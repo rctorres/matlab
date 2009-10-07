@@ -25,6 +25,11 @@ for i=1:length(norm),
   if discover_via_pcd,
     save(sprintf('nodes_analysis_%s.mat', par.id), 'net');
   else
-    save(sprintf('nets_%s.mat', par.id), 'net', 'fisher');
+    if doCrossVal,
+      pref = 'cross_val';
+    else
+      pref = 'nets';
+    end
+    save(sprintf('%s_%s.mat', pref, par.id), 'net', 'fisher');
   end
 end
