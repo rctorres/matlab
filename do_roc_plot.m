@@ -31,9 +31,10 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pfRef)
     %SP
     subplot(2,2,2);
     hold on;
-    mv = mean(d.sp);
-    [si, ss] = adjustErrorRanges(mv, std(d.sp));
-    h = errorbar(idx-1+i, 100*mv, 100*si, 100*ss, [c m]);
+    mean_sp = mean(d.sp);
+    std_sp = std(d.sp);
+    [si, ss] = adjustErrorRanges(mean_sp, std_sp);
+    h = errorbar(idx-1+i, 100*mean_sp, 100*si, 100*ss, [c m]);
     grid on;
     title('Maximo SP de Cada Caso');
     xlabel('Caso');
@@ -43,10 +44,11 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pfRef)
     %Area da ROC
     subplot(2,2,3);
     hold on;
-    detSum = roc_area(d.det);
-    mv = mean(detSum);
-    [si, ss] = adjustErrorRanges(mv, std(detSum));
-    errorbar(idx-1+i, 100*mv, 100*si, 100*ss, [c m]);
+    area = roc_area(d.det);
+    mean_area = mean(area);
+    std_area = std(area);
+    [si, ss] = adjustErrorRanges(mean_area, std_area);
+    errorbar(idx-1+i, 100*mean_area, 100*si, 100*ss, [c m]);
     grid on;
     title('Area da ROC');
     xlabel('Caso');
@@ -57,17 +59,19 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pfRef)
     hold on;
     [v, I] = min(abs(d.fa - pfRef), [], 2);
     pd = d.det(I);
-    mpd = mean(d.det(I));
-    [si, ss] = adjustErrorRanges(mpd, std(pd));
-    errorbar(idx-1+i, 100*mpd, 100*si, 100*ss, [c m]);
+    mean_pd = mean(pd);
+    std_pd = std(pd);
+    [si, ss] = adjustErrorRanges(mean_pd, std_pd);
+    errorbar(idx-1+i, 100*mean_pd, 100*si, 100*ss, [c m]);
     grid on;
     title(sprintf('P_D @ P_{FA} = %2.2f%%', 100*pfRef));
     xlabel('Caso');
     ylabel('Detecao (%)');
 
- 
-    
-%    fprintf('%s   : SP = %2.2f, Area = %3.2f, Pd@Pf = %2.0f%% = %f\n', getNumNodesAsText(d.net), 100*d.sp, sum(d.det), 100*pfRef, pd);
+    netName = getNumNodesAsText(d.net);
+    spaces = '        ';
+    netName = [netName spaces(1:length(spaces)-length(netName))];
+    fprintf('%s : SP = %2.2f +- %2.2e, Area = %2.2f +- %2.2e, Pd@Pf = %2.0f =  %2.2f +- %2.2e\n', netName, 100*mean_sp, 100*std_sp, 100*mean_area, 100*std_area, 100*pfRef, 100*mean_pd, 100*std_pd);
   end
   
   
