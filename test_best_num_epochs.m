@@ -52,7 +52,7 @@ plot(x', conv');
 set(gca, 'xScale', 'log');
 set(gca, 'yScale', 'log');
 grid on;
-title('Diferenca Relativa Entre o SP Maximo e Minimo em Cada Slot');
+title(sprintf('Diferenca Relativa Entre o SP Maximo e Minimo em Cada Slot de %d Epocas', res));
 xlabel('Epocas');
 ylabel('Diferenca relativa (%)');
 legend(leg);
