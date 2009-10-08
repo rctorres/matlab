@@ -7,13 +7,20 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pfRef)
 %correspondente.
 
   disp(net.desc);
-  cases = {net, fisher};
+  
+  if isempty(fisher),
+    cases = {net};
+  else
+    cases = {net, fisher};
+  end
+  
+  nCases = length(cases);  
   traces = {'-', '--'};
   marker = {'s', 'o'};
-  h_roc = zeros(1,2);
-  h_sp = zeros(1,2);
+  h_roc = zeros(1,nCases);
+  h_sp = zeros(1,nCases);
   
-  for i=1:2,
+  for i=1:nCases,
     d = cases{i};
     t = traces{i};
     m = marker{i};
@@ -69,9 +76,7 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pfRef)
     ylabel('Detecao (%)');
 
     netName = getNumNodesAsText(d.net);
-    spaces = '        ';
-    netName = [netName spaces(1:length(spaces)-length(netName))];
-    fprintf('%s : SP = %2.2f +- %2.2e, Area = %2.2f +- %2.2e, Pd@Pf = %2.0f =  %2.2f +- %2.2e\n', netName, 100*mean_sp, 100*std_sp, 100*mean_area, 100*std_area, 100*pfRef, 100*mean_pd, 100*std_pd);
+    fprintf('%8s : SP = %2.2f +- %2.2e, Area = %2.2f +- %2.2e, Pd@Pf = %2.0f =  %2.2f +- %2.2e\n', netName, 100*mean_sp, 100*std_sp, 100*mean_area, 100*std_area, 100*pfRef, 100*mean_pd, 100*std_pd);
   end
   
   
