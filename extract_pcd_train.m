@@ -5,7 +5,8 @@ function [trn, val, tst, pp] = extract_pcd_train(trn, val, tst, par)
 % - norm : ponteiro p/ a funcao usada p/ normalizar (event, esf, etc)
 % - ringsDist : vetor com a distribuicao dos aneis.
 % - isSegmented : se true, fara a extracao segmentada.
-% - pcd : Matriz, ou evtor de celulas contendo as PCDs extraidas.
+% - pcd : Estrutura com a info das PCDs extraidas (tal como retornada por
+%         extract e extract_segmented.
 % - doTanh : se true, vai passar os conjuntos, apos a projecao nas PCDs
 %            pela tangente hiperbolica.
 % - nComp : um valor (caso nao-segmentado), ou um vetor, especificando o
@@ -17,6 +18,7 @@ disp('Preparando os Conjuntos para Treino Com PCD');
 
 %Usando a normalizacao solicitada.
 [trn, val, tst, pp{1}] = par.norm(trn, val, tst, par);
+normName = pp{1}.name;
 
 %Para o resto do codigo, fica mais facil testar se ringDist = [] p/
 %extracao nao segmentada.
@@ -25,8 +27,9 @@ if ~par.isSegmented,
 end
 
 %Pegando as PCDs
-pp{2}.W = par.pcd.W;
-pp{2}.efic = par.pcd.efic.max;
+fprintf('Pegando as PCDs extraidas com normalizacao ""\n', normName);
+pp{2}.W = par.pcd.(normName).W;
+pp{2}.efic = par.pcd.(normName).efic.max;
 pp{2}.nComp = par.nComp;
 if isempty(par.ringsDist),
   pp{2}.name = 'PCD';
