@@ -27,7 +27,7 @@ if ~par.isSegmented,
 end
 
 %Pegando as PCDs
-fprintf('Pegando as PCDs extraidas com normalizacao ""\n', normName);
+fprintf('Pegando as PCDs extraidas com normalizacao "%s"\n', normName);
 pp{2}.W = par.pcd.(normName).W;
 pp{2}.efic = par.pcd.(normName).efic.max;
 pp{2}.nComp = par.nComp;
