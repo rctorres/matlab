@@ -39,4 +39,5 @@ function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainP
     net.id = par.id;
   else
     disp('Nao vao realizar treino neural!');
+    net = [];
   end
