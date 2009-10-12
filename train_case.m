@@ -33,6 +33,11 @@ function [net, fisher] = train_case(trn, val, tst, par, discover_via_pcd, trainP
   end
 
   %Treino neural.
-  net = fullTrain(trn, val, tst, trainParam, numNodes, par, tst_equal_val, doCrossVal);
-  net.desc = par.desc;
-  net.id = par.id;
+  if numNodes > 0,
+    net = fullTrain(trn, val, tst, trainParam, numNodes, par, tst_equal_val, doCrossVal);
+    net.desc = par.desc;
+    net.id = par.id;
+  else
+    disp('Nao vao realizar treino neural!');
+    net = [];
+  end
