@@ -5,11 +5,11 @@ if nargin < 3, cstyle = 'b*--'; end
 
 names = [{'PS'} {'EM1'} {'EM2'} {'EM3'} {'HD1'} {'HD2'} {'HD3'}];
 
-for i=1:length(pcd_seg),
+for i=1:length(pcd_seg.efic),
   subplot(2,4,i);
 %  errorbar(pcd_seg{i}.efic.mean, pcd_seg{i}.efic.std, 'b*--');
 %  hold on
-  plot(pcd_seg{i}.efic.max, cstyle);
+  plot(pcd_seg.efic{i}.max, cstyle);
 %  hold off
 %  legend('Mean', 'Max', 'Location', 'SouthEast');
   hold on
@@ -17,7 +17,7 @@ for i=1:length(pcd_seg),
   xlabel('# PCD');
   ylabel('SP');
   grid on;
-  set(gca, 'xLim', [0 length(pcd_seg{i}.efic.max)]);
+  set(gca, 'xLim', [0 length(pcd_seg.efic{i}.max)]);
 end
 
 subplot(2,4,8);
