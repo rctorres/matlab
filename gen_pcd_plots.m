@@ -9,7 +9,7 @@ for i=1:length(pcd_seg.efic),
   subplot(2,4,i);
 %  errorbar(pcd_seg{i}.efic.mean, pcd_seg{i}.efic.std, 'b*--');
 %  hold on
-  plot(pcd_seg.efic{i}.max, cstyle);
+  plot(100*pcd_seg.efic{i}.max, cstyle);
 %  hold off
 %  legend('Mean', 'Max', 'Location', 'SouthEast');
   hold on
@@ -23,7 +23,7 @@ end
 subplot(2,4,8);
 %errorbar(pcd.efic.mean, pcd.efic.std, '*--');
 %hold on;
-plot(pcd.efic.max, cstyle);
+plot(100*pcd.efic.max, cstyle);
 %hold off
 %legend('Mean', 'Max', 'Location', 'SouthEast');
 hold on
