@@ -65,7 +65,8 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pdRef)
     subplot(2,2,4);
     hold on;
     [v, I] = min(abs(d.det - pdRef), [], 2);
-    pfa = d.det(I);
+    I = sub2ind(size(d.det), (1:size(d.det,1)), I');
+    pfa = d.fa(I);
     mean_pfa = mean(pfa);
     std_pfa = std(pfa);
     [si, ss] = adjustErrorRanges(mean_pfa, std_pfa);
@@ -75,7 +76,11 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pdRef)
     xlabel('Caso');
     ylabel('Detecao (%)');
 
-    netName = getNumNodesAsText(d.net{1});
+    if iscell(d.net),
+      netName = getNumNodesAsText(d.net{1});
+    else
+      netName = getNumNodesAsText(d.net);
+    end
     fprintf('%8s : SP = %2.2f +- %2.2e, Area = %2.2f +- %2.2e, Pd@Pf = %2.0f =  %2.2f +- %2.2e\n', netName, 100*mean_sp, 100*std_sp, 100*mean_area, 100*std_area, 100*pdRef, 100*mean_pfa, 100*std_pfa);
   end
   
