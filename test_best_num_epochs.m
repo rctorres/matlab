@@ -1,4 +1,5 @@
 function test_best_num_epochs(trnEvo)
+%function test_best_num_epochs(trnEvo)
 %Este script pega cada treino com um numero insano de epocas, e, variando o
 %criteriod e parada em slots de 1000, calcula a diferenca media e o
 %respectivo erro em relacao ao treino usando o numero total de epocas. O
