@@ -1,9 +1,9 @@
-function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pfRef)
-%function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pfRef)
+function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pdRef)
+%function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pdRef)
 %Plota a ROC e a tabela de eficiencias recebendo os valores net e fisher
 %salvos por train_case. c e uma cor a representar o conjunto a ser plotado.
-%idx e o indice para ser usado no eixo x do errorbar, e pfRef e um falso
-%alarme de referencia [0-1] par aque se ja apresentada a detecao
+%idx e o indice para ser usado no eixo x do errorbar, e pdRef e uma prob.
+%de detecao de referencia [0-1] par aque se ja apresentada o falso alarme
 %correspondente.
 
   disp(net.desc);
@@ -61,22 +61,22 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pfRef)
     xlabel('Caso');
     ylabel('Area');
 
-    %SP
+    %PF@PD
     subplot(2,2,4);
     hold on;
-    [v, I] = min(abs(d.fa - pfRef), [], 2);
-    pd = d.det(I);
-    mean_pd = mean(pd);
-    std_pd = std(pd);
-    [si, ss] = adjustErrorRanges(mean_pd, std_pd);
-    errorbar(idx-1+i, 100*mean_pd, 100*si, 100*ss, [c m]);
+    [v, I] = min(abs(d.det - pdRef), [], 2);
+    pfa = d.det(I);
+    mean_pfa = mean(pfa);
+    std_pfa = std(pfa);
+    [si, ss] = adjustErrorRanges(mean_pfa, std_pfa);
+    errorbar(idx-1+i, 100*mean_pfa, 100*si, 100*ss, [c m]);
     grid on;
-    title(sprintf('P_D @ P_{FA} = %2.2f%%', 100*pfRef));
+    title(sprintf('P_D @ P_{FA} = %2.2f%%', 100*pdRef));
     xlabel('Caso');
     ylabel('Detecao (%)');
 
     netName = getNumNodesAsText(d.net);
-    fprintf('%8s : SP = %2.2f +- %2.2e, Area = %2.2f +- %2.2e, Pd@Pf = %2.0f =  %2.2f +- %2.2e\n', netName, 100*mean_sp, 100*std_sp, 100*mean_area, 100*std_area, 100*pfRef, 100*mean_pd, 100*std_pd);
+    fprintf('%8s : SP = %2.2f +- %2.2e, Area = %2.2f +- %2.2e, Pd@Pf = %2.0f =  %2.2f +- %2.2e\n', netName, 100*mean_sp, 100*std_sp, 100*mean_area, 100*std_area, 100*pdRef, 100*mean_pfa, 100*std_pfa);
   end
   
   
