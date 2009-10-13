@@ -71,11 +71,11 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pdRef)
     [si, ss] = adjustErrorRanges(mean_pfa, std_pfa);
     errorbar(idx-1+i, 100*mean_pfa, 100*si, 100*ss, [c m]);
     grid on;
-    title(sprintf('P_D @ P_{FA} = %2.2f%%', 100*pdRef));
+    title(sprintf('P_{FA}@P_D = %2.2f%%', 100*pdRef));
     xlabel('Caso');
     ylabel('Detecao (%)');
 
-    netName = getNumNodesAsText(d.net);
+    netName = getNumNodesAsText(d.net{1});
     fprintf('%8s : SP = %2.2f +- %2.2e, Area = %2.2f +- %2.2e, Pd@Pf = %2.0f =  %2.2f +- %2.2e\n', netName, 100*mean_sp, 100*std_sp, 100*mean_area, 100*std_area, 100*pdRef, 100*mean_pfa, 100*std_pfa);
   end
   
