@@ -14,7 +14,7 @@ for i=1:N,
   id = pre_proc.name(1:3);
   if strcmp(id, 'PCA') || strcmp(id, 'PCD') || strcmp(id, 'ICA'),
     fprintf('Fazendo projecao %s.\n', pre_proc.name);
-    [trn, val, tst] = project(trn, val, tst, pre_proc, ringsDist);
+    [trn, val, tst, ringsDist] = project(trn, val, tst, pre_proc, ringsDist);
   else
     func = str2func(pre_proc.name);
     [trn, val, tst] = func(trn, val, tst, pre_proc);
@@ -22,7 +22,7 @@ for i=1:N,
 end
 
 
-function [trn, val, tst] = project(trn, val, tst, pre_proc, ringsDist)
+function [trn, val, tst, ringsDist] = project(trn, val, tst, pre_proc, ringsDist)
   W = pre_proc.W;
   
   %Verifica se o campo com nComp existe. Se nao existir, projetamos na
@@ -51,4 +51,7 @@ function [trn, val, tst] = project(trn, val, tst, pre_proc, ringsDist)
   end
   
   [trn, val, tst] = do_projection(trn, val, tst, W, ringsDist);
+
+  %Atualizando as camadas em ringsDist, ja que corti dimensoes.
+  if iscell(W), ringsDist = nComp; end
   
