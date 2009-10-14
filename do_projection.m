@@ -14,16 +14,12 @@ end
 
 
 
-function [otrn, oval, otst] = project(trn, val, tst, W)
-  nSets = length(trn);
-  otrn = cell(1,nSets);
-  oval = cell(1,nSets);
-  otst = cell(1,nSets);
-
-  for i=1:nSets,
-    otrn{i} = W * trn{i};
-    oval{i} = W * val{i};
-    otst{i} = W * tst{i};
+function [trn, val, tst] = project(trn, val, tst, W)
+  fprintf('Projetando nas %d componentes.\n', size(W,1));
+  for i=1:length(trn),
+    trn{i} = W * trn{i};
+    val{i} = W * val{i};
+    tst{i} = W * tst{i};
   end
 
 
