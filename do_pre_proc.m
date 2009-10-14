@@ -7,10 +7,17 @@ function [trn, val, tst] = do_pre_proc(pp, ringsDist, trn, val, tst)
 %estao armazenados nos dados.
 %
 
-N = length(pp);
+%Se pp nao for um vetor de celulas, a gente transforma num...
+if ~iscell(pp),
+  pproc{1} = pp;
+else
+  pproc = pp;
+end
+
+N = length(pproc);
 
 for i=1:N,
-  pre_proc = pp{i};
+  pre_proc = pproc{i};
   id = pre_proc.name(1:3);
   if strcmp(id, 'PCA') || strcmp(id, 'PCD') || strcmp(id, 'ICA'),
     fprintf('Fazendo projecao %s.\n', pre_proc.name);

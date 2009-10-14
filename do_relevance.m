@@ -7,7 +7,7 @@ function [r_mse, r_sp] = do_relevance(net_str, ringsDist, trn, val, tst)
 %
 
   net = net_str.net;
-  pp = net_str.net;
+  pp = net_str.pp;
   
   [trn, val, tst] = do_pre_proc(pp, ringsDist, trn, val, tst);
   clear tst;

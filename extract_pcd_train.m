@@ -35,6 +35,7 @@ if isempty(par.ringsDist),
   pp{2}.name = 'PCD';
 else
   pp{2}.name = 'PCD-Seg';
+  pp{2}.ringsDist = par.ringsDist;
 end
 
 %Fazendo a compactacao do sinal.

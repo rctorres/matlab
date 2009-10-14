@@ -33,6 +33,7 @@ if isempty(par.ringsDist),
   pp{3}.name = 'PCA';  
 else
   pp{3}.name = 'PCA-Seg';
+  pp{3}.ringsDist = par.ringsDist;
 end
 
 %Fazendo a compactacao do sinal.
@@ -48,6 +49,7 @@ if isempty(par.ringsDist),
 else
   pp{4}.W = extract_ica(trn, par.nComp); %nComp e o novo ringsDist, apos a compactacao.
   pp{4}.name = 'ICA-Seg';
+  pp{4}.ringsDist = par.nComp;
 end
 
 %Fazendo a projecao nas ICAs 

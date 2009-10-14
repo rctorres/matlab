@@ -31,6 +31,7 @@ if isempty(par.ringsDist),
   pp{3}.name = 'PCA';  
 else
   pp{3}.name = 'PCA-Seg';
+  pp{3}.ringsDist = par.ringsDist;
 end
 
 %Fazendo a compactacao do sinal, se solicitado.

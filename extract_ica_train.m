@@ -27,6 +27,7 @@ if isempty(par.ringsDist),
   pp{3}.name = 'ICA';
 else
   pp{3}.name = 'ICA-Seg';
+  pp{3}.ringsDist = par.ringsDist;
 end
 
 %Fasendo a projecao nas ICAs 

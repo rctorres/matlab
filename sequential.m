@@ -4,6 +4,8 @@ function [trn, val, tst, pp] = sequential(trn, val, tst, par)
 % - par.ringsDist : distribuicao dos aneis em cada camada.
 %
   pp.name = 'sequential';
+  pp.ringsDist = par.ringsDist;
+  
   disp('Fazendo Normalizacao Sequencial');
   
   for i=1:length(trn),
