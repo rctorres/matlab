@@ -55,7 +55,7 @@ function [h_roc, h_sp] = do_roc_plot(net, fisher, c, idx, pdRef)
     mean_area = mean(area);
     std_area = std(area);
     [si, ss] = adjustErrorRanges(mean_area, std_area);
-    errorbar(idx-1+i, 100*mean_area, 100*si, 100*ss, [c m]);
+    errorbar(idx-1+i, mean_area, si, ss, [c m]);
     grid on;
     title('Area da ROC');
     xlabel('Caso');
