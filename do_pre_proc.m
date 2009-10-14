@@ -22,11 +22,22 @@ for i=1:N,
   if strcmp(id, 'PCA') || strcmp(id, 'PCD') || strcmp(id, 'ICA'),
     fprintf('Fazendo projecao %s.\n', pre_proc.name);
     [trn, val, tst, ringsDist] = project(trn, val, tst, pre_proc, ringsDist);
+  elseif strcmp(pre_proc.name, 'tanh'),
+    [trn, val, tst] = do_tanh(trn, val, tst);
   else
     func = str2func(pre_proc.name);
     [trn, val, tst] = func(trn, val, tst, pre_proc);
   end
 end
+
+
+function [trn, val, tst] = do_tanh(trn, val, tst)
+  disp('Calculando a tangente hiperbolica das projecoes.');
+  for i=1:length(trn),
+    trn{i} = tanh(trn{i});
+    val{i} = tanh(val{i});
+    tst{i} = tanh(tst{i});
+  end
 
 
 function [trn, val, tst, ringsDist] = project(trn, val, tst, pre_proc, ringsDist)
