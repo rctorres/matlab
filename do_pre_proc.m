@@ -13,8 +13,8 @@ for i=1:N,
   pre_proc = pp{i};
   id = pre_proc.name(1:3);
   if strcmp(id, 'PCA') || strcmp(id, 'PCD') || strcmp(id, 'ICA'),
-    fprintf('Projetando nas %s\n', pre_proc.name);
-    [trn, val, tst] = project(trn, val, tst, pre_proc);
+    fprintf('Fazendo projecao %s.\n', pre_proc.name);
+    [trn, val, tst] = project(trn, val, tst, pre_proc, ringsDist);
   else
     func = str2func(pre_proc.name);
     [trn, val, tst] = func(trn, val, tst, pre_proc);
@@ -24,8 +24,24 @@ end
 
 function [trn, val, tst] = project(trn, val, tst, pre_proc, ringsDist)
   W = pre_proc.W;
-  nComp = pre_proc.nComp;
-
+  
+  %Verifica se o campo com nComp existe. Se nao existir, projetamos na
+  %dimensao total de W.
+  if isfield(pre_proc, 'nComp'),
+    nComp = pre_proc.nComp;
+  else
+    if iscell(W),
+      N = length(W);
+      nComp = zeros(1,N);
+      for i=1:N,
+        nComp(i) = size(W{i}, 1);
+      end
+    else
+      nComp = size(W, 1);
+    end
+  end
+  
+  %Fazendo o corte de dimensoes.
   if iscell(W),
     for i=1:length(W),
       W{i} = W{i}(1:nComp(i),:);
