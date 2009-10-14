@@ -1,5 +1,5 @@
-function [trn, val, tst] = do_pre_proc(pp, trn, val, tst)
-%function [trn, val, tst] = do_pre_proc(trn, val, tst, pp)
+function [trn, val, tst] = do_pre_proc(pp, ringsDist, trn, val, tst)
+%function [trn, val, tst] = do_pre_proc(pp, ringsDist, trn, val, tst)
 %Realiza a cadeia de pre-processamento armazenada no vetor de celulas pp.
 %Este vetor e, por exemplo, retornada pelas funcoes extract_ica_train,
 %extract_pca_train, event, remove_mean, etc. Ou seja, esta funcao vai
@@ -21,8 +21,18 @@ for i=1:N,
   end
 end
 
-function [trn, val, tst] = project(trn, val, tst, pre_proc)
+
+function [trn, val, tst] = project(trn, val, tst, pre_proc, ringsDist)
   W = pre_proc.W;
   nComp = pre_proc.nComp;
 
+  if iscell(W),
+    for i=1:length(W),
+      W{i} = W{i}(1:nComp(i),:);
+    end
+  else
+    W = W(1:nComp,:);
+  end
+  
+  [trn, val, tst] = do_projection(trn, val, tst, W, ringsDist);
   
