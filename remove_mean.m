@@ -5,6 +5,8 @@ function [trn, val, tst, pp] = remove_mean(trn, val, tst, par)
 % par.means : vetor com medias previamente calculadas. Neste caso, eu so
 % removo as medias usando este vetor, ao inves de calcula-las.
 %
+if nargin < 4, par = []; end
+
 disp('Removendo a Media dos Conjuntos.');
 
 pp.name = 'remove_mean';
