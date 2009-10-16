@@ -24,11 +24,21 @@ for i=1:N,
     [trn, val, tst, ringsDist] = project(trn, val, tst, pre_proc, ringsDist);
   elseif strcmp(pre_proc.name, 'tanh'),
     [trn, val, tst] = do_tanh(trn, val, tst);
+  elseif strcmp(pre_proc.name, 'relevance'),
+    [trn, val, tst] = do_relevance(trn, val, tst, pre_proc);
   else
     func = str2func(pre_proc.name);
     [trn, val, tst] = func(trn, val, tst, pre_proc);
   end
 end
+
+function [trn, val, tst] = do_relevance(trn, val, tst, pre_proc)
+  disp('Selecionando as componentes relevantes.');
+  for i=1:length(trn),
+    trn{i} = trn{i}(pre_proc.relevComp, :);
+    val{i} = val{i}(pre_proc.relevComp, :);
+    tst{i} = tst{i}(pre_proc.relevComp, :);
+  end
 
 
 function [trn, val, tst] = do_tanh(trn, val, tst)
