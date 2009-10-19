@@ -52,7 +52,7 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
   %Doing the training.
   if (nNodes == 1),
     disp('Extracting the number of hidden nodes via PCD.');
-    [trn, val, tst, oNet.pp] = pp.func(trn, val, tst, pp.par);
+    [trn, val, tst, oNet.pp] = calculate_pre_processing(trn, val, tst, pp);
     fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
     net = create_network(trn, nNodes, trainParam);
     [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
@@ -63,7 +63,7 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
       data = getCrossData(trn, val, tst, tstIsVal);
       oNet = crossVal(data, net, pp, tstIsVal);
     else
-      [trn, val, tst, oNet.pp] = pp.func(trn, val, tst, pp.par);
+      [trn, val, tst, oNet.pp] = calculate_pre_processing(trn, val, tst, pp);
       fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
       net = create_network(trn, nNodes, trainParam);
       fprintf('Training the network (%s).\n', getNumNodesAsText(net));
