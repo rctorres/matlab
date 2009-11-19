@@ -10,16 +10,13 @@ if nargin < 3, marker = 'b*--'; end
 
 names = [{'PS'} {'EM1'} {'EM2'} {'EM3'} {'HD1'} {'HD2'} {'HD3'}];
 
-for i=1:length(pca_seg),
-  hold on;
-  pcRet = size(pca_seg{i}.W,1);
+for i=1:length(pca_seg.en),
   subplot(2,4,i);
-  plotPCAcurve(pca_seg{i}.en, marker);
-  hold on;
+  plotPCAcurve(pca_seg.en{i}, marker);
   title(names{i});
   xlabel('# PCA');
   ylabel('Energy (%)');
-  set(gca, 'xLim', [0, (length(pca_seg{i}.en)+1)]);
+  set(gca, 'xLim', [0, (length(pca_seg.en{i})+1)]);
   grid on;
 end
 
