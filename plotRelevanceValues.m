@@ -5,11 +5,13 @@ function plotRelevanceValues(relev, rIdx, name)
 %um nome 'name' p/ identificar o tirulo.
 %
 
-barh([1:length(relev)], relev, 1, 'r');
+barh((1:length(relev)), relev, 1, 'r');
 hold on;
-barh(rIdx, relev(rIdx), 1, 'g');
+aux = zeros(size(relev));
+aux(rIdx) = relev(rIdx);
+barh((1:length(relev)), aux, 1, 'g');
 hold off;
 legend('Rejected', 'Accepted');
-title(sprintf('Relevance Value for the Classifier Input Variables (%s)', name));
-xlabel('MSE Deviation');
+title(sprintf('Input Relevance (%s)', name));
+xlabel('Deviation');
 ylabel('Input Number');
