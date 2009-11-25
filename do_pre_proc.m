@@ -33,7 +33,7 @@ for i=1:N,
 end
 
 function [trn, val, tst] = do_relevance(trn, val, tst, pre_proc)
-  disp('Selecionando as componentes relevantes.');
+  fprintf('Selecionando as %d componentes relevantes.\n', length(pre_proc.relevComp));
   for i=1:length(trn),
     trn{i} = trn{i}(pre_proc.relevComp, :);
     val{i} = val{i}(pre_proc.relevComp, :);
