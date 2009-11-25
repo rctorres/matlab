@@ -1,5 +1,5 @@
-function [trn, val, tst] = do_pre_proc(pp, ringsDist, trn, val, tst)
-%function [trn, val, tst] = do_pre_proc(pp, ringsDist, trn, val, tst)
+function [trn, val, tst] = do_pre_proc(pp, trn, val, tst)
+%function [trn, val, tst] = do_pre_proc(pp, trn, val, tst)
 %Realiza a cadeia de pre-processamento armazenada no vetor de celulas pp.
 %Este vetor e, por exemplo, retornada pelas funcoes extract_ica_train,
 %extract_pca_train, event, remove_mean, etc. Ou seja, esta funcao vai
@@ -21,7 +21,7 @@ for i=1:N,
   id = pre_proc.name(1:3);
   if strcmp(id, 'PCA') || strcmp(id, 'PCD') || strcmp(id, 'ICA'),
     fprintf('Fazendo projecao %s.\n', pre_proc.name);
-    [trn, val, tst, ringsDist] = project(trn, val, tst, pre_proc, ringsDist);
+    [trn, val, tst] = project(trn, val, tst, pre_proc);
   elseif strcmp(pre_proc.name, 'tanh'),
     [trn, val, tst] = do_tanh(trn, val, tst);
   elseif strcmp(pre_proc.name, 'relevance'),
@@ -50,7 +50,7 @@ function [trn, val, tst] = do_tanh(trn, val, tst)
   end
 
 
-function [trn, val, tst, ringsDist] = project(trn, val, tst, pre_proc, ringsDist)
+function [trn, val, tst] = project(trn, val, tst, pre_proc)
   W = pre_proc.W;
   
   %Verifica se o campo com nComp existe. Se nao existir, projetamos na
@@ -71,15 +71,14 @@ function [trn, val, tst, ringsDist] = project(trn, val, tst, pre_proc, ringsDist
   
   %Fazendo o corte de dimensoes.
   if iscell(W),
+    ringsDist = pre_proc.ringsDist;
     for i=1:length(W),
       W{i} = W{i}(1:nComp(i),:);
     end
   else
     W = W(1:nComp,:);
+    ringsDist = [];
   end
   
   [trn, val, tst] = do_projection(trn, val, tst, W, ringsDist);
-
-  %Atualizando as camadas em ringsDist, ja que corti dimensoes.
-  if iscell(W), ringsDist = nComp; end
   
