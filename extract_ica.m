@@ -16,8 +16,12 @@ else
   N = length(ringsDist);
   W = cell(1,N);
   for i=1:N,
-    ldata = getLayer(data, ringsDist, i);
-    fprintf('Extraindo as %d ICAs do caso segmentado.\n', size(ldata,1));
-    W{i} = jadeica(ldata);
+    if ringsDist(i) ~= 0,
+      ldata = getLayer(data, ringsDist, i);
+      fprintf('Extraindo as %d ICAs do caso segmentado (camada %d).\n', size(ldata,1), i);
+      W{i} = jadeica(ldata);
+    else
+      fprintf('Nao ha componentes na camada %d para a extracao de ICAs.\n', i);
+    end
   end  
 end
