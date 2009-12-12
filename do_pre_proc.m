@@ -44,16 +44,18 @@ function [trn, val, tst] = do_relevance(trn, val, tst, pre_proc)
 
 
 function [trn, val, tst] = events_selection(trn, val, tst, pre_proc)
-  for i=1:length(trn),
-    fprintf('Selecionando %d eventos (trn).\n', length(pre_proc.events.trn));
-    trn{i} = trn{i}(:, pre_proc.events.trn);
-    
-    fprintf('Selecionando %d eventos (val).\n', length(pre_proc.events.val));
-    val{i} = val{i}(:, pre_proc.events.val);
-    
-    fprintf('Selecionando %d eventos (tst).\n', length(pre_proc.events.tst));
-    tst{i} = tst{i}(:, pre_proc.events.tst);
+  if length(trn) ~= 1,
+    error('Se vc usa selecao de eventos, vc nao pode passar eletrons e jatos\nao mesmo tempo! Chame a do_pre_proc para uma tipo de particula de cada vez!!');
   end
+
+  fprintf('Selecionando %d eventos (trn).\n', length(pre_proc.events.trn));
+  trn{1} = trn{1}(:, pre_proc.events.trn);
+    
+  fprintf('Selecionando %d eventos (val).\n', length(pre_proc.events.val));
+  val{1} = val{1}(:, pre_proc.events.val);
+    
+  fprintf('Selecionando %d eventos (tst).\n', length(pre_proc.events.tst));
+  tst{1} = tst{1}(:, pre_proc.events.tst);
 
   
 function [trn, val, tst] = do_tanh(trn, val, tst)
