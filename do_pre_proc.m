@@ -26,6 +26,8 @@ for i=1:N,
     [trn, val, tst] = do_tanh(trn, val, tst);
   elseif strcmp(pre_proc.name, 'relevance'),
     [trn, val, tst] = do_relevance(trn, val, tst, pre_proc);
+  elseif strcmp(pre_proc.name, 'events_selection'),
+    [trn, val, tst] = events_selection(trn, val, tst, pre_proc);
   else
     func = str2func(pre_proc.name);
     [trn, val, tst] = func(trn, val, tst, pre_proc);
@@ -41,6 +43,19 @@ function [trn, val, tst] = do_relevance(trn, val, tst, pre_proc)
   end
 
 
+function [trn, val, tst] = events_selection(trn, val, tst, pre_proc)
+  for i=1:length(trn),
+    fprintf('Selecionando %d eventos (trn).\n', length(pre_proc.events.trn));
+    trn{i} = trn{i}(:, pre_proc.events.trn);
+    
+    fprintf('Selecionando %d eventos (val).\n', length(pre_proc.events.val));
+    val{i} = val{i}(:, pre_proc.events.val);
+    
+    fprintf('Selecionando %d eventos (tst).\n', length(pre_proc.events.tst));
+    tst{i} = tst{i}(:, pre_proc.events.tst);
+  end
+
+  
 function [trn, val, tst] = do_tanh(trn, val, tst)
   disp('Calculando a tangente hiperbolica das projecoes.');
   for i=1:length(trn),
