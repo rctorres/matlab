@@ -1,14 +1,15 @@
-% dist=KLDiv(P,Q, res);
+function dist=KLDiv(P,Q, nbins)
+% dist=KLDiv(P,Q, nbins)
 %
 %Calculates the Kullback-Leibler divergence between the P and Q random
 %variables. The p.d.fs are estimated by histogramming both variables with
-%the resolution given in 'res'.
+%the number of bins given in 'nbins'.
 %
-
-function dist=KLDiv(P,Q, res);
   
   xmin = min([P Q]);
   xmax = max([P Q]);
+  res = abs(xmax - xmin) / nbins;
+  
   xbins = xmin:res:xmax-res;
   P = histc(P,xbins);
   Q = histc(Q,xbins);
