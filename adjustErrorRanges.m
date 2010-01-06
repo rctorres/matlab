@@ -10,6 +10,6 @@ function [stdInf, stdSup] = adjustErrorRanges(mean_val, std_val)
   stdSup = std_val;
   sup_vals = mean_val + std_val;
   inf_vals = mean_val - std_val;
-  stdInf(inf_vals < 0) = mean_val;
+  stdInf(inf_vals < 0) = mean_val(inf_vals < 0);
   stdSup(sup_vals > 1) = 1 - mean_val(sup_vals > 1);
   
