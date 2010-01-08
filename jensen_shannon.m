@@ -1,7 +1,7 @@
-function dist=KLDiv(P,Q, nbins)
-% dist=KLDiv(P,Q, nbins)
+function dist=jensen_shannon(P,Q, nbins)
+% dist=jensen_shannon(P,Q, nbins)
 %
-%Calculates the Kullback-Leibler divergence between the P and Q random
+%Calculates the jensen_shannon divergence between the P and Q random
 %variables. The p.d.fs are estimated by histogramming both variables with
 %the number of bins given in 'nbins'.
 %
@@ -18,8 +18,9 @@ function dist=KLDiv(P,Q, nbins)
   % normalizing the P and Q
   Q = Q ./ sum(Q);
   P = P ./ sum(P);
-  d1 =  safe_sum(P.*log(P./Q));
-  d2 =  safe_sum(Q.*log(Q./P));
+  M = mean([P;Q]);
+  d1 =  safe_sum(P.*log(P./M));
+  d2 =  safe_sum(Q.*log(Q./M));
 
   dist = (d1 + d2) / 2;
 
