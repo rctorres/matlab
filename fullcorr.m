@@ -81,12 +81,18 @@ function res = js_div(mat)
 function c = do_corr(A, B, func)
   nComp = size(A,2);
   c = zeros(nComp);
+  
+  %Como correlacao e sempre simetrica, eu poupo tempo fazendo so a metade
+  %dos calculos
   for i=1:nComp,
-    parfor j=i:nComp,
+    for j=i:nComp,
       aux = func([A(:,i), B(:,j)]);
       c(i,j) = abs(aux(1,2));
     end
   end
+  %Componho a matriz final colocando a transposta da matriz na parte
+  %inferior.
+  c = triu(c) + tril(c',-1);
 
 
 function m = format(m)
