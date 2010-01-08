@@ -82,7 +82,7 @@ function c = do_corr(A, B, func)
   nComp = size(A,2);
   c = zeros(nComp);
   for i=1:nComp,
-    for j=1:nComp,
+    parfor j=i:nComp,
       aux = func([A(:,i), B(:,j)]);
       c(i,j) = abs(aux(1,2));
     end
