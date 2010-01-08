@@ -26,13 +26,14 @@ function c = fullcorr(doPlot, A, MA, B, MB)
   c.ang = calcAngles(MA', MB', true);
 
   %2) Correlacao linear entre as duas bases.
-  c.corr = do_corr(A, B, @corrcoef);
+  c.corr = do_corr(A, B, @corrcoef, false);
 
-  %3) Distancia de Jensen-Shanon
-  c.dist = do_corr(A, B, @js_div);
+  %3) Informacao Mutua
+  c.im = do_corr(A, B, @mutual_info, false);
 
-  %4) Informacao Mutua
-  c.im = do_corr(A, B, @mutual_info);
+  %4) Distancia de Jensen-Shanon
+  c.dist = do_corr(A, B, @js_div, false);
+
 
   if doPlot,
     figure;
@@ -51,15 +52,15 @@ function c = fullcorr(doPlot, A, MA, B, MB)
     colorbar;
 
     subplot(2,2,3);
-    pcolor(format(c.dist));
-    title('Dist. Jensen-Shannon entre as Projecoes');
+    pcolor(format(c.im));
+    title('Inf. Mutua entre as Projecoes');
     xlabel('B');
     ylabel('A');
     colorbar;
 
     subplot(2,2,4);
-    pcolor(format(c.im));
-    title('Inf. Mutua entre as Projecoes');
+    pcolor(format(c.dist));
+    title('Dist. Jensen-Shannon entre as Projecoes');
     xlabel('B');
     ylabel('A');
     colorbar;
@@ -78,7 +79,7 @@ function res = js_div(mat)
   res = [0 d];
 
   
-function c = do_corr(A, B, func)
+function c = do_corr(A, B, func, doNorm)
   nComp = size(A,2);
   c = zeros(nComp);
   
@@ -88,6 +89,10 @@ function c = do_corr(A, B, func)
     for j=i:nComp,
       aux = func([A(:,i), B(:,j)]);
       c(i,j) = abs(aux(1,2));
+    end
+    
+    if doNorm,
+      c(i,i:end) = c(i,i:end) ./ max(c(i,i:end));
     end
   end
   %Componho a matriz final colocando a transposta da matriz na parte
