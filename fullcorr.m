@@ -19,9 +19,11 @@ function c = fullcorr(doPlot, A, MA, B, MB)
     MB = MA;
   end
 
+  A = A';
+  B = B';
 
   %1) Angulo entre as direcoes
-  c.ang = calcAngles(MA, MB, true);
+  c.ang = calcAngles(MA', MB', true);
 
   %2) Correlacao linear entre as duas bases.
   c.corr = do_corr(A, B, @corrcoef);
