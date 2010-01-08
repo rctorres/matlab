@@ -1,14 +1,23 @@
-function ret = sumcorr(c)
+function data = sumcorr(c)
+%function data = sumcorr(c)
+%Plota um resumo das analises de correlacao feitas com a funcao fullcorr.
+%Este resumo e feito pegando o valor que MAIS representa semelhanca entre
+%duas variaveis,s egundo uma dada fig de merito (menor angulo, maior
+%correlacao, etc).
+%As figuras de merito que nao ficam limitadas entre 0 e 1, sao normlizadas
+%para que o resultado fique nesta faixa. Adicionalmente, o angulo e a
+%distancia sao rebatidos (1-x), para que tenhamos sempre o mesmo padrao
+%(quanto mais prox de 1, maior a semelhanca entre as variaveis,s egundo uma
+%dada fig de merito).
+%
 
-  ang = min(c.ang);
+  ang = min(c.ang) ./ 90; %Max = 1.
   corr = max(c.corr);
   im = max(c.im);
+  im = im ./ max(im); %Max = 1.
   dist = min(c.dist);
 
-  ret = [ang; corr; im; dist];
-
-  %P/ visualizar na tela, coloco todo mundo na faixa [0,1].
-  data = (mapminmax(ret) + 1) ./ 2;
+  data = [ang; corr; im; dist];
   
   %Angulo e distancia sao rebatidos. Quanto mais prox de 1, mais 
   %correlacionados.
