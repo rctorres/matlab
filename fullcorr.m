@@ -29,7 +29,7 @@ function c = fullcorr(doPlot, A, MA, B, MB)
   c.corr = do_corr(A, B, @corrcoef, false);
 
   %3) Informacao Mutua
-  c.im = do_corr(A, B, @mutual_info, false);
+  c.im = do_corr(A, B, @mutual_info, true);
 
   %4) Distancia de Jensen-Shanon
   c.dist = do_corr(A, B, @js_div, false);
