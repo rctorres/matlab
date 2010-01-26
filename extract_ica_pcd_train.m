@@ -16,9 +16,12 @@ function [trn, val, tst, pp] = extract_ica_pcd_train(trn, val, tst, par)
 
 disp('Preparando os Conjuntos para Treino Com ICA Compactada por PCD');
 
+pidx = 0;
+
 %Usando a normalizacao solicitada.
-[trn, val, tst, pp{1}] = par.norm(trn, val, tst, par);
-normName = pp{1}.name;
+pidx = pidx + 1;
+[trn, val, tst, pp{pidx}] = par.norm(trn, val, tst, par);
+normName = pp{pidx}.name;
 
 %Para o resto do codigo, fica mais facil testar se ringDist = [] p/
 %extracao nao segmentada.
@@ -27,26 +30,28 @@ if ~par.isSegmented,
 end
 
 %Pegando as PCDs
+pidx = pidx + 1;
 fprintf('Pegando as PCDs extraidas com normalizacao "%s"\n', normName);
-pp{2}.W = par.pcd.(normName).W;
-pp{2}.efic = par.pcd.(normName).efic;
-pp{2}.nComp = par.nComp;
+pp{pidx}.W = par.pcd.(normName).W;
+pp{pidx}.efic = par.pcd.(normName).efic;
+pp{pidx}.nComp = par.nComp;
 if isempty(par.ringsDist),
-  pp{2}.name = 'PCD';
+  pp{pidx}.name = 'PCD';
 else
-  pp{2}.name = 'PCD-Seg';
-  pp{2}.ringsDist = par.ringsDist;
+  pp{pidx}.name = 'PCD-Seg';
+  pp{pidx}.ringsDist = par.ringsDist;
 end
 
 %Fazendo a compactacao do sinal.
-W = do_reduction(pp{2}.W, par.ringsDist, par.nComp);
+W = do_reduction(pp{pidx}.W, par.ringsDist, par.nComp);
 
 %Fazendo a projecao nas PCDs 
 [trn, val, tst] = do_projection(trn, val, tst, W, par.ringsDist);
 
 if par.doTanh,
+  pidx = pidx + 1;
   disp('Passando os datasets pela Tangente Hiperbolica');
-  pp{3}.name = 'tanh';
+  pp{pidx}.name = 'tanh';
   for i=1:length(trn),
     trn{i} = tanh(trn{i});
     val{i} = tanh(val{i});
@@ -54,18 +59,23 @@ if par.doTanh,
   end
 end
 
+%Removendo a media.
+pidx = pidx + 1;
+[trn, val, tst, pp{pidx}] = remove_mean(trn, val, tst);
+
 %Extraindo as ICAs
+pidx = pidx + 1;
 if isempty(par.ringsDist),
-  pp{4}.W = extract_ica(trn, []);
-  pp{4}.name = 'ICA';
+  pp{pidx}.W = extract_ica(trn, []);
+  pp{pidx}.name = 'ICA';
 else
-  pp{4}.W = extract_ica(trn, par.nComp); %nComp e o novo ringsDist, apos a compactacao.
-  pp{4}.name = 'ICA-Seg';
-  pp{4}.ringsDist = par.nComp;
+  pp{pidx}.W = extract_ica(trn, par.nComp); %nComp e o novo ringsDist, apos a compactacao.
+  pp{pidx}.name = 'ICA-Seg';
+  pp{pidx}.ringsDist = par.nComp;
 end
 
 %Fazendo a projecao nas ICAs 
-[trn, val, tst] = do_projection(trn, val, tst, pp{4}.W, par.nComp);
+[trn, val, tst] = do_projection(trn, val, tst, pp{pidx}.W, par.nComp);
 
 
 
