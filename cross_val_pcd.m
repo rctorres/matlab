@@ -22,13 +22,13 @@ ret.evo = cell(nDeal, nPCDs);
 ret.sp = zeros(nDeal, nPCDs);
 ret.det = cell(1, nDeal);
 ret.fa = cell(1, nDeal);
+ret.pp = cell(1, nDeal);
 
-ret.evo = cell(1,nDeal);
 [net_par.hidNodes, net_par.trfFunc, net_par.trnParam] = getNetworkInfo(net);
 for d=1:nDeal,
   [trn val tst] = deal_sets(data, tstIsVal);
   [trn val tst ret.pp{d}] = calculate_pre_processing(trn, val, tst, pp);
-  [ret.pcd{d} ret.net(d,:) ret.evo(d,:) ret.sp(d,:) ret.det{d} ret.fa{d}] = get_pcd(net_par, trn, val, tst, nTrains, nPCD);
+  [ret.pcd{d} ret.net(d,:) ret.evo(d,:) ret.sp(d,:) ret.det{d} ret.fa{d}] = get_pcd(net_par, trn, val, tst, nTrains, nPCDs);
 end
 
 
@@ -70,16 +70,16 @@ function [trn val tst] = deal_sets(data, tstIsVal)
   end
  
 
-function [pcd onet oevo sp det fa] = get_pcd(net_par, trn, val, tst, nTrains, nPCD)
+function [pcd onet oevo sp det fa] = get_pcd(net_par, trn, val, tst, nTrains, numPCD)
   nROC = 500;
   net = newff2(trn, [-1 1], net_par.hidNodes, net_par.trfFunc);
   net.trainParam = net_par.trnParam;
-  [pcd, onet, oevo] = npcd(net, trn, val, tst, nTrains, 0, nPCD);
-  det = zeros(nPCD, nROC);
-  fa = zeros(nPCD, nROC);
-  sp = zeros(1, nPCD);
+  [pcd, onet, oevo] = npcd(net, trn, val, tst, nTrains, 0, numPCD);
+  det = zeros(numPCD, nROC);
+  fa = zeros(numPCD, nROC);
+  sp = zeros(1, numPCD);
 
-  for i=1:nPCD,
+  for i=1:numPCD,
     out = nsim(onet{i}, tst);
     [spVec, cutVec, det(i,:), fa(i,:)] = genROC(out{1}, out{2}, nROC);
     sp(i) = max(spVec);
@@ -99,14 +99,6 @@ function [hidNodes, trfFunc, trnParam] = getNetworkInfo(net)
   end
   
   trnParam = net.trainParam;
-
-  
-function [w maxSP det fa] = get_sp_by_fisher(trn, tst, nROC)
-%Calculates the best SP achieved considering a Fisher discriminant.
-  w = fisher(trn{1}, trn{2});
-  out = {w*tst{1}, w*tst{2}};
-  [spVec, cutVec, det, fa] = genROC(out{1}, out{2}, nROC);
-  maxSP = max(spVec);
 
   
 function [otrn, oval, otst, pp] = do_nothing(trn, val, tst, par)
