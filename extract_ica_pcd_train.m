@@ -12,6 +12,8 @@ function [trn, val, tst, pp] = extract_ica_pcd_train(trn, val, tst, par)
 % - nComp : um valor (caso nao-segmentado), ou um vetor, especificando o
 %           numero de PCs p/ serem retidas do evento ou de cada segmento. 
 %           Se este campo for [], TODAS as PCs disponiveis serao utilizadas.
+% - icaAlgo: Ponteiro p/ a funcao de extracao das ICA (jadeica, akuzawa,
+%            etc).
 %
 
 disp('Preparando os Conjuntos para Treino Com ICA Compactada por PCD');
@@ -66,12 +68,14 @@ pidx = pidx + 1;
 %Extraindo as ICAs
 pidx = pidx + 1;
 if isempty(par.ringsDist),
-  pp{pidx}.W = extract_ica(trn, []);
+  pp{pidx}.W = extract_ica(trn, [], par.icaAlgo);
   pp{pidx}.name = 'ICA';
+  pp{pidx}.icaAlgo = par.icaAlgo;
 else
-  pp{pidx}.W = extract_ica(trn, par.nComp); %nComp e o novo ringsDist, apos a compactacao.
+  pp{pidx}.W = extract_ica(trn, par.nComp, par.icaAlgo); %nComp e o novo ringsDist, apos a compactacao.
   pp{pidx}.name = 'ICA-Seg';
   pp{pidx}.ringsDist = par.nComp;
+  pp{pidx}.icaAlgo = par.icaAlgo;
 end
 
 %Fazendo a projecao nas ICAs 
