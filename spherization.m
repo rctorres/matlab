@@ -9,6 +9,8 @@ function [trn, val, tst, pp] = spherization(trn, val, tst, par)
 %
   disp('Fazendo normalizacao por Esferizacao.');
   
+  if nargin < 4, par = []; end
+  
   pp.name = 'spherization';
   
   if isstruct(par) && isfield(par, 'ps'),
