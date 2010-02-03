@@ -1,5 +1,7 @@
 function c = mutual_info(m, doNorm)
 
+  if nargin < 2, doNorm = false; end;
+
   m = m';
   [M,N] = size(m);
   c = zeros(M);
