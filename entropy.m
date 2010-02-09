@@ -32,7 +32,7 @@ function h = entropy(data, p, mode, nPoints)
   %numerica (ex: -1e-12). Vou descartar esses caras tb, considerando que
   %sao ~= 0.
   p = p(p > 0);
-  h = -sum(p .* log2(p)); %Results are in bits!
+  h = -sum(p .* log(p)); %Results are in nats!
 
 
 function p = get_pdf_by_hist(u,v,nPoints)
