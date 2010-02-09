@@ -12,18 +12,17 @@ function c = mutual_info(m, doNorm, mode, nPoints)
     x = m(i,:);
     for j=i:M,
       y = m(j,:);
-      hx = entropy(x, [], mode, nPoints);
-      hy = entropy(y, [], mode, nPoints);
-      hxy = entropy([x;y], [], mode, nPoints);
+      hx = entropy(x, [], mode, nPoints)
+      hy = entropy(y, [], mode, nPoints)
+      hxy = entropy([x;y], [], mode, nPoints)
       c(i,j) = hx + hy - hxy;
     end    
   end
     
-  
   %Componho a matriz final colocando a transposta da matriz na parte
   %inferior.
   c = triu(c) + tril(c',-1);
 
   if doNorm,
-    c = ones(size(c)) - exp(-2*c);
+    c = 1 - exp(-2*c);
   end
