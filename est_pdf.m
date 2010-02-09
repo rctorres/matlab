@@ -21,7 +21,10 @@ function [p, x, y] = est_pdf(data, mode, nPoints)
     [p, x, y] = get_pdf_by_kernel(u, v, nPoints);
   else
     error('Invalid mode! See help for options.')
-  end    
+  end
+  
+  %Normalizando p/ a integral ser 1.
+  p = p ./ sum(sum(p));
 
 
 function [p, x, y] = get_pdf_by_hist(u,v,nPoints)
@@ -29,18 +32,11 @@ function [p, x, y] = get_pdf_by_hist(u,v,nPoints)
     [p, x] = hist(u, nPoints);
     y = [];
     
-    %Normalizando p/ a integral ser 1.
-    p = p ./ (abs(x(2)-x(1)) * sum(p));
   else
     desc = [min(u) max(u), nPoints; min(v), max(v), nPoints];
     p = histogram2(u,v,desc);
-    
-    %Normalizando p/ a integral ser 1.
-    x = linspace(desc(1,1), desc(1,2), desc(1,3));
-    y = linspace(desc(2,1), desc(2,2), desc(2,3));
-    p = p ./ ( abs( (x(2)-x(1)) * (y(2)-y(1)) ) * sum(sum(p)) );
-    x = repmat(x,nPoints,1);
-    y = repmat(y',1,nPoints);
+    x = repmat(linspace(desc(1,1), desc(1,2), desc(1,3)), nPoints, 1);
+    y = repmat(linspace(desc(2,1), desc(2,2), desc(2,3))', 1, nPoints);
   end
   
   
