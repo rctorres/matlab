@@ -1,27 +1,40 @@
-function h = entropy(data, p, mode, nPoints, doDif)
-%function h = entropy(data, p, mode, nPoints, doDif)
+function h = entropy(data, doDif, nPoints, mode)
+%function h = entropy(data, doDif, nPoints, mode)
 %Calcula a entropia.
-% - data: realizacoes da variavel aleatoria (uma variavel por linha).
-%         Maximo de 2 variaveis aleatorias.
-% - p : um vetor (ou matriz) de probabilidades pre-calculadas. Neste caso,
-%       data ddeve ser []. p pode ser SOMENTE uma MDF (discreta).
-% - mode : modo p/ estimar a PDF. Pode ser 'hist' ou 'kernel' (default).
-% - nPoints : Numero de pontos da PDF p/ estimar. Default = 128.
+% - data: Se for uma matriz, de conter as realizacoes da variavel 
+%         aleatoria (uma variavel por linha).Maximo de 2 variaveis 
+%         aleatorias. Se ao inves de realizacoes, vc quiser passar uma PDF
+%         ou MDF previamente calculada, data deve ser uma estrutura
+%         contendo os seguintes campos:
+%         - p : o valor da probabildiade em cada ponto onde ela 
+%               foi estimada.
+%         - x : Vetor (1 var. aleatoria) ou matriz (2 var aleatorias) 
+%               com os pontos de x onde a probabilidade foi estimada.
+%         - y : omitido (1 var. aleatoria) ou matriz (2 var aleatorias) 
+%               com os pontos de y onde a probabilidade foi estimada.
+%         Se vc passar a PDF ja calculada, os parametros mode e nPoints sao
+%         ignorados. x e y, na estrutura, so precisam ser definidos se a
+%         entropia for diferencial.
 % - doDif : Se false, calcula a MDF (discreta). Se true, calcula a PDF
 %           continua. Default = false.
+% - nPoints : Numero de pontos da PDF p/ estimar. Default = 128.
+% - mode : modo p/ estimar a PDF. Pode ser 'hist' ou 'kernel' (default).
 %
 % A funcao retorna a entropia calculada, em nats.
 %
-  
-  if nargin < 2, p = []; end
-  if nargin < 3, mode = 'kernel'; end
-  if nargin < 4, nPoints = 128; end
-  if nargin < 5, doDif = false; end
+
+  if nargin < 2, doDif = false; end
+  if nargin < 3, nPoints = 128; end
+  if nargin < 4, mode = 'kernel'; end
   
 
   %We must estimate the pdf
-  if isempty(p),
-    [p, x, y] = est_pdf(data, mode, nPoints, doDif);
+  if isstruct(data),
+    p = data.p;
+    if hasfield(data, 'x'), x = data.x; end
+    if hasfield(data, 'y'), y = data.y; end
+  else
+    [p, x, y] = est_pdf(data, doDif, nPoints, mode);
   end
   
   %Calculo a entropia considerando so os valores > 0 p/ evitar valor
