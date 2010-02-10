@@ -22,7 +22,7 @@ function [p, x, y] = emdensity(u, nPoints, kmax)
   end
   
   lx = em_gauss(d,m,r);
-  p = lx*w;
+  p = (lx*w)';
   
   if nDim == 2,
     p = reshape(p, nPoints, nPoints);
