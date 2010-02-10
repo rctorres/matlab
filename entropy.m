@@ -31,8 +31,8 @@ function h = entropy(data, doDif, nPoints, mode)
   %We must estimate the pdf
   if isstruct(data),
     p = data.p;
-    if hasfield(data, 'x'), x = data.x; end
-    if hasfield(data, 'y'), y = data.y; end
+    if isfield(data, 'x'), x = data.x; end
+    if isfield(data, 'y'), y = data.y; end
   else
     [p, x, y] = est_pdf(data, doDif, nPoints, mode);
   end
