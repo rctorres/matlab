@@ -8,7 +8,7 @@ function c = mutual_info(m, doNorm, doDif, nPoints, mode)
 % - doDif : Se false, calcula a MDF (discreta). Se true, calcula a PDF
 %           continua. Default = false.
 % - nPoints : Numero de pontos da PDF p/ estimar. Default = 128.
-% - mode : modo p/ estimar a PDF. Pode ser 'hist' ou 'kernel' (default).
+% - mode : modo p/ estimar a PDF. Pode ser 'hist', 'em' ou 'kernel' (default).
 %
 % A funcao retorna uma matriz [NxN] com a Informacao Mutua (em nats)
 % entre as variaveis aleatorias.

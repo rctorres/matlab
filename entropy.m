@@ -18,7 +18,7 @@ function h = entropy(data, doDif, nPoints, mode)
 % - doDif : Se false, calcula a MDF (discreta). Se true, calcula a PDF
 %           continua. Default = false.
 % - nPoints : Numero de pontos da PDF p/ estimar. Default = 128.
-% - mode : modo p/ estimar a PDF. Pode ser 'hist' ou 'kernel' (default).
+% - mode : modo p/ estimar a PDF. Pode ser 'hist', 'em' ou 'kernel' (default).
 %
 % A funcao retorna a entropia calculada, em nats.
 %
