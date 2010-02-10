@@ -1,4 +1,5 @@
 function h = entropy(data, p, mode, nPoints)
+%function h = entropy(data, p, mode, nPoints)
   
   if nargin < 2, p = []; end
   if nargin < 3, mode = 'kernel'; end

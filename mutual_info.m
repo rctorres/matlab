@@ -1,4 +1,5 @@
 function c = mutual_info(m, doNorm, mode, nPoints)
+%function c = mutual_info(m, doNorm, mode, nPoints)
 
   if nargin < 2, doNorm = false; end;
   if nargin < 3, mode = 'kernel'; end;

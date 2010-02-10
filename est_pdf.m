@@ -1,4 +1,5 @@
 function [p, x, y] = est_pdf(data, mode, nPoints)
+%function [p, x, y] = est_pdf(data, mode, nPoints)
   
   if nargin < 2, mode = 'kernel'; end
   if nargin < 3, nPoints = 128; end
