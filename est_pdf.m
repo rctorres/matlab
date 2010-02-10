@@ -6,7 +6,7 @@ function [p, x, y] = est_pdf(data, doDif, nPoints, mode)
 % - doDif : Se false, calcula a MDF (discreta). Se true, calcula a PDF
 %           continua. Default = false.
 % - nPoints : Numero de pontos da PDF p/ estimar. Default = 128.
-% - mode : modo p/ estimar a PDF. Pode ser 'hist' ou 'kernel' (default).
+% - mode : modo p/ estimar a PDF. Pode ser 'hist' 'em' ou 'kernel' (default).
 %
 % Retorna:
 % - p : o valor da probabildiade em cada ponto onde ela foi estimada.
@@ -36,6 +36,8 @@ function [p, x, y] = est_pdf(data, doDif, nPoints, mode)
     [p, x, y] = get_pdf_by_hist(u, v, nPoints, doDif);
   elseif strcmp(mode, 'kernel'),
     [p, x, y] = get_pdf_by_kernel(u, v, nPoints, doDif);
+  elseif strcmp(mode, 'em')
+    [p, x, y] = get_pdf_by_em(u, v, nPoints, doDif);
   else
     error('Invalid mode! See help for options.')
   end
@@ -65,6 +67,17 @@ function [p, x, y] = get_pdf_by_kernel(u,v,nPoints,doDif)
     y = [];
   else
     [b, p, x, y] = kde2d([u;v]', nPoints);
+  end
+
+  if ~doDif, p = p ./ sum(sum(p));  end
+
+  
+function [p, x, y] = get_pdf_by_em(u,v,nPoints,doDif)
+  kmax = 3;
+  if isempty(v),
+    [p, x, y] = emdensity(u, nPoints, kmax);
+  else
+    [p, x, y] = emdensity([u;v], nPoints, kmax);
   end
 
   if ~doDif, p = p ./ sum(sum(p));  end
