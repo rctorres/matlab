@@ -1,6 +1,21 @@
 function [p, x, y] = est_pdf(data, mode, nPoints, doDif)
 %function [p, x, y] = est_pdf(data, mode, nPoints, doDif)
-  
+%Faz a estimacao da PDF.
+% - data: realizacoes da variavel aleatoria (uma variavel por linha).
+%         Maximo de 2 variaveis aleatorias.
+% - mode : modo p/ estimar a PDF. Pode ser 'hist' ou 'kernel' (default).
+% - nPoints : Numero de pontos da PDF p/ estimar. Default = 128.
+% - doDif : Se false, calcula a MDF (discreta). Se true, calcula a PDF
+%           continua. Default = false.
+%
+% Retorna:
+% - p : o valor da probabildiade em cada ponto onde ela foi estimada.
+% - x : Vetor (1 var. aleatoria) ou matriz (2 var aleatorias) com os pontos
+%       de x onde a probabilidade foi estimada.
+% - y : [] (1 var. aleatoria) ou matriz (2 var aleatorias) com os pontos
+%       de y onde a probabilidade foi estimada.
+%
+
   if nargin < 2, mode = 'kernel'; end
   if nargin < 3, nPoints = 128; end
   if nargin < 4, doDif = false; end

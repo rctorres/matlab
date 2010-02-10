@@ -1,5 +1,17 @@
 function h = entropy(data, p, mode, nPoints, doDif)
 %function h = entropy(data, p, mode, nPoints, doDif)
+%Calcula a entropia.
+% - data: realizacoes da variavel aleatoria (uma variavel por linha).
+%         Maximo de 2 variaveis aleatorias.
+% - p : um vetor (ou matriz) de probabilidades pre-calculadas. Neste caso,
+%       data ddeve ser []. p pode ser SOMENTE uma MDF (discreta).
+% - mode : modo p/ estimar a PDF. Pode ser 'hist' ou 'kernel' (default).
+% - nPoints : Numero de pontos da PDF p/ estimar. Default = 128.
+% - doDif : Se false, calcula a MDF (discreta). Se true, calcula a PDF
+%           continua. Default = false.
+%
+% A funcao retorna a entropia calculada, em nats.
+%
   
   if nargin < 2, p = []; end
   if nargin < 3, mode = 'kernel'; end
