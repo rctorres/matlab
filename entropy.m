@@ -46,7 +46,7 @@ function h = entropy(data, doDif, nPoints, mode)
   
   %Se for p/ calcular a entropia deferencial
   if doDif,
-    if size(data,1) == 1,
+    if size(x,1) == 1,
       h = abs(x(2)-x(1)) * h;
     else
       h = abs(x(1,2)-x(1,1)) * abs(y(2,1)-y(1,1)) * h;
