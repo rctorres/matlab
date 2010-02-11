@@ -1,6 +1,8 @@
 function [p, x, y] = emdensity(u, nPoints, kmax)
 %function [p, x, y] = emdensity(u, nPoints, kmax)
 %Estimador de PDF por Expectation Maximization.
+%nPoints pode ser o numero de pontos, ou, SOMENTE pra o caso unidimensional,
+%pode ser o vetor onde pegar os pontos da PDF.
 %
 
   if nargin < 2, nPoints = 100; end
@@ -10,7 +12,11 @@ function [p, x, y] = emdensity(u, nPoints, kmax)
   
   [w,m,r] = em(u', [], kmax, 0, 0, 0);
 
-  x = linspace(min(u(1,:)), max(u(1,:)), nPoints);
+  if length(nPoints) > 1,
+    x = nPoints;
+  else
+    x = linspace(min(u(1,:)), max(u(1,:)), nPoints);
+  end
   
   if nDim == 1,
     y = [];

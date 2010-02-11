@@ -5,7 +5,11 @@ function [p, x, y] = est_pdf(data, doDif, nPoints, mode)
 %         Maximo de 2 variaveis aleatorias.
 % - doDif : Se false, calcula a MDF (discreta). Se true, calcula a PDF
 %           continua. Default = false.
-% - nPoints : Numero de pontos da PDF p/ estimar. Default = 128.
+% - nPoints : Numero de pontos da PDF p/ estimar. Default = 128. Se for um
+%             vetor, a PDF sera estimada nos pontos passados. kernel nao suporta
+%             vetores, logo, se nPoints for um vetor, e vc quiser kernel,
+%             nPoints = length(nPoints). nPoitns so pode ser um vetor p/ o caso
+%             unidimensional.
 % - mode : modo p/ estimar a PDF. Pode ser 'hist' 'em' ou 'kernel' (default).
 %
 % Retorna:
@@ -62,6 +66,8 @@ function [p, x, y] = get_pdf_by_hist(u,v,nPoints,doDif)
   
   
 function [p, x, y] = get_pdf_by_kernel(u,v,nPoints,doDif)
+  if length(nPoints) > 1, nPoints = length(nPoints); end 
+  
   if isempty(v),
     [p, x] = ksdensity(u, 'npoints', nPoints);
     y = [];
@@ -73,7 +79,7 @@ function [p, x, y] = get_pdf_by_kernel(u,v,nPoints,doDif)
 
   
 function [p, x, y] = get_pdf_by_em(u,v,nPoints,doDif)
-  kmax = 3;
+  kmax = 10;
   if isempty(v),
     [p, x, y] = emdensity(u, nPoints, kmax);
   else
