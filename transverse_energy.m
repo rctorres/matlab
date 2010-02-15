@@ -1,25 +1,18 @@
-function [otrn, oval, otst, pp] = event(trn, val, tst, par)
-%function [trn, val, tst, pp] = event(trn, val, tst)
-%Faz a normalizacao por evento (energia total). trn, val, tst precisam ser
+function [trn, val, tst, pp] = transverse_energy(trn, val, tst, par)
+%function [trn, val, tst, pp] = transverse_energy(trn, val, tst)
+%Faz a normalizacao por energia transversa. trn, val, tst precisam ser
 %vetores de celulas, com 1 celula p/ cada classe.
 %
-  pp.name = 'event';
-  disp('Fazendo normalizacao por evento.');
+  pp.name = 'transverse_energy';
+  disp('Fazendo normalizacao por energia transversa.');
 
-  nClasses = length(trn);
-  otrn = cell(1, nClasses);
-  oval = cell(1, nClasses);
-  otst = cell(1, nClasses);
-  
-  for i=1:nClasses,
-    otrn{i} = do_event(trn{i});
-    oval{i} = do_event(val{i});
-    otst{i} = do_event(tst{i});
+  for i=1:length(trn),
+    trn{i} = do_et(trn{i});
+    val{i} = do_et(val{i});
+    tst{i} = do_et(tst{i});
   end
 
 
-function ndata = do_event(data)
-  energyThreshold = 0.001;
-  etot = abs(sum(data));
-  etot(etot <= energyThreshold) = 1;
-  ndata = data ./ repmat(etot, size(data,1), 1);
+function data = do_et(data)
+  %Aproximo a energia transversa pegando os 4 primeiros aneis da EM2.
+  data = data ./ repmat(sum(data(73:76,:)), size(data,1), 1);
