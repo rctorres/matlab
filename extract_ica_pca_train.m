@@ -44,10 +44,10 @@ W = do_reduction(pp{3}.W, par.ringsDist, par.nComp);
 
 %Extraindo as ICAs
 if isempty(par.ringsDist),
-  pp{4}.W = extract_ica(trn, []);
+  pp{4}.W = extract_ica(trn, [], par.icaAlgo);
   pp{4}.name = 'ICA';
 else
-  pp{4}.W = extract_ica(trn, par.nComp); %nComp e o novo ringsDist, apos a compactacao.
+  pp{4}.W = extract_ica(trn, par.nComp, par.icaAlgo); %nComp e o novo ringsDist, apos a compactacao.
   pp{4}.name = 'ICA-Seg';
   pp{4}.ringsDist = par.nComp;
 end

@@ -22,7 +22,7 @@ end
 [trn, val, tst, pp{2}] = remove_mean(trn, val, tst);
 
 %Extraindo as ICAs
-pp{3}.W = extract_ica(trn, par.ringsDist);
+pp{3}.W = extract_ica(trn, par.ringsDist, par.icaAlgo);
 if isempty(par.ringsDist),
   pp{3}.name = 'ICA';
 else
