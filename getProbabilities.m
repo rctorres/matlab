@@ -1,5 +1,5 @@
-function [pd, pfa, numE, numJ] = getProbabilities(net, cut, dataE, dataJ, analE, analJ, infLim, supLim)
-%function [pd, pfa, numE, numJ] = getProbabilities(net, cut, dataE, dataJ, analE, analJ, infLim, supLim)
+function [pd, pfa, numE, numJ] = getProbabilities(net, cut, tst, fName, infLim, supLim)
+%function [pd, pfa, numE, numJ] = getProbabilities(net, cut, tst, fName, infLim, supLim)
 %calcula as probabilidades de deteccao e falso alarme em relacao a uma dada
 %grandeza. Exemplo, esta funcao pode ser usada para calcular as
 %probabilidades de deteccao e falso alarme para cada valor de energia, para
@@ -9,14 +9,8 @@ function [pd, pfa, numE, numJ] = getProbabilities(net, cut, dataE, dataJ, analE,
 % Parametros de entrada:
 % - net: a rede neural a ser utilizada.
 % - cut: O corte (threshold) de separacao das classes.
-% - dataE: conjunto de dados de eletrons de validacao (somente aneis).
-% - dataE: conjunto de dados de eletrons de validacao (somente aneis).
-% - analE: vetor de grandezas de analise de eletrons. Este vetor deve ter a
-% mesma quantidade de elementos que o conjunto de dados de eletrons, de
-% forma que seja posivel associar, a cada anel, um valor de grandeza.
-% - analJ: vetor de grandezas de analise de jatos. Este vetor deve ter a
-% mesma quantidade de elementos que o conjunto de dados de jatos, de
-% forma que seja posivel associar, a cada anel, um valor de grandeza.
+% - tst: conjunto de dados de teste (load4Train(false,...))
+% - fname: nome do campo a ser testado (lvl2_eta, Et, etc)
 % - infLim: O valor do limite inferior de analise para cada bim. O tamanho
 % deste vetor diz quantos bins serao utilizados.
 % - supLim: O valor do limite inferior de analise para cada bim. O tamanho
@@ -35,6 +29,9 @@ function [pd, pfa, numE, numJ] = getProbabilities(net, cut, dataE, dataJ, analE,
   numE = zeros(1,nBims);
   numJ = zeros(1,nBims);
   
+  analE = tst{1}.(fName);
+  analJ = tst{2}.(fName);
+  
   for i=1:nBims,
     %Selecting the data falling on the desired region.
     Ie = find( (analE >= infLim(i)) & (analE < supLim(i)) );
@@ -43,12 +40,10 @@ function [pd, pfa, numE, numJ] = getProbabilities(net, cut, dataE, dataJ, analE,
     numJ(i) = length(Ij);
     
     %Calculating Pd.
-    out = nsim(net, dataE(:,Ie));
+    out = nsim(net, tst{1}.rings(:,Ie));
     pd(i) = length(find(out >= cut)) / numE(i);
     
     %Calculating Pfa
-    out = nsim(net, dataJ(:,Ij));
+    out = nsim(net, tst{2}.rings(:,Ij));
     pfa(i) = length(find(out >= cut)) / numJ(i);
   end
-
-
