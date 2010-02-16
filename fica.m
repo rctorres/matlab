@@ -2,4 +2,4 @@ function w = fica(data)
 %w = fica(data)
 %Hel[er function for the fastica function.
 %
-[a, w] = fastica(data, 'g', 'tanh');
+[a, w] = fastica(data, 'g', 'tanh', 'stabilization', 'on', 'verbose', 'off');
