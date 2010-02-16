@@ -29,8 +29,8 @@ function [pd, pfa, numE, numJ] = getProbabilities(net, cut, tst, fName, infLim, 
   numE = zeros(1,nBims);
   numJ = zeros(1,nBims);
   
-  analE = tst{1}.(fName);
-  analJ = tst{2}.(fName);
+  analE = double(tst{1}.(fName));
+  analJ = double(tst{2}.(fName));
   
   for i=1:nBims,
     %Selecting the data falling on the desired region.

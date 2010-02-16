@@ -1,4 +1,4 @@
-function plotAnalysis(net, tst, bE, bEta, bPhi)
+function [out, et, eta, phi] = plotAnalysis(net, tst, bE, bEta, bPhi)
 %function plotAnalysis(net, evo, tst, bE, bEta, bPhi)
 %Gera as figuras de Plots para analise. Os parametros de entrada sao:
 % - net: a rede neural a ser utilizada, tal como retornada pelo fullTrain.
@@ -19,26 +19,26 @@ function plotAnalysis(net, tst, bE, bEta, bPhi)
   if nargin < 5, bPhi = 50; end
     
   [a1, a2, tst] = do_pre_proc(net.pp, tst, tst, tst);
-  clear a1, a2;
+  clear a1 a2;
   
   %Calculating net Output
-  ret.out_e = nsim(net, tst{1}.rings);
-  ret.out_j = nsim(net, tst{2}.rings);
+  out.e = nsim(net.net, tst{1}.rings);
+  out.j = nsim(net.net, tst{2}.rings);
   
   %Getting the best cut.
-  [spVec, cutVec] = genROC(ret.out_e, ret.out_j);
+  [spVec, cutVec] = genROC(out.e, out.j);
   [sp, I] = max(spVec);
-  ret.cut = cutVec(I);
+  out.cut = cutVec(I);
   
   %Doing energy analysis.
-  [in, sup, ret.et.x] = getBimRanges(7000, 80000, bE);
-  [ret.et.det, ret.et.fa, ret.et.num_e, ret.et.num_j] = getProbabilities(net, ret.cut, tst, 'et', in, sup);
+  [in, sup, et.x] = getBimRanges(7000, 80000, bE);
+  [et.det, et.fa, et.num_e, et.num_j] = getProbabilities(net.net, out.cut, tst, 'et', in, sup);
   
   %Doing eta.
-  [in, sup, ret.eta.x] = getBimRanges(-2.5, 2.5, bEta);
-  [ret.eta.det, ret.eta.fa, ret.eta.num_e, ret.eta.num_j] = getProbabilities(net, ret.cut, tst, 'lvl2_eta', in, sup);
+  [in, sup, eta.x] = getBimRanges(-2.5, 2.5, bEta);
+  [eta.det, eta.fa, eta.num_e, eta.num_j] = getProbabilities(net.net, out.cut, tst, 'lvl2_eta', in, sup);
 
   %Doing phi.
-  [in, sup, ret.phi.x] = getBimRanges(-pi, pi, bPhi);
-  [ret.phi.det, ret.phi.fa, ret.phi.num_e, ret.phi.num_j] = getProbabilities(net, ret.cut, tst, 'lvl2_phi', in, sup);
+  [in, sup, phi.x] = getBimRanges(-pi, pi, bPhi);
+  [phi.det, phi.fa, phi.num_e, phi.num_j] = getProbabilities(net.net, out.cut, tst, 'lvl2_phi', in, sup);
   
