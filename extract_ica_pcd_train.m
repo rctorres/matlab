@@ -31,11 +31,26 @@ if ~par.isSegmented,
   par.ringsDist = [];
 end
 
+%Decidindo se extraio as PCDs do zero, ou se uso pre-calculadas.
+if isfield(par.pcd, 'nNodes'),
+  disp('Extraindo as PCDs do Zero!');
+  if isempty(par.ringsDist),
+   net = newff2(trn, [-1 1], par.pcd.nNodes, par.pcd.trfFunc, 'trainrp');
+   net.trainParam = par.pcd.trainParam;
+   [extPCD.W, aux1, aux2, extPCD.efic] = npcd(net, trn, val, tst);
+  else
+    extPCD = extract_pcd_seg(par.pcd, par.ringsDist, trn, val, tst);
+  end
+else
+  fprintf('Pegando as PCDs PREVIAMENTE extraidas com normalizacao "%s"\n', normName);
+  extPCD = par.pcd.(normName);
+end
+
 %Pegando as PCDs
 pidx = pidx + 1;
 fprintf('Pegando as PCDs extraidas com normalizacao "%s"\n', normName);
-pp{pidx}.W = par.pcd.(normName).W;
-pp{pidx}.efic = par.pcd.(normName).efic;
+pp{pidx}.W = extPCD.W;
+pp{pidx}.efic = extPCD.efic;
 pp{pidx}.nComp = par.nComp;
 if isempty(par.ringsDist),
   pp{pidx}.name = 'PCD';
@@ -93,4 +108,19 @@ function W = do_reduction(pcd, ringsDist, nComp)
       W{i} = pcd{i}(1:nComp(i),:);
     end
   end
+
+
+function ret = extract_pcd_seg(netPar, ringsDist, trn, val, tst)
+  for i=1:length(ringsDist),
+    %Pegando os aneis da camada desejada.
+    trn = getLayer(trn, ringsDist, i);
+    val = getLayer(val, ringsDist, i);
+    tst = getLayer(tst, ringsDist, i);
+
+    fprintf('Pegando os %d aneis da camada %d\n', ringsDist(i), i);
+
+    net = newff2(trn, [-1 1], netPar.nNodes, netPar.trfFunc, 'trainrp');
+    net.trainParam = netPar.trainParam;
+    [ret.W{i}, aux, aux2, ret.efic{i}] = npcd(net, trn, val, tst);
+  end  
 
