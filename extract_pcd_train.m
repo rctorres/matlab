@@ -30,10 +30,11 @@ if isstruct(par.pcd),
   fprintf('Pegando as PCDs PREVIAMENTE extraidas com normalizacao "%s"\n', normName);
   extPCD = par.pcd.(normName);
 else
+  disp('Extraindo as PCDs do Zero!');
   if isempty(par.ringsDist),
    [extPCD.W, aux1, aux2, extPCD.efic] = npcd(par.pcd, trn, val, tst);
   else
-    extPCD = extract_pcd_seg(par.pcd, trn, val, tst);
+    extPCD = extract_pcd_seg(par.pcd, par.ringsDist, trn, val, tst);
   end
 end
 
@@ -76,3 +77,47 @@ function W = do_reduction(pcd, ringsDist, nComp)
     end
   end
    
+
+function ret = extract_pcd_seg(netRef, ringsDist, trn, val, tst)
+  [trnAlgo, maxNumPCD, numNodes, trfFunc, usingBias, trnParam] = getNetworkInfo(netRef);
+
+  for i=1:length(ringsDist),
+    %Pegando os aneis da camada desejada.
+    trn = getLayer(trn, ringsDist, i);
+    val = getLayer(val, ringsDist, i);
+    tst = getLayer(tst, ringsDist, i);
+
+    fprintf('Pegando os %d aneis da camada %d\n', ringsDist(i), i);
+
+    net = newff2(trn, [-1 1], numNodes.hidNodes, trfFunc, trnAlgo);
+    net.trainParam = trnParam;
+    [ret.W{i}, aux, aux2, ret.efic{i}] = npcd(net, trn, val, tst);
+  end  
+
+
+function [trnAlgo, maxNumPCD, numNodes, trfFunc, usingBias, trnParam] = getNetworkInfo(net)
+  %Getting the network information regarding its topology
+
+  %Taking the training algo.
+  trnAlgo = net.trainFcn;
+
+  %The maximum number of PCDs to be extracted is equal to the input size.
+  maxNumPCD = net.inputs{1}.size;
+  
+  %Getting the input and output ranges.
+  numNodes.inRange = net.inputs{1}.range;
+  numNodes.outRange = net.outputs{length(net.outputs)}.range;
+
+  %Taking the other layer's size and training function.
+  numNodes.hidNodes = zeros(1,(length(net.layers)-1));
+  trfFunc = cell(1,length(net.layers));
+  usingBias = zeros(1,length(net.layers));
+  for i=1:length(net.layers),
+    if i < length(net.layers),
+      numNodes.hidNodes(i) = net.layers{i}.size;
+    end
+    trfFunc{i} = net.layers{i}.transferFcn;
+    usingBias(i) = net.layers{i}.userdata.usingBias;
+  end
+  
+  trnParam = net.trainParam;
