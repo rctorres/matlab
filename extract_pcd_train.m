@@ -26,10 +26,14 @@ if ~par.isSegmented,
   par.ringsDist = [];
 end
 
+if isstruct(par.pcd),
+  fprintf('Pegando as PCDs PREVIAMENTE extraidas com normalizacao "%s"\n', normName);
+  extPCD = par.pcd.(normName);
+end
+
 %Pegando as PCDs
-fprintf('Pegando as PCDs extraidas com normalizacao "%s"\n', normName);
-pp{2}.W = par.pcd.(normName).W;
-pp{2}.efic = par.pcd.(normName).efic;
+pp{2}.W = extPCD.W;
+pp{2}.efic = extPCD.efic;
 pp{2}.nComp = par.nComp;
 if isempty(par.ringsDist),
   pp{2}.name = 'PCD';
