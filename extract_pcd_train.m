@@ -31,7 +31,7 @@ if isstruct(par.pcd),
   extPCD = par.pcd.(normName);
 else
   if isempty(par.ringsDist),
-    extPCD = extract_pcd(par.pcd, trn, val, tst);
+   [extPCD.W, aux1, aux2, extPCD.efic] = npcd(par.pcd, trn, val, tst);
   else
     extPCD = extract_pcd_seg(par.pcd, trn, val, tst);
   end
@@ -75,3 +75,4 @@ function W = do_reduction(pcd, ringsDist, nComp)
       W{i} = pcd{i}(1:nComp(i),:);
     end
   end
+   
