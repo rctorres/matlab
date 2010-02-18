@@ -31,7 +31,7 @@ function [out, et, eta, phi] = plotAnalysis(net, tst, bE, bEta, bPhi)
   out.cut = cutVec(I);
   
   %Doing energy analysis.
-  [in, sup, et.x] = getBimRanges(7000, 80000, bE);
+  [in, sup, et.x] = getBimRanges(15000, 80000, bE);
   [et.det, et.fa, et.num_e, et.num_j] = getProbabilities(net.net, out.cut, tst, 'et', in, sup);
   
   %Doing eta.
