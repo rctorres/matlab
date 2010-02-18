@@ -29,6 +29,12 @@ end
 if isstruct(par.pcd),
   fprintf('Pegando as PCDs PREVIAMENTE extraidas com normalizacao "%s"\n', normName);
   extPCD = par.pcd.(normName);
+else
+  if isempty(par.ringsDist),
+    extPCD = extract_pcd(par.pcd, trn, val, tst);
+  else
+    extPCD = extract_pcd_seg(par.pcd, trn, val, tst);
+  end
 end
 
 %Pegando as PCDs
