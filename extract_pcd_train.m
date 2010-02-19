@@ -31,9 +31,9 @@ if isfield(par.pcd, 'nNodes'),
   if isempty(par.ringsDist),
    net = newff2(trn, [-1 1], par.pcd.nNodes, par.pcd.trfFunc, 'trainrp');
    net.trainParam = par.pcd.trainParam;
-   [extPCD.W, aux1, aux2, extPCD.efic] = npcd(net, trn, val, tst);
+   [extPCD.W, aux1, aux2, extPCD.efic] = npcd(net, trn, val, tst, 5, 0, par.nComp);
   else
-    extPCD = extract_pcd_seg(par.pcd, par.ringsDist, trn, val, tst);
+    extPCD = extract_pcd_seg(par.pcd, par.ringsDist, par.nComp, trn, val, tst);
   end
 else
   fprintf('Pegando as PCDs PREVIAMENTE extraidas com normalizacao "%s"\n', normName);
@@ -80,7 +80,7 @@ function W = do_reduction(pcd, ringsDist, nComp)
   end
    
 
-function ret = extract_pcd_seg(netPar, ringsDist, inTrn, inVal, inTst)
+function ret = extract_pcd_seg(netPar, ringsDist, nComp, inTrn, inVal, inTst)
   for i=1:length(ringsDist),
     %Pegando os aneis da camada desejada.
     trn = getLayer(inTrn, ringsDist, i);
@@ -91,5 +91,5 @@ function ret = extract_pcd_seg(netPar, ringsDist, inTrn, inVal, inTst)
 
     net = newff2(trn, [-1 1], netPar.nNodes, netPar.trfFunc, 'trainrp');
     net.trainParam = netPar.trainParam;
-    [ret.W{i}, aux, aux2, ret.efic{i}] = npcd(net, trn, val, tst);
+    [ret.W{i}, aux, aux2, ret.efic{i}] = npcd(net, trn, val, tst, 5, 0, nComp(i));
   end  
