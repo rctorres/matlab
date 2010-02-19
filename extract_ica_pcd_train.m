@@ -110,12 +110,12 @@ function W = do_reduction(pcd, ringsDist, nComp)
   end
 
 
-function ret = extract_pcd_seg(netPar, ringsDist, trn, val, tst)
+function ret = extract_pcd_seg(netPar, ringsDist, inTrn, inVal, inTst)
   for i=1:length(ringsDist),
     %Pegando os aneis da camada desejada.
-    trn = getLayer(trn, ringsDist, i);
-    val = getLayer(val, ringsDist, i);
-    tst = getLayer(tst, ringsDist, i);
+    trn = getLayer(inTrn, ringsDist, i);
+    val = getLayer(inVal, ringsDist, i);
+    tst = getLayer(inTst, ringsDist, i);
 
     fprintf('Pegando os %d aneis da camada %d\n', ringsDist(i), i);
 
