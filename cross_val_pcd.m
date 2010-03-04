@@ -11,7 +11,7 @@ end
 if nargin < 5, tstIsVal = false; end
 if nargin < 6, nBlocks = 12; end
 if nargin < 7, nDeal = 10; end
-if nargin < 8, nTrains = 5; end
+if nargin < 8, nTrains = 2; end
 if nargin > 8, error('Invalid number of parameters. See help!'); end
 
 data = create_blocks(data, nBlocks);
@@ -26,6 +26,7 @@ ret.pp = cell(1, nDeal);
 
 [net_par.hidNodes, net_par.trfFunc, net_par.trnParam] = getNetworkInfo(net);
 for d=1:nDeal,
+  fprintf('DEAL %d\n', d); 
   [trn val tst] = deal_sets(data, tstIsVal);
   [trn val tst ret.pp{d}] = calculate_pre_processing(trn, val, tst, pp);
   [ret.pcd{d} ret.net(d,:) ret.evo(d,:) ret.sp(d,:) ret.det{d} ret.fa{d}] = get_pcd(net_par, trn, val, tst, nTrains, nPCDs);
