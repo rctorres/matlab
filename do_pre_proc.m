@@ -19,9 +19,11 @@ if isstruct(trn{1}),
   sTrn = trn;
   sVal = val;
   sTst = tst;
-  trn = {trn{1}.rings, trn{2}.rings};
-  val = {val{1}.rings, val{2}.rings};
-  tst = {tst{1}.rings, tst{2}.rings};
+  for i=1:length(trn),
+    trn{i} = trn{i}.rings;
+    val{i} = val{i}.rings;
+    tst{i} = tst{i}.rings;
+  end
 else
   doRecover = false;
 end
