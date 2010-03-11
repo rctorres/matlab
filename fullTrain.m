@@ -47,7 +47,7 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
     pp.par = [];
   end
   
-  numTrains = 5;
+  numTrains = 2;
 
   %Doing the training.
   if (nNodes == 1),
