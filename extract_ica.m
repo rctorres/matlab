@@ -15,7 +15,12 @@ data = cell2mat(trn);
 
 if isempty(ringsDist),
   fprintf('Extraindo as %d ICAs do caso NAO segmentado.\n', size(data,1));
-  W = icaAlgoFunc(data);
+  if size(data,1) == 1,
+    disp('   Data is unidimensional... not extracting ICA for this case (W = [1])');
+    W = [1];
+  else
+    W = icaAlgoFunc(data);
+  end
 else
   N = length(ringsDist);
   W = cell(1,N);
@@ -23,7 +28,14 @@ else
     if ringsDist(i) ~= 0,
       ldata = getLayer(data, ringsDist, i);
       fprintf('Extraindo as %d ICAs do caso segmentado (camada %d).\n', size(ldata,1), i);
-      W{i} = icaAlgoFunc(ldata);
+      
+      if size(ldata,1) == 1,
+        disp('   Data is unidimensional... not extracting ICA for this case (W = [1])');
+        W{i} = [1];
+      else
+        W{i} = icaAlgoFunc(ldata);
+      end
+      
     else
       fprintf('Nao ha componentes na camada %d para a extracao de ICAs.\n', i);
     end
