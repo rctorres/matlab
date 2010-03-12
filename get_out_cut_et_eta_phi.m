@@ -15,7 +15,8 @@ function ret = get_out_cut_et_eta_phi(name, netStr, tst)
   %Propagando pela rede neural.
   ret.name = name;
   for i=1:length(tst),
-    ret.out{i} = nsim(net, tst{i}.rings);
+    ret.nn_out{i} = nsim(net, tst{i}.rings);
+    ret.t2calo_out{i} = eGammaHypo(tst{i});
     ret.et{i} = 0.001 * (tst{i}.t2ca_em_e ./ cosh(tst{i}.t2ca_eta));
     ret.eta{i} = tst{i}.t2ca_eta;
     ret.phi{i} = tst{i}.t2ca_phi;
