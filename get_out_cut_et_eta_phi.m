@@ -1,4 +1,4 @@
-function ret = get_out_cut_et_eta_phi(name, netStr, tst)
+function ret = get_out_cut_et_eta_phi(name, netStr, tstd)
 %function ret = get_out_cut_et_eta_phi(name, netStr, tst)
 %  name: nome da abordagem (ICA, PCA 99%, etc.)
 %  netStr: estrutura contendo pp e net.
@@ -10,7 +10,7 @@ function ret = get_out_cut_et_eta_phi(name, netStr, tst)
   pp = netStr.pp{idx};
   
   %Aplicando o pre-processamento.
-  tst = do_pre_proc(pp, tst, tst, tst);
+  tst = do_pre_proc(pp, tstd, tstd, tstd);
 
   %Propagando pela rede neural.
   ret.name = name;
