@@ -23,6 +23,6 @@ function ret = get_out_cut_et_eta_phi(name, netStr, tst)
     ret.ev_mean{i} = mean(tst{i}.rings,2)';
   end
   
-  [spVal, cutVal] = genROC(ret.nn_out{1}, ret.nn_out{2});
-  [mv, idx] = max(spVal);
+  [spVal, cutVal, detVal, faVal] = genROC(ret.nn_out{1}, ret.nn_out{2});
+  [mv, idx] = min(abs(detVal - 0.9734));
   ret.cut = cutVal(idx);
