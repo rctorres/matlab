@@ -25,42 +25,48 @@ em_e = data.t2ca_em_e;
 et = data.et;
 ehadES0 = data.t2ca_had_es0;
 
-m_eTthr.e5   		=	[4.e3, 4.e3, 4.e3, 4.e3, 4.e3, 4.e3, 4.e3, 4.e3, 4.e3];
-m_eT2thr.e5         =	[90e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3];
+m_eTthr.e5      		=	[4.e3, 4.e3, 4.e3, 4.e3, 4.e3, 4.e3, 4.e3, 4.e3, 4.e3];
 m_hadeTthr.e5       =	[0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058, 0.058];
+m_caeratiothr.e5  	=	[0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10];
+m_carcorethr.e5 	  =	[0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65];
+m_eT2thr.e5         =	[90e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3];
 m_hadeT2thr.e5      =	[999, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0];
 m_etabin.e5         =	[0, 0.6, 0.8, 1.15, 1.37, 1.52, 1.81, 2.01, 2.37, 2.47];
-m_carcorethr.e5 	=	[0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65];
-m_caeratiothr.e5	=	[0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10];
-m_F1thr.e5		    =	0.005;    
+m_F1thr.e5		      =	0.005;    
 
 
 m_eTthr.e10         =	[9.e3, 9.e3, 9.e3, 9.e3, 9.e3, 9.e3, 9.e3, 9.e3, 9.e3];
-m_eT2thr.e10        =	[90e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3];
 m_hadeTthr.e10      =	[0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043];
+m_carcorethr.e10	  =	[0.87, 0.87, 0.87, 0.87, 0.87, 0.87, 0.87, 0.87, 0.87];
+m_caeratiothr.e10   =	[0.29, 0.29, 0.29, 0.29, 0.29, 0.29, 0.29, 0.29, 0.29];
+m_eT2thr.e10        =	[90e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3];
 m_hadeT2thr.e10     =	[999, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0];
 m_etabin.e10        =	[0, 0.6, 0.8, 1.15, 1.37, 1.52, 1.81, 2.01, 2.37, 2.47];
-m_carcorethr.e10	=	[0.66, 0.66, 0.66, 0.66, 0.66, 0.66, 0.66, 0.66, 0.66];
-m_caeratiothr.e10   =	[0.29, 0.29, 0.29, 0.29, 0.29, 0.29, 0.29, 0.29, 0.29];
-m_F1thr.e10		    =	0.005;
-m_etabin.e10        =   [0, 0.6, 0.8, 1.15, 1.37, 1.52, 1.81, 2.01, 2.37, 2.47];
+m_F1thr.e10		      =	0.005;
 
 
-m_eTthr.e15 		=	[14.e3, 14.e3, 14.e3, 14.e3, 14.e3, 14.e3, 14.e3, 14.e3, 14.e3];
-m_eT2thr.e15        =	[90e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3];
-m_hadeTthr.e15      =	[0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043];
-m_hadeT2thr.e15     =	[999, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0];
-m_etabin.e15        =	[0, 0.6, 0.8, 1.15, 1.37, 1.52, 1.81, 2.01, 2.37, 2.47];
+m_eTthr.e15 		  =	[14.e3, 14.e3, 14.e3, 14.e3, 14.e3, 14.e3, 14.e3, 14.e3, 14.e3];
+m_hadeTthr.e15    =	[0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043, 0.043];
 m_carcorethr.e15	=	[0.87, 0.87, 0.87, 0.87, 0.87, 0.87, 0.87, 0.87, 0.87];
 m_caeratiothr.e15	=	[0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60];
+m_eT2thr.e15      =	[90e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3, 90.0e3];
+m_hadeT2thr.e15   =	[999, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0, 999.0];
+m_etabin.e15      =	[0, 0.6, 0.8, 1.15, 1.37, 1.52, 1.81, 2.01, 2.37, 2.47];
 m_F1thr.e15		    =	0.005;
-m_etabin.e15        =   [0, 0.6, 0.8, 1.15, 1.37, 1.52, 1.81, 2.01, 2.37, 2.47];
 
 
 alpha = reshape( abs( kron( lvl2_eta,ones( 1,length( m_etabin.(sign) ) ) ) ), length( m_etabin.(sign)), [] );
 beta = repmat(m_etabin.(sign)',1,length(lvl2_eta));
 [lines, colums] = find( alpha > beta ); %#ok<NASGU>
-etaBin = [lines(find(lines(2:end) == 1) -1)' lines(end)];
+counter = 1;
+etaBin = zeros(1,length(lvl2_eta));
+while (lines(counter+1) == 1)
+    etaBin(counter) = 1 ;
+    counter = counter + 1;
+end
+size(etaBin(counter:end))
+size([lines(find(lines(counter+1:end) == 1) -1)' lines(end)])
+etaBin(counter:end) = [lines(find(lines(counter+1:end) == 1) -1)' lines(end)];
 etaBin(etaBin==10) = 9;
 clear alpha beta lines colums;
 
@@ -80,7 +86,7 @@ hadEt = ehadES0./cosh(abs(lvl2_eta))./et;
 
 %Cuts
 rCoreCut = find(rCore < m_carcorethr.(sign)(etaBin));
-eRatioCut = setdiff(find((~inCrack | F1 < m_F1thr.(sign)) & ( eRatio < m_caeratiothr.(sign)(etaBin))), rCoreCut);
+eRatioCut = setdiff(find( ~(inCrack | F1 < m_F1thr.(sign)) & ( eRatio < m_caeratiothr.(sign)(etaBin))), rCoreCut);
 etCut = setdiff(setdiff(find((et < m_eTthr.(sign)(etaBin))),rCoreCut), eRatioCut);
 hadEtCut = setdiff(setdiff(setdiff(find( ( hadEt > hadET_cut )) , rCoreCut),eRatioCut),etCut);
 
