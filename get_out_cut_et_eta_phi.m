@@ -5,9 +5,12 @@ function ret = get_out_cut_et_eta_phi(name, netStr, tst)
 %  tst: conjunto de teste
 %  
   %Pegando o melhor resultado de validacao cruzada
-  [mV, idx] = max(netStr.sp);
-  net = netStr.net{idx};
-  pp = netStr.pp{idx};
+%  [mV, idx] = max(netStr.sp);
+%  net = netStr.net{idx};
+%  pp = netStr.pp{idx};
+
+  net = netStr.net;
+  pp = netStr.pp;
   
   %Aplicando o pre-processamento.
   tst = do_pre_proc(pp, tst, tst, tst);
