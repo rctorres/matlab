@@ -1,5 +1,5 @@
-function ret = cross_val_pcd(nPCDs, data, net, pp, tstIsVal, nBlocks, nDeal, nTrains)
-%function ret = cross_val_pcd(nPCDs, data, net, pp, tstIsVal, nBlocks, nDeal, nTrains)
+function ret = cross_val_pcd(nPCDs, data, net, pp, tstIsVal, saveData, nBlocks, nDeal, nTrains)
+%function ret = cross_val_pcd(nPCDs, data, net, pp, tstIsVal, saveData, nBlocks, nDeal, nTrains)
 %
 %WARNING: THIS FUNCTION ONLY WORKS FOR THE 2 CLASSES CASE!!!
 %
@@ -9,10 +9,11 @@ if (nargin < 4) || (isempty(pp)),
   pp.par = [];
 end
 if nargin < 5, tstIsVal = false; end
-if nargin < 6, nBlocks = 12; end
-if nargin < 7, nDeal = 10; end
-if nargin < 8, nTrains = 5; end
-if nargin > 8, error('Invalid number of parameters. See help!'); end
+if nargin < 6, saveData = false; end
+if nargin < 7, nBlocks = 12; end
+if nargin < 8, nDeal = 10; end
+if nargin < 9, nTrains = 5; end
+if nargin > 9, error('Invalid number of parameters. See help!'); end
 
 data = create_blocks(data, nBlocks);
 
@@ -23,11 +24,19 @@ ret.sp = zeros(nDeal, nPCDs);
 ret.det = cell(1, nDeal);
 ret.fa = cell(1, nDeal);
 ret.pp = cell(1, nDeal);
+if saveData,
+  ret.data = cell(1, nDeal);
+end
 
 [net_par.hidNodes, net_par.trfFunc, net_par.trnParam] = getNetworkInfo(net);
 for d=1:nDeal,
   fprintf('DEAL %d\n', d); 
   [trn val tst] = deal_sets(data, tstIsVal);
+  if saveData,
+    ret.data{d}.trn = trn;
+    ret.data{d}.val = val;
+    ret.data{d}.tst = tst;    
+  end
   [trn val tst ret.pp{d}] = calculate_pre_processing(trn, val, tst, pp);
   [ret.pcd{d} ret.net(d,:) ret.evo(d,:) ret.sp(d,:) ret.det{d} ret.fa{d}] = get_pcd(net_par, trn, val, tst, nTrains, nPCDs);
 end
