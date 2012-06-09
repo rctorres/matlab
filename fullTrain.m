@@ -61,7 +61,11 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
       net = create_network(trn, nNodes, trainParam);
       fprintf('Training a network (%s) by cross validation.\n', getNumNodesAsText(net));
       data = getCrossData(trn, val, tst, tstIsVal);
-      oNet = crossVal(data, net, pp, tstIsVal);
+      trnDiv = struct('trn', 4, 'val', 4, 'tst', 4);
+      if tstIsVal,
+          trnDiv = struct('trn', 6, 'val', 6, 'tst', 0);
+      end
+      oNet = crossVal(data, net, pp, trnDiv);
     else
       [trn, val, tst, oNet.pp] = calculate_pre_processing(trn, val, tst, pp);
       fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
