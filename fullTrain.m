@@ -4,7 +4,8 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
 % -trn, val, tst - cell vectors with trn, val and tst data.
 % -trainParam : structure containing th taining parameters of a neural  
 %               network object (net.trainParam).
-% -nNodes : the number of hidden nodes for the neural network.
+% -nNodes : the number of hidden nodes for the neural network. If nNodes =
+%             1, then PCD will be used.
 % - pp :      A structure containing 2 fields named 'func' and 'par'.
 %            'func' must be a pointer to a pre-processing function to be 
 %             executed on the data. 'par' must be a structure containing 
