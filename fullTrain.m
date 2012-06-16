@@ -1,4 +1,4 @@
-function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, blocksDiv)
+function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, dealAlgo)
 %function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, blocksDiv)
 %Perform the standard training.
 % -trn, val, tst - cell vectors with trn, val and tst data.
@@ -14,11 +14,12 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, blocksDiv)
 %             if func does not use any par, pp.par must be [].
 %             If this parameter os ommited, or [], no pre-processing will 
 %             be done.
-% - blocksDiv : if empty, the function will not perform the training
-%                 employing cross validation. If not empty, it must be a
-%                 struct containing the number of blocks for trn, val, tst 
-%                 sets. If tst = 0, then this function will assume val = tst.
-%                 Structure fields must be named as 'trn', 'val' and 'tst'. 
+% - dealAlgo : if it is empty, the function won't perform ross validation.
+%              Otherwise, it must be a class instance that will be responsible 
+%              for sorting the trn, val and tst sets for each deal. The class 
+%              must contain a method called dealsets with the following interface
+%              [trn, val, tst] = dealAlgo.deal_Sets(). It is this class
+%              responsability to manage the case when val = tst.
 %
 %Returns:
 % oNet: trained structure with the following fields:
@@ -61,12 +62,12 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, blocksDiv)
     net = create_network(trn, nNodes, trainParam);
     [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
   else
-    if ~isempty(blocksDiv), %Using cross val.
-      tstIsVal = (blocksDiv.tst == 0);
+    if ~isempty(dealAlgo), %Using cross val.
+      tstIsVal = (dealAlgo.nTst == 0);
       net = create_network(trn, nNodes, trainParam);
       fprintf('Training a network (%s) by cross validation.\n', getNumNodesAsText(net));
       data = getCrossData(trn, val, tst, tstIsVal);
-      oNet = crossVal(data, net, pp, blocksDiv);
+      oNet = crossVal(data, net, pp, dealAlgo);
     else
       [trn, val, tst, oNet.pp] = calculate_pre_processing(trn, val, tst, pp);
       fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
