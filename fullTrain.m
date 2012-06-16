@@ -2,10 +2,10 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
 %function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doCrossVal)
 %Perform the standard training.
 % -trn, val, tst - cell vectors with trn, val and tst data.
-% -trainParam : structure containing th taining parameters 
-%               (I'll do net.trainParam = trainParam).
+% -trainParam : structure containing th taining parameters of a neural  
+%               network object (net.trainParam).
 % -nNodes : the number of hidden nodes for the neural network.
-% - pp :      A structure containing 2 fileds named 'func' and 'par'.
+% - pp :      A structure containing 2 fields named 'func' and 'par'.
 %            'func' must be a pointer to a pre-processing function to be 
 %             executed on the data. 'par' must be a structure containing 
 %             any parameter that must be used by func. The calling
@@ -26,7 +26,7 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
 %     - efic : Atructure containing the max, mean and std values of the SP
 %              achieved for each PCD extracted.
 % 
-%  2) If PCD was not used was done:
+%  2) If PCD was not used:
 %     - net : Cell vector with the network corresponding to each deal.
 %     - evo : The evolution structure associated with each network.
 %     - sp : The SP values achieved in each deal.
@@ -35,6 +35,8 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
 %
 %     If cross_val was not used, the returned structure will be the same as
 %     for cross val, but you will have only one occurence of each field.
+%
+% THIS FUNCTION WORKS ONLY FOR 2 CLASSES PATTER RECOGNITION PROBLEM
 %
 
   if (nargin ~= 8),
@@ -63,7 +65,7 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
       data = getCrossData(trn, val, tst, tstIsVal);
       trnDiv = struct('trn', 4, 'val', 4, 'tst', 4);
       if tstIsVal,
-          trnDiv = struct('trn', 6, 'val', 6, 'tst', 0);
+          trnDiv = struct('trn', 10, 'val', 2, 'tst', 0);
       end
       oNet = crossVal(data, net, pp, trnDiv);
     else
