@@ -63,10 +63,9 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, dealAlgo)
     [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
   else
     if ~isempty(dealAlgo), %Using cross val.
-      tstIsVal = (dealAlgo.nTst == 0);
       net = create_network(trn, nNodes, trainParam);
       fprintf('Training a network (%s) by cross validation.\n', getNumNodesAsText(net));
-      data = getCrossData(trn, val, tst, tstIsVal);
+      data = getCrossData(trn, val, tst, dealAlgo.tstIsVal);
       oNet = crossVal(data, net, pp, dealAlgo);
     else
       [trn, val, tst, oNet.pp] = calculate_pre_processing(trn, val, tst, pp);
