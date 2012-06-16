@@ -10,7 +10,7 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, blocksDiv)
 %            'func' must be a pointer to a pre-processing function to be 
 %             executed on the data. 'par' must be a structure containing 
 %             any parameter that must be used by func. The calling
-%             procedure is [trn,val,tst,] = pp.func(trn, val, tst, pp.par)
+%             procedure is [trn,val,tst,pp] = pp.func(trn, val, tst, pp.par)
 %             if func does not use any par, pp.par must be [].
 %             If this parameter os ommited, or [], no pre-processing will 
 %             be done.
