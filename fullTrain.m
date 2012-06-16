@@ -1,5 +1,5 @@
-function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doCrossVal)
-%function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doCrossVal)
+function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, blocksDiv)
+%function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, blocksDiv)
 %Perform the standard training.
 % -trn, val, tst - cell vectors with trn, val and tst data.
 % -trainParam : structure containing th taining parameters of a neural  
@@ -14,10 +14,11 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
 %             if func does not use any par, pp.par must be [].
 %             If this parameter os ommited, or [], no pre-processing will 
 %             be done.
-% -tstIsVal : If true, the data will be split into trn and
-%             val only, and tst = val. 
-% -doCrossVal : If true, a cross validation analysis will be done.
-%               Othewise, a single training will be performed
+% - blocksDiv : if empty, the function will not perform the training
+%                 employing cross validation. If not empty, it must be a
+%                 struct containing the number of blocks for trn, val, tst 
+%                 sets. If tst = 0, then this function will assume val = tst.
+%                 Structure fields must be named as 'trn', 'val' and 'tst'. 
 %
 %Returns:
 % oNet: trained structure with the following fields:
@@ -40,7 +41,7 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
 % THIS FUNCTION WORKS ONLY FOR 2 CLASSES PATTER RECOGNITION PROBLEM
 %
 
-  if (nargin ~= 8),
+  if (nargin ~= 7),
     error('Invalid number of parameters. See help!');
   end
   
@@ -60,15 +61,12 @@ function [oNet] = fullTrain(trn, val, tst, trainParam, nNodes, pp, tstIsVal, doC
     net = create_network(trn, nNodes, trainParam);
     [aux, oNet.net, oNet.evo, oNet.efic] = npcd(net, trn, val, tst, numTrains);
   else
-    if doCrossVal,
+    if ~isempty(blocksDiv), %Using cross val.
+      tstIsVal = (blocksDiv.tst == 0);
       net = create_network(trn, nNodes, trainParam);
       fprintf('Training a network (%s) by cross validation.\n', getNumNodesAsText(net));
       data = getCrossData(trn, val, tst, tstIsVal);
-      trnDiv = struct('trn', 4, 'val', 4, 'tst', 4);
-      if tstIsVal,
-          trnDiv = struct('trn', 10, 'val', 2, 'tst', 0);
-      end
-      oNet = crossVal(data, net, pp, trnDiv);
+      oNet = crossVal(data, net, pp, blocksDiv);
     else
       [trn, val, tst, oNet.pp] = calculate_pre_processing(trn, val, tst, pp);
       fprintf('Data input dimension after pre-processing: %d\n', size(trn{1},1));
