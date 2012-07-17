@@ -7,6 +7,7 @@ function histej(e,j,bins)
 hist(e, bins);
 hold on;
 hist(j, bins);
+hold off;
 
 h = findobj(gca, 'Type', 'patch');
 set(h(1), 'FaceColor', 'none');
