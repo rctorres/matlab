@@ -34,7 +34,6 @@ for i=1:N,
   end
 end
 
-end
 
 function [trn, val, tst] = do_relevance(trn, val, tst, pre_proc)
   fprintf('Selecionando as %d componentes relevantes.\n', length(pre_proc.relevComp));
