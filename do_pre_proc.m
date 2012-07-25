@@ -14,20 +14,6 @@ else
   pproc = pp;
 end
 
-if isstruct(trn{1}),
-  doRecover = true;
-  sTrn = trn;
-  sVal = val;
-  sTst = tst;
-  for i=1:length(trn),
-    trn{i} = trn{i}.rings;
-    val{i} = val{i}.rings;
-    tst{i} = tst{i}.rings;
-  end
-else
-  doRecover = false;
-end
-
 N = length(pproc);
 
 for i=1:N,
@@ -48,17 +34,7 @@ for i=1:N,
   end
 end
 
-if doRecover,
-  for i=1:length(trn),
-    sTrn{i}.rings = trn{i};
-    sVal{i}.rings = val{i};
-    sTst{i}.rings = tst{i};    
-  end
-  trn = sTrn;
-  val = sVal;
-  tst = sTst;
 end
-
 
 function [trn, val, tst] = do_relevance(trn, val, tst, pre_proc)
   fprintf('Selecionando as %d componentes relevantes.\n', length(pre_proc.relevComp));
