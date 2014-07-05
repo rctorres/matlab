@@ -11,7 +11,7 @@ aux = zeros(size(relev));
 aux(rIdx) = relev(rIdx);
 barh((1:length(relev)), aux, 1, 'g');
 hold off;
-legend('Rejected', 'Accepted');
+legend('Rejected', 'Accepted', 'location', 'best');
 title(sprintf('Input Relevance (%s)', name));
 xlabel('Deviation');
 ylabel('Input Number');
