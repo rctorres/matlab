@@ -8,15 +8,19 @@ function histej(e,j,bins)
 %  hist(j, bins);
 %  hold off;
 
-  [~,ec] = hist(e, bins);
-  [~,ej] = hist(j, bins);
+  if isscalar(bins),
+    [~,ec] = hist(e, bins);
+    [~,ej] = hist(j, bins);
   
-  limits = minmax([ec ej]);
-  min_c = limits(1);
-  max_c = limits(2);
+    limits = minmax([ec ej]);
+    min_c = limits(1);
+    max_c = limits(2);
   
-  step = (max_c - min_c) / bins;
-  centers = (min_c:step:max_c);
+    step = (max_c - min_c) / bins;
+    centers = (min_c:step:max_c);
+  else
+    centers = bins;
+  end
   
   hist(e, centers);
   hold on;
